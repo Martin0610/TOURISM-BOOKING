@@ -41,8 +41,9 @@ export const getAllUsers = async (_req: Request, res: Response): Promise<void> =
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   try {
+    const id = req.params.id as string;
     const user = await prisma.user.findUnique({
-      where: { id: req.params.id },
+      where: { id },
       select: {
         id: true, name: true, email: true, phone: true, role: true, createdAt: true,
         bookings: { include: { package: true, payment: true } },

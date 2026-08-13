@@ -65,8 +65,9 @@ export const getBookings = async (req: AuthRequest, res: Response): Promise<void
 
 export const getBookingById = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    const id = req.params.id as string;
     const booking = await prisma.booking.findUnique({
-      where: { id: req.params.id },
+      where: { id },
       include: { package: true, payment: true, user: { select: { id: true, name: true, email: true } } },
     });
 
@@ -88,7 +89,8 @@ export const getBookingById = async (req: AuthRequest, res: Response): Promise<v
 
 export const updateBooking = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const booking = await prisma.booking.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const booking = await prisma.booking.findUnique({ where: { id } });
     if (!booking) {
       errorResponse(res, 'Booking not found', 404);
       return;
@@ -101,7 +103,7 @@ export const updateBooking = async (req: AuthRequest, res: Response): Promise<vo
 
     const { status } = req.body;
     const updated = await prisma.booking.update({
-      where: { id: req.params.id },
+      where: { id },
       data: { ...(status && { status }) },
       include: { package: true },
     });
@@ -114,7 +116,8 @@ export const updateBooking = async (req: AuthRequest, res: Response): Promise<vo
 
 export const cancelBooking = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const booking = await prisma.booking.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const booking = await prisma.booking.findUnique({ where: { id } });
     if (!booking) {
       errorResponse(res, 'Booking not found', 404);
       return;
@@ -130,7 +133,7 @@ export const cancelBooking = async (req: AuthRequest, res: Response): Promise<vo
       return;
     }
 
-    await prisma.booking.update({ where: { id: req.params.id }, data: { status: 'CANCELLED' } });
+    await prisma.booking.update({ where: { id }, data: { status: 'CANCELLED' } });
 
     // Restore seats on cancellation
     await prisma.package.update({

@@ -31,7 +31,8 @@ export const getPackages = async (req: Request, res: Response): Promise<void> =>
 
 export const getPackageById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const pkg = await prisma.package.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const pkg = await prisma.package.findUnique({ where: { id } });
     if (!pkg) {
       errorResponse(res, 'Package not found', 404);
       return;
@@ -62,7 +63,8 @@ export const createPackage = async (req: Request, res: Response): Promise<void> 
 
 export const updatePackage = async (req: Request, res: Response): Promise<void> => {
   try {
-    const existing = await prisma.package.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const existing = await prisma.package.findUnique({ where: { id } });
     if (!existing) {
       errorResponse(res, 'Package not found', 404);
       return;
@@ -70,7 +72,7 @@ export const updatePackage = async (req: Request, res: Response): Promise<void> 
 
     const { name, destination, description, price, duration, availableSeats, imageUrl, itinerary } = req.body;
     const pkg = await prisma.package.update({
-      where: { id: req.params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(destination && { destination }),
@@ -91,12 +93,13 @@ export const updatePackage = async (req: Request, res: Response): Promise<void> 
 
 export const deletePackage = async (req: Request, res: Response): Promise<void> => {
   try {
-    const existing = await prisma.package.findUnique({ where: { id: req.params.id } });
+    const id = req.params.id as string;
+    const existing = await prisma.package.findUnique({ where: { id } });
     if (!existing) {
       errorResponse(res, 'Package not found', 404);
       return;
     }
-    await prisma.package.delete({ where: { id: req.params.id } });
+    await prisma.package.delete({ where: { id } });
     successResponse(res, null, 'Package deleted');
   } catch {
     errorResponse(res, 'Failed to delete package', 500);
