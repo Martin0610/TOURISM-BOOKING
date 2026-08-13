@@ -34,3 +34,10 @@ prisma/migrations/dev.db
 
 # TypeScript
 *.tsbuildinfo
+
+# Prisma agent skill folders
+**/.agents/
+**/.claude/
+**/.windsurf/
+**/skills-lock.json
+**/prisma.config.ts
