@@ -23,6 +23,12 @@ enum PaymentStatus {
   FAILED
 }
 
+enum TransportMode {
+  FLIGHT
+  TRAIN
+  BUS
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -37,35 +43,65 @@ model User {
 }
 
 model Package {
-  id             String   @id @default(cuid())
-  name           String
+  id                 String   @id @default(cuid())
+  name               String
+  destination        String
+  state              String
+  description        String
+  shortDescription   String
+  pricePerPerson     Float
+  durationDays       Int
+  durationNights     Int
+  category           String
+  availableSeats     Int
+  hotelCategory      String
+  accommodation      String
+  mealsIncluded      String
+  transportIncluded  Boolean  @default(false)
+  sightseeingIncluded Boolean @default(true)
+  bestTimeToVisit    String
+  itinerary          String
+  inclusions         String
+  exclusions         String
+  cancellationPolicy String
+  imageUrl           String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+model DepartureLocation {
+  id             String        @id @default(cuid())
+  departureCity  String
+  departureState String
   destination    String
-  description    String?
-  price          Float
-  duration       Int      // in days
-  availableSeats Int
-  imageUrl       String?
-  itinerary      String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  transportMode  TransportMode
+  transportPrice Float
+  available      Boolean       @default(true)
+  createdAt      DateTime      @default(now())
 
   bookings Booking[]
 }
 
 model Booking {
-  id             String        @id @default(cuid())
-  userId         String
-  packageId      String
-  travelDate     DateTime
-  numberOfPeople Int
-  totalAmount    Float
-  status         BookingStatus @default(PENDING)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id                  String        @id @default(cuid())
+  userId              String
+  packageId           String
+  departureLocationId String?
+  travelDate          DateTime
+  numberOfPeople      Int
+  packageAmount       Float
+  transportAmount     Float         @default(0)
+  totalAmount         Float
+  status              BookingStatus @default(PENDING)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  package Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
-  payment Payment?
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  package          Package            @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  departureLocation DepartureLocation? @relation(fields: [departureLocationId], references: [id])
+  payment          Payment?
 }
 
 model Payment {

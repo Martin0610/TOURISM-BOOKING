@@ -10,6 +10,7 @@ import packageRoutes from './routes/package.routes';
 import bookingRoutes from './routes/booking.routes';
 import paymentRoutes from './routes/payment.routes';
 import adminRoutes from './routes/admin.routes';
+import departureRoutes from './routes/departure.routes';
 import { errorHandler, notFound } from './middleware/error.middleware';
 
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/departures', departureRoutes);
 
 // Health check
 app.get('/health', (_req, res) => res.json({ status: 'OK', timestamp: new Date().toISOString() }));

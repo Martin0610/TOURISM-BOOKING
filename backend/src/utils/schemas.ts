@@ -36,6 +36,7 @@ export const updatePackageSchema = z.object({
 
 export const createBookingSchema = z.object({
   packageId: z.string().min(1, 'Package ID is required'),
+  departureLocationId: z.string().optional(),
   travelDate: z.string().refine((d) => !isNaN(Date.parse(d)), 'Invalid travel date'),
   numberOfPeople: z.union([z.number(), z.string()]).transform(Number).refine((v) => v >= 1, 'At least 1 person required'),
 });
