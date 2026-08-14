@@ -265,7 +265,37 @@
       ]
     },
     {
-      "name": "Bookings",
+      "name": "Departures",
+      "item": [
+        {
+          "name": "Get Departures by Destination",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/departures?destination=Goa",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "departures"],
+              "query": [{ "key": "destination", "value": "Goa" }]
+            }
+          },
+          "response": [
+            {
+              "name": "Success - 200",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"clx...\",\n      \"departureCity\": \"Chennai\",\n      \"departureState\": \"Tamil Nadu\",\n      \"destination\": \"Goa\",\n      \"transportMode\": \"FLIGHT\",\n      \"transportPrice\": 3500,\n      \"available\": true\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Departure by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/departures/:departureId"
+          }
+        }
+      ]
+    },
       "item": [
         {
           "name": "Create Booking",
@@ -291,7 +321,7 @@
             "url": "{{baseUrl}}/api/bookings",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"packageId\": \"{{packageId}}\",\n  \"travelDate\": \"2025-03-15\",\n  \"numberOfPeople\": 2\n}"
+              "raw": "{\n  \"packageId\": \"{{packageId}}\",\n  \"travelDate\": \"2025-03-15\",\n  \"numberOfPeople\": 2,\n  \"departureLocationId\": \"clx_departure_id_here\"\n}"
             }
           },
           "response": [
