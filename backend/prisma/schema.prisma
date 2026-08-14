@@ -93,6 +93,7 @@ model Booking {
   numberOfPeople      Int
   packageAmount       Float
   transportAmount     Float         @default(0)
+  discountAmount      Float         @default(0)
   totalAmount         Float
   status              BookingStatus @default(PENDING)
   createdAt           DateTime      @default(now())

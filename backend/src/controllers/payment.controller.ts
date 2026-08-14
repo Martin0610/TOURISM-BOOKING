@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import prisma from '../config/db';
 import { successResponse, errorResponse } from '../utils/apiResponse';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { sendBookingConfirmationEmail } from '../services/email.service';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID as string,
@@ -101,6 +102,40 @@ export const verifyPayment = async (req: AuthRequest, res: Response): Promise<vo
       where: { id: bookingId },
       data: { status: 'CONFIRMED' },
     });
+
+    // Send confirmation email (non-blocking)
+    try {
+      const booking = await prisma.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+          user: true,
+          package: true,
+          departureLocation: true,
+        },
+      });
+
+      if (booking && booking.user && booking.package) {
+        await sendBookingConfirmationEmail({
+          userName: booking.user.name,
+          userEmail: booking.user.email,
+          packageName: booking.package.name,
+          destination: booking.package.destination,
+          state: booking.package.state,
+          travelDate: booking.travelDate.toISOString(),
+          numberOfPeople: booking.numberOfPeople,
+          departureCity: booking.departureLocation?.departureCity,
+          transportMode: booking.departureLocation?.transportMode,
+          packageAmount: booking.packageAmount,
+          transportAmount: booking.transportAmount,
+          discountAmount: (booking as { discountAmount?: number }).discountAmount ?? 0,
+          totalAmount: booking.totalAmount,
+          bookingId: booking.id,
+          cancellationPolicy: booking.package.cancellationPolicy,
+        });
+      }
+    } catch (emailErr) {
+      console.error('Email send failed (non-blocking):', emailErr);
+    }
 
     successResponse(res, null, 'Payment verified successfully');
   } catch {

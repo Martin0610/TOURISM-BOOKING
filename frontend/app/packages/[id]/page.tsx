@@ -40,7 +40,8 @@ export default function PackageDetailPage() {
   const selectedDeparture = departures.find((d) => d.id === form.departureLocationId);
   const packageAmount = pkg ? pkg.pricePerPerson * form.numberOfPeople : 0;
   const transportAmount = selectedDeparture ? selectedDeparture.transportPrice * form.numberOfPeople : 0;
-  const totalAmount = packageAmount + transportAmount;
+  const discountAmount = form.numberOfPeople >= 3 ? Math.round(packageAmount * 0.20) : 0;
+  const totalAmount = packageAmount + transportAmount - discountAmount;
 
   const transportIcon = (mode: string) => mode === 'FLIGHT' ? '✈️' : mode === 'TRAIN' ? '🚂' : '🚌';
 
@@ -194,6 +195,12 @@ export default function PackageDetailPage() {
                       value={form.numberOfPeople}
                       onChange={(e) => setForm({ ...form, numberOfPeople: parseInt(e.target.value) || 1 })}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    {form.numberOfPeople < 3 && (
+                      <p className="text-xs text-blue-500 mt-1">💡 Book for 3+ people and get 20% off!</p>
+                    )}
+                    {form.numberOfPeople >= 3 && (
+                      <p className="text-xs text-green-600 mt-1 font-medium">🎉 Group discount applied — 20% off!</p>
+                    )}
                   </div>
 
                   {/* Departure City */}
@@ -226,10 +233,19 @@ export default function PackageDetailPage() {
                         <span>₹{transportAmount.toLocaleString()}</span>
                       </div>
                     )}
+                    {discountAmount > 0 && (
+                      <div className="flex justify-between text-green-600 font-medium">
+                        <span>🎉 Group Discount (20% off, 3+ people)</span>
+                        <span>-₹{discountAmount.toLocaleString()}</span>
+                      </div>
+                    )}
                     <div className="border-t pt-2 flex justify-between font-bold text-gray-800">
                       <span>Total</span>
                       <span className="text-blue-600 text-lg">₹{totalAmount.toLocaleString()}</span>
                     </div>
+                    {discountAmount > 0 && (
+                      <p className="text-green-600 text-xs text-center">You save ₹{discountAmount.toLocaleString()} with group booking!</p>
+                    )}
                     <p className="text-xs text-gray-400">Final price confirmed by server</p>
                   </div>
 

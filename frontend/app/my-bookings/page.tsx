@@ -96,6 +96,9 @@ export default function MyBookingsPage() {
                           Pkg ₹{booking.packageAmount.toLocaleString()} + Travel ₹{booking.transportAmount.toLocaleString()}
                         </div>
                       )}
+                      {(booking as {discountAmount?: number}).discountAmount && (booking as {discountAmount?: number}).discountAmount! > 0 ? (
+                        <div className="text-green-500 text-xs">Saved ₹{(booking as {discountAmount?: number}).discountAmount!.toLocaleString()}</div>
+                      ) : null}
                       <span className={`inline-block px-3 py-0.5 rounded-full text-xs font-semibold mt-1 ${statusColors[booking.status]}`}>
                         {booking.status}
                       </span>

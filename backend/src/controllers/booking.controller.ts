@@ -2,6 +2,13 @@ import { Request, Response } from 'express';
 import prisma from '../config/db';
 import { successResponse, errorResponse } from '../utils/apiResponse';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { sendBookingConfirmationEmail } from '../services/email.service';
+
+// Group discount: 3+ people = 20% off package amount
+const calculateDiscount = (packageAmount: number, numberOfPeople: number): number => {
+  if (numberOfPeople >= 3) return Math.round(packageAmount * 0.20);
+  return 0;
+};
 
 export const createBooking = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -23,15 +30,17 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
     // Backend calculates all amounts — never trust frontend
     const packageAmount = pkg.pricePerPerson * numberOfPeople;
     let transportAmount = 0;
+    let dep = null;
 
     if (departureLocationId) {
-      const dep = await prisma.departureLocation.findUnique({ where: { id: departureLocationId } });
+      dep = await prisma.departureLocation.findUnique({ where: { id: departureLocationId } });
       if (!dep) { errorResponse(res, 'Departure location not found', 404); return; }
       if (!dep.available) { errorResponse(res, 'Selected departure route is not available', 400); return; }
       transportAmount = dep.transportPrice * numberOfPeople;
     }
 
-    const totalAmount = packageAmount + transportAmount;
+    const discountAmount = calculateDiscount(packageAmount, numberOfPeople);
+    const totalAmount = packageAmount + transportAmount - discountAmount;
 
     const booking = await prisma.booking.create({
       data: {
@@ -42,6 +51,7 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
         numberOfPeople: parseInt(numberOfPeople),
         packageAmount,
         transportAmount,
+        discountAmount,
         totalAmount,
         status: 'PENDING',
       },
