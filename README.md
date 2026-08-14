@@ -1,71 +1,67 @@
-# Tourism Package Booking and Management System
+# TourEase — Tourism Package Booking & Management System
 
-A full-stack web application that allows users to browse tourism packages, make bookings, and pay online using Razorpay. Admins can manage packages, users, bookings, and payments through a protected dashboard.
-
----
-
-## Features
-
-### User Features
-- Register and login with JWT authentication
-- Browse and search tourism packages
-- Filter by destination, price, duration
-- View package details, itinerary, available seats
-- Create bookings with travel date and number of people
-- Pay online via Razorpay
-- View booking history and payment status
-- Cancel bookings
-
-### Admin Features
-- Protected admin dashboard
-- Manage tourism packages (CRUD)
-- View and manage users and their bookings
-- View and manage all bookings
-- View payment details and Razorpay transaction info
-- Dashboard statistics (total users, bookings, revenue, etc.)
+A full-stack tourism booking platform where users can browse Indian travel packages, select a departure city, make bookings, and pay online via Razorpay. Admins manage everything through a protected dashboard.
 
 ---
 
 ## Tech Stack
 
-| Layer        | Technology                          |
-|--------------|-------------------------------------|
-| Frontend     | Next.js, React, TypeScript, Tailwind CSS |
-| Backend      | Node.js, Express.js, TypeScript     |
-| Database     | Supabase PostgreSQL                 |
-| ORM          | Prisma                              |
-| Auth         | JWT, bcrypt                         |
-| Payments     | Razorpay                            |
-| Version Control | Git, GitHub                      |
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 16, React, TypeScript, Tailwind CSS |
+| Backend | Node.js, Express.js, TypeScript |
+| Database | Supabase PostgreSQL |
+| ORM | Prisma v7 |
+| Auth | JWT + bcryptjs |
+| Validation | Zod |
+| Payments | Razorpay |
+| Version Control | Git + GitHub |
 
 ---
 
 ## Architecture
 
 ```
-User Browser
-     |
-  Next.js Frontend (localhost:3000)
-     |
-  Express.js REST API (localhost:5000)
-     |
-  Prisma ORM
-     |
-  Supabase PostgreSQL (remote)
+Browser (Next.js - localhost:3000)
+        ↓
+Express REST API (localhost:5000)
+        ↓
+Prisma ORM (pg adapter)
+        ↓
+Supabase PostgreSQL (remote)
 ```
 
-### Scalability Note
-The backend is stateless and uses JWT authentication, meaning it can be horizontally scaled. In production, multiple Node.js backend instances can run behind a load balancer (e.g., NGINX or AWS ALB):
+**Scalability:** The backend is stateless (JWT auth), so multiple instances can run behind a load balancer (NGINX / AWS ALB) pointing to the same Supabase database.
+
+---
+
+## Database Schema
 
 ```
-Load Balancer
-     |
-┌────┴────┬────────┐
-Backend   Backend   Backend
-Server 1  Server 2  Server 3
-     └────┬────┘
-   Supabase PostgreSQL
+User ──────< Booking >────── Package
+                │
+             Payment
+
+DepartureLocation ──< Booking
 ```
+
+- **User** — id, name, email, password, phone, role (USER/ADMIN)
+- **Package** — 20+ fields: name, destination, state, pricePerPerson, durationDays/Nights, category, availableSeats, hotelCategory, accommodation, mealsIncluded, itinerary, inclusions, exclusions, cancellationPolicy, imageUrl, etc.
+- **DepartureLocation** — departureCity, departureState, destination, transportMode (FLIGHT/TRAIN/BUS), transportPrice
+- **Booking** — userId, packageId, departureLocationId, travelDate, numberOfPeople, packageAmount, transportAmount, totalAmount, status
+- **Payment** — bookingId, razorpayOrderId, razorpayPaymentId, razorpaySignature, amount, status
+
+---
+
+## Booking Price Calculation (Backend Only)
+
+```
+packageAmount   = pricePerPerson × numberOfPeople   ← from DB
+transportAmount = transportPrice × numberOfPeople   ← from DB
+totalAmount     = packageAmount + transportAmount
+```
+
+The frontend **never** sends price. The backend fetches actual prices from the database and calculates everything server-side.
 
 ---
 
@@ -73,10 +69,61 @@ Server 1  Server 2  Server 3
 
 ```
 tourism-booking/
-├── frontend/          # Next.js application
-├── backend/           # Express + TypeScript API
-├── README.md
-└── .gitignore
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── seed.ts
+│   │   └── migrations/
+│   ├── src/
+│   │   ├── config/db.ts
+│   │   ├── controllers/
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── package.controller.ts
+│   │   │   ├── booking.controller.ts
+│   │   │   ├── payment.controller.ts
+│   │   │   ├── departure.controller.ts
+│   │   │   └── admin.controller.ts
+│   │   ├── middleware/
+│   │   │   ├── auth.middleware.ts
+│   │   │   ├── validate.middleware.ts
+│   │   │   └── error.middleware.ts
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   │   ├── jwt.ts
+│   │   │   ├── apiResponse.ts
+│   │   │   └── schemas.ts
+│   │   ├── app.ts
+│   │   └── server.ts
+│   ├── prisma.config.ts
+│   ├── .env
+│   ├── .env.example
+│   └── package.json
+├── frontend/
+│   ├── app/
+│   │   ├── page.tsx              (Home)
+│   │   ├── login/page.tsx
+│   │   ├── register/page.tsx
+│   │   ├── packages/page.tsx
+│   │   ├── packages/[id]/page.tsx
+│   │   ├── booking/[id]/page.tsx
+│   │   ├── my-bookings/page.tsx
+│   │   └── admin/
+│   │       ├── page.tsx          (Dashboard stats)
+│   │       ├── packages/page.tsx (Full CRUD)
+│   │       ├── bookings/page.tsx
+│   │       ├── users/page.tsx
+│   │       └── payments/page.tsx
+│   ├── components/Navbar.tsx
+│   ├── context/AuthContext.tsx
+│   ├── lib/
+│   │   ├── api.ts
+│   │   └── types.ts
+│   ├── .env.local
+│   └── .env.example
+├── postman/
+│   └── tourism-booking.json
+├── .gitignore
+└── README.md
 ```
 
 ---
@@ -86,38 +133,40 @@ tourism-booking/
 - Node.js v18+
 - npm v9+
 - Git
-- Supabase account (free tier works)
+- Supabase account
 - Razorpay account (test mode)
 
 ---
 
-## Installation & Setup
+## Installation
 
-### 1. Clone the repository
+### 1. Clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/tourism-booking.git
-cd tourism-booking
+git clone https://github.com/Martin0610/TOURISM-BOOKING.git
+cd TOURISM-BOOKING/tourism-booking
 ```
 
-### 2. Backend Setup
+### 2. Backend
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
-# Fill in your .env values
+# Fill in .env values (see below)
+npx prisma generate
 npx prisma migrate dev --name init
+npm run seed
 npm run dev
 ```
 
-### 3. Frontend Setup
+### 3. Frontend
 
 ```bash
 cd frontend
 npm install
 cp .env.example .env.local
-# Fill in your .env.local values
+# Fill in .env.local values
 npm run dev
 ```
 
@@ -125,124 +174,203 @@ npm run dev
 
 ## Environment Variables
 
-### Backend (`backend/.env`)
+### `backend/.env`
 
-```
-DATABASE_URL=postgresql://...
-JWT_SECRET=your_jwt_secret
-RAZORPAY_KEY_ID=rzp_test_...
+```env
+DATABASE_URL=postgresql://postgres:PASSWORD@db.xxx.supabase.co:5432/postgres
+JWT_SECRET=your_jwt_secret_key
+RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
 RAZORPAY_KEY_SECRET=your_razorpay_secret
 PORT=5000
+FRONTEND_URL=http://localhost:3000
 ```
 
-### Frontend (`frontend/.env.local`)
+> Note: If your password contains `@`, encode it as `%40` in the DATABASE_URL.
 
-```
+### `frontend/.env.local`
+
+```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
-NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_...
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
 ```
 
 ---
 
 ## Supabase Setup
 
-1. Go to [https://supabase.com](https://supabase.com) and create a new project
-2. Copy the **Connection String** from Settings → Database → Connection string (URI mode)
-3. Paste it as `DATABASE_URL` in your backend `.env`
+1. Create project at [supabase.com](https://supabase.com)
+2. Go to Settings → Database → Connection string (URI mode)
+3. Copy and paste into `DATABASE_URL` in `.env`
 
 ---
 
-## Prisma Setup & Migrations
+## Razorpay Setup
+
+1. Sign up at [razorpay.com](https://razorpay.com)
+2. Settings → API Keys → Generate Test Key
+3. Copy Key ID and Key Secret to `.env` and `.env.local`
+
+---
+
+## Seed Data
 
 ```bash
 cd backend
-npx prisma generate          # Generate Prisma client
-npx prisma migrate dev       # Run migrations
-npx prisma studio            # (Optional) Open Prisma Studio to view DB
+npm run seed
 ```
+
+Seeds:
+- 10 realistic Indian tourism packages (Goa, Kerala, Rajasthan, Manali, Andaman, Varanasi, Kashmir, Ladakh, Golden Triangle, Coorg)
+- 38 departure routes from 8 cities with FLIGHT/TRAIN/BUS options
 
 ---
 
 ## API Endpoints
 
 ### Auth
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/auth/register | Register new user |
-| POST | /api/auth/login | Login |
-| GET  | /api/auth/me | Get current user |
+```
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+```
 
 ### Packages
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/packages | Get all packages |
-| GET | /api/packages/:id | Get package by ID |
-| POST | /api/packages | Create package (Admin) |
-| PUT | /api/packages/:id | Update package (Admin) |
-| DELETE | /api/packages/:id | Delete package (Admin) |
+```
+GET    /api/packages?search=&state=&category=&minPrice=&maxPrice=&duration=
+GET    /api/packages/:id
+POST   /api/packages          (Admin only)
+PUT    /api/packages/:id      (Admin only)
+DELETE /api/packages/:id      (Admin only)
+```
+
+### Departure Locations
+```
+GET /api/departures?destination=Goa
+GET /api/departures/:id
+```
 
 ### Bookings
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/bookings | Create booking |
-| GET | /api/bookings | Get user's bookings |
-| GET | /api/bookings/:id | Get booking by ID |
-| PUT | /api/bookings/:id | Update booking |
-| DELETE | /api/bookings/:id | Cancel booking |
+```
+POST   /api/bookings
+GET    /api/bookings
+GET    /api/bookings/:id
+PUT    /api/bookings/:id
+DELETE /api/bookings/:id   (cancel — restores seats)
+```
 
 ### Payments
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/payments/create-order | Create Razorpay order |
-| POST | /api/payments/verify | Verify payment |
+```
+POST /api/payments/create-order
+POST /api/payments/verify
+```
+
+### Admin
+```
+GET /api/admin/stats
+GET /api/admin/users
+GET /api/admin/users/:id
+GET /api/admin/payments
+```
+
+---
+
+## Admin Setup
+
+1. Register at `http://localhost:3000/register`
+2. Run in Supabase SQL Editor:
+
+```sql
+UPDATE "User" SET role = 'ADMIN' WHERE email = 'your@email.com';
+```
+
+3. Log out and log back in — admin nav link will appear
+
+---
+
+## Postman Testing
+
+Import `postman/tourism-booking.json` into Postman.
+
+Collection variables auto-set: `token`, `adminToken`, `packageId`, `bookingId`
+
+Test order:
+1. Register → token auto-saved
+2. Login (admin) → set `adminToken` manually
+3. Create Package → `packageId` auto-saved
+4. Get Departures → copy a departure ID
+5. Create Booking (with departureLocationId) → `bookingId` auto-saved
+6. Create Razorpay Order
+7. Verify Payment
+
+---
+
+## Payment Flow
+
+```
+User selects package
+        ↓
+Selects departure city (optional)
+        ↓
+Selects travel date + number of people
+        ↓
+POST /api/bookings
+Backend calculates: packageAmount + transportAmount = totalAmount
+        ↓
+POST /api/payments/create-order
+Backend creates Razorpay order with backend-calculated amount
+        ↓
+Razorpay checkout opens in browser
+        ↓
+User completes payment
+        ↓
+POST /api/payments/verify
+Backend verifies HMAC signature
+        ↓
+Booking status → CONFIRMED
+Payment status → SUCCESS
+Available seats decremented
+```
 
 ---
 
 ## Running Locally
 
 ```bash
-# Terminal 1 - Backend
-cd backend && npm run dev
+# Terminal 1
+cd backend && npm run dev    # http://localhost:5000
 
-# Terminal 2 - Frontend
-cd frontend && npm run dev
-```
-
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
-
----
-
-## Admin Access
-
-To create an admin user, register normally and then update the `role` field in the database to `ADMIN` via Prisma Studio or Supabase SQL editor:
-
-```sql
-UPDATE "User" SET role = 'ADMIN' WHERE email = 'admin@example.com';
+# Terminal 2
+cd frontend && npm run dev   # http://localhost:3000
 ```
 
 ---
 
-## Postman Testing
+## GitHub Commit History
 
-Import the Postman collection from `postman/tourism-booking.json` to test all API endpoints with example request bodies and responses.
-
----
-
-## Razorpay Setup
-
-1. Sign up at [https://razorpay.com](https://razorpay.com)
-2. Go to Settings → API Keys → Generate Test Key
-3. Copy `Key ID` and `Key Secret` to your `.env` files
+Meaningful commits showing incremental development:
+1. Initial project setup
+2. Add Express TypeScript backend
+3. Add Prisma schema
+4. Configure Supabase and run migrations
+5. Add Next.js frontend with all pages
+6. Fix TypeScript errors in controllers
+7. Fix backend runner for Node v24
+8. Add Zod input validation on all routes
+9. Add seed data
+10. Expand schema with departure locations and price calculation
+11. Update frontend with departure city selector and price breakdown
+12. Add admin package CRUD with full field form
+13. Update Zod validation for new package schema
+14. Update README — final documentation
 
 ---
 
 ## Future Improvements
 
-- Email notifications for booking confirmation
-- Package reviews and ratings
-- PDF booking invoice download
-- Advanced analytics dashboard
+- Email notifications on booking confirmation
+- PDF invoice download
+- Package image upload (Cloudinary/S3)
+- Reviews and ratings
 - Multi-currency support
-- Package image upload via cloud storage
+- Advanced revenue analytics
 - Mobile app (React Native)
