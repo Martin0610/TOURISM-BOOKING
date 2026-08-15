@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, Phone } from 'lucide-react';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -27,6 +27,9 @@ export default function Navbar() {
 
           {/* Desktop */}
           <div className="hidden md:flex items-center gap-6">
+            <a href="tel:+917200336447" className="flex items-center gap-1.5 text-gray-500 hover:text-blue-600 transition text-sm">
+              <Phone className="w-3.5 h-3.5" /> +91 72003 36447
+            </a>
             <Link href="/packages" className="text-gray-600 hover:text-blue-600 transition">Packages</Link>
             {user ? (
               <>

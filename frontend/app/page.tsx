@@ -201,7 +201,10 @@ export default function Home() {
         <div className="flex items-center justify-center gap-2 text-white font-bold text-xl mb-3">
           <Globe className="w-5 h-5 text-blue-400" /> TourEase
         </div>
-        <p className="text-sm">© 2024 TourEase. Built with Next.js, Express, Supabase & Razorpay.</p>
+        <p className="text-sm mb-2">© 2024 TourEase. Built with Next.js, Express, Supabase & Razorpay.</p>
+        <a href="tel:+917200336447" className="text-blue-400 hover:text-blue-300 text-sm font-medium">
+          📞 +91 72003 36447
+        </a>
       </footer>
     </>
   );

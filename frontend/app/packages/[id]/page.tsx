@@ -19,6 +19,7 @@ export default function PackageDetailPage() {
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ travelDate: '', numberOfPeople: 1, departureLocationId: '' });
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,17 +38,27 @@ export default function PackageDetailPage() {
     fetchData();
   }, [id]);
 
+  const [formError, setFormError] = useState('');
+
   const selectedDeparture = departures.find((d) => d.id === form.departureLocationId);
   const packageAmount = pkg ? pkg.pricePerPerson * form.numberOfPeople : 0;
   const transportAmount = selectedDeparture ? selectedDeparture.transportPrice * form.numberOfPeople : 0;
-  const discountAmount = form.numberOfPeople >= 3 ? Math.round(packageAmount * 0.20) : 0;
-  const totalAmount = packageAmount + transportAmount - discountAmount;
+  // Discount logic: 3+ people = 20% off. 4+ people = 1 ticket free (pay for n-1 people for package)
+  const freeTickets = form.numberOfPeople >= 4 ? Math.floor(form.numberOfPeople / 4) : 0;
+  const paidPeople = form.numberOfPeople - freeTickets;
+  const packageAmountAfterFree = pkg ? pkg.pricePerPerson * paidPeople : 0;
+  const discountAmount = form.numberOfPeople >= 3 ? Math.round(packageAmountAfterFree * 0.20) : (freeTickets > 0 ? packageAmount - packageAmountAfterFree : 0);
+  const effectivePackageAmount = freeTickets > 0 ? packageAmountAfterFree : packageAmount;
+  const totalAmount = effectivePackageAmount + transportAmount - (form.numberOfPeople >= 3 && freeTickets === 0 ? discountAmount : 0);
 
   const transportIcon = (mode: string) => mode === 'FLIGHT' ? '✈️' : mode === 'TRAIN' ? '🚂' : '🚌';
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) { router.push('/login'); return; }
+    if (!form.travelDate) { setFormError('Please select a travel date.'); return; }
+    if (!form.numberOfPeople || form.numberOfPeople < 1) { setFormError('Please enter number of people.'); return; }
+    setFormError('');
     setBookingLoading(true);
     try {
       const res = await api.post('/api/bookings', {
@@ -173,16 +184,16 @@ export default function PackageDetailPage() {
                   <p className="text-gray-400 text-sm">per person (package only)</p>
                 </div>
 
-                <form onSubmit={handleBook} className="space-y-4">
+                <form onSubmit={handleBook} className="space-y-4" noValidate>
                   {/* Travel Date */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                       <Calendar className="w-4 h-4" /> Travel Date
                     </label>
-                    <input type="date" required
+                    <input type="date"
                       min={new Date().toISOString().split('T')[0]}
                       value={form.travelDate}
-                      onChange={(e) => setForm({ ...form, travelDate: e.target.value })}
+                      onChange={(e) => { setForm({ ...form, travelDate: e.target.value }); setFormError(''); }}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                   </div>
 
@@ -191,15 +202,18 @@ export default function PackageDetailPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                       <Users className="w-4 h-4" /> Number of People
                     </label>
-                    <input type="number" required min={1} max={pkg.availableSeats}
+                    <input type="number" min={1} max={pkg.availableSeats}
                       value={form.numberOfPeople}
-                      onChange={(e) => setForm({ ...form, numberOfPeople: parseInt(e.target.value) || 1 })}
+                      onChange={(e) => { setForm({ ...form, numberOfPeople: parseInt(e.target.value) || 1 }); setFormError(''); }}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     {form.numberOfPeople < 3 && (
-                      <p className="text-xs text-blue-500 mt-1">💡 Book for 3+ people and get 20% off!</p>
+                      <p className="text-xs text-blue-500 mt-1">💡 3+ people → 20% off | 🎟️ Every 4 tickets = 1 FREE!</p>
                     )}
-                    {form.numberOfPeople >= 3 && (
-                      <p className="text-xs text-green-600 mt-1 font-medium">🎉 Group discount applied — 20% off!</p>
+                    {form.numberOfPeople >= 3 && form.numberOfPeople < 4 && (
+                      <p className="text-xs text-green-600 mt-1 font-medium">🎉 20% group discount applied! Add 1 more for a free ticket!</p>
+                    )}
+                    {freeTickets > 0 && (
+                      <p className="text-xs text-purple-600 mt-1 font-medium">🎟️ {freeTickets} FREE ticket{freeTickets > 1 ? 's' : ''} included! Pay for {paidPeople}, travel as {form.numberOfPeople}!</p>
                     )}
                   </div>
 
@@ -227,27 +241,39 @@ export default function PackageDetailPage() {
                       <span>Package (₹{pkg.pricePerPerson.toLocaleString()} × {form.numberOfPeople})</span>
                       <span>₹{packageAmount.toLocaleString()}</span>
                     </div>
+                    {freeTickets > 0 && (
+                      <div className="flex justify-between text-purple-600 font-medium">
+                        <span>🎟️ {freeTickets} Free ticket{freeTickets > 1 ? 's' : ''} (4+1 offer)</span>
+                        <span>-₹{(packageAmount - packageAmountAfterFree).toLocaleString()}</span>
+                      </div>
+                    )}
+                    {form.numberOfPeople >= 3 && freeTickets === 0 && (
+                      <div className="flex justify-between text-green-600 font-medium">
+                        <span>🎉 Group Discount (20% off, 3+ people)</span>
+                        <span>-₹{discountAmount.toLocaleString()}</span>
+                      </div>
+                    )}
                     {selectedDeparture && (
                       <div className="flex justify-between text-gray-600">
                         <span>Transport ({selectedDeparture.departureCity} × {form.numberOfPeople})</span>
                         <span>₹{transportAmount.toLocaleString()}</span>
                       </div>
                     )}
-                    {discountAmount > 0 && (
-                      <div className="flex justify-between text-green-600 font-medium">
-                        <span>🎉 Group Discount (20% off, 3+ people)</span>
-                        <span>-₹{discountAmount.toLocaleString()}</span>
-                      </div>
-                    )}
                     <div className="border-t pt-2 flex justify-between font-bold text-gray-800">
                       <span>Total</span>
                       <span className="text-blue-600 text-lg">₹{totalAmount.toLocaleString()}</span>
                     </div>
-                    {discountAmount > 0 && (
-                      <p className="text-green-600 text-xs text-center">You save ₹{discountAmount.toLocaleString()} with group booking!</p>
+                    {(discountAmount > 0 || freeTickets > 0) && (
+                      <p className="text-green-600 text-xs text-center font-medium">
+                        You save ₹{(freeTickets > 0 ? packageAmount - packageAmountAfterFree : discountAmount).toLocaleString()}!
+                      </p>
                     )}
                     <p className="text-xs text-gray-400">Final price confirmed by server</p>
                   </div>
+
+                  {formError && (
+                    <p className="text-red-500 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2">{formError}</p>
+                  )}
 
                   <button type="submit"
                     disabled={bookingLoading || pkg.availableSeats === 0}

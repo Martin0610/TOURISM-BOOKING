@@ -4,10 +4,19 @@ import { successResponse, errorResponse } from '../utils/apiResponse';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { sendBookingConfirmationEmail } from '../services/email.service';
 
-// Group discount: 3+ people = 20% off package amount
-const calculateDiscount = (packageAmount: number, numberOfPeople: number): number => {
-  if (numberOfPeople >= 3) return Math.round(packageAmount * 0.20);
-  return 0;
+// Group discount: 3+ people = 20% off. 4+ people = 1 free ticket per 4 (pay for n-1 per group of 4)
+const calculateDiscount = (pricePerPerson: number, numberOfPeople: number): { discountAmount: number; packageAmount: number } => {
+  const freeTickets = Math.floor(numberOfPeople / 4);
+  if (freeTickets > 0) {
+    const paidPeople = numberOfPeople - freeTickets;
+    const packageAmount = pricePerPerson * paidPeople;
+    return { discountAmount: pricePerPerson * freeTickets, packageAmount };
+  }
+  const packageAmount = pricePerPerson * numberOfPeople;
+  if (numberOfPeople >= 3) {
+    return { discountAmount: Math.round(packageAmount * 0.20), packageAmount };
+  }
+  return { discountAmount: 0, packageAmount };
 };
 
 export const createBooking = async (req: AuthRequest, res: Response): Promise<void> => {
@@ -28,7 +37,7 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
     }
 
     // Backend calculates all amounts — never trust frontend
-    const packageAmount = pkg.pricePerPerson * numberOfPeople;
+    const { discountAmount, packageAmount } = calculateDiscount(pkg.pricePerPerson, numberOfPeople);
     let transportAmount = 0;
     let dep = null;
 
@@ -39,7 +48,6 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
       transportAmount = dep.transportPrice * numberOfPeople;
     }
 
-    const discountAmount = calculateDiscount(packageAmount, numberOfPeople);
     const totalAmount = packageAmount + transportAmount - discountAmount;
 
     const booking = await prisma.booking.create({
