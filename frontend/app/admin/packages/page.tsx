@@ -22,6 +22,8 @@ const emptyForm = {
 
 type FormState = typeof emptyForm;
 
+import AdminLayout from '@/components/AdminLayout';
+
 export default function AdminPackagesPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -111,20 +113,9 @@ export default function AdminPackagesPage() {
   const labelCls = 'block text-sm font-medium text-gray-700 mb-1';
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <div className="bg-gray-900 text-white px-6 py-4 flex items-center justify-between">
-        <Link href="/admin" className="text-xl font-bold hover:text-purple-300">TourEase Admin</Link>
-        <div className="flex gap-4 text-sm">
-          <Link href="/admin" className="hover:text-purple-300">Dashboard</Link>
-          <Link href="/admin/bookings" className="hover:text-purple-300">Bookings</Link>
-          <Link href="/admin/users" className="hover:text-purple-300">Users</Link>
-          <Link href="/admin/payments" className="hover:text-purple-300">Payments</Link>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-6">
+    <AdminLayout>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-800">Manage Packages ({packages.length})</h2>
           <button onClick={openCreate}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition text-sm font-medium">
@@ -323,6 +314,6 @@ export default function AdminPackagesPage() {
           </div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
