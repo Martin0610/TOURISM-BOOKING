@@ -234,8 +234,8 @@ export default function PackageDetailPage() {
                   </div>
 
                   {/* Price Breakdown */}
-                  <div className="bg-blue-50 rounded-xl p-4 space-y-2 text-sm">
-                    <div className="flex justify-between text-gray-600">
+                  <div className="bg-blue-50 dark:bg-blue-950/40 rounded-xl p-4 space-y-2 text-sm border border-blue-100 dark:border-blue-800">
+                    <div className="flex justify-between text-gray-600 dark:text-gray-300">
                       <span>Package (₹{pkg.pricePerPerson.toLocaleString()} × {form.numberOfPeople})</span>
                       <span>₹{packageAmount.toLocaleString()}</span>
                     </div>
@@ -257,16 +257,16 @@ export default function PackageDetailPage() {
                         <span>₹{transportAmount.toLocaleString()}</span>
                       </div>
                     )}
-                    <div className="border-t pt-2 flex justify-between font-bold text-gray-800">
+                    <div className="border-t border-blue-200 dark:border-blue-700 pt-2 flex justify-between font-bold text-gray-800 dark:text-white">
                       <span>Total</span>
-                      <span className="text-blue-600 text-lg">₹{totalAmount.toLocaleString()}</span>
+                      <span className="text-blue-600 dark:text-blue-400 text-lg">₹{totalAmount.toLocaleString()}</span>
                     </div>
                     {(discountAmount > 0 || freeTickets > 0) && (
-                      <p className="text-green-600 text-xs text-center font-medium">
+                      <p className="text-green-600 dark:text-green-400 text-xs text-center font-medium">
                         You save ₹{(freeTickets > 0 ? packageAmount - packageAmountAfterFree : discountAmount).toLocaleString()}!
                       </p>
                     )}
-                    <p className="text-xs text-gray-400">Final price confirmed by server</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">Final price confirmed by server</p>
                   </div>
 
                   {formError && (
