@@ -164,9 +164,16 @@ export default function BookingPage() {
             </div>
 
             {booking.status === 'CONFIRMED' ? (
-              <div className="flex items-center gap-2 bg-green-50 text-green-700 p-4 rounded-xl">
-                <CheckCircle className="w-5 h-5" />
-                <span className="font-medium">Payment complete — booking confirmed!</span>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-4 rounded-xl">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-medium">Payment complete — booking confirmed!</span>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 p-4 rounded-xl text-center">
+                  <p className="text-lg font-bold mb-1">🌟 Have a wonderful journey!</p>
+                  <p className="text-sm">Stay safe and enjoy every moment of your trip! ✈️</p>
+                  <p className="text-xs mt-2 text-blue-500">For any assistance: <a href="mailto:mjv3140@gmail.com" className="underline">mjv3140@gmail.com</a> | +91 72003 36447</p>
+                </div>
               </div>
             ) : booking.status === 'CANCELLED' ? (
               <div className="bg-red-50 text-red-600 p-4 rounded-xl text-center">Booking has been cancelled.</div>

@@ -109,13 +109,16 @@ export const sendBookingConfirmationEmail = async (data: BookingEmailData): Prom
 
         <!-- Support -->
         <p style="color:#6b7280;font-size:13px;text-align:center;margin:0;">
-          Questions? Contact us at <a href="mailto:support@tourease.com" style="color:#2563eb;">support@tourease.com</a>
+          Questions? Contact us at <a href="mailto:mjv3140@gmail.com" style="color:#2563eb;">mjv3140@gmail.com</a>
+        </p>
+        <p style="color:#10b981;font-size:14px;text-align:center;margin:12px 0 0;font-weight:600;">
+          🌟 Have a wonderful and safe journey! Enjoy every moment of your trip! ✈️
         </p>
       </div>
 
       <!-- Footer -->
       <div style="background:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
-        <p style="margin:0;color:#9ca3af;font-size:12px;">© 2024 TourEase · Secure payments by Razorpay</p>
+        <p style="margin:0;color:#9ca3af;font-size:12px;">© 2026 TourEase · Secure payments by Razorpay</p>
       </div>
     </div>
   </body>

@@ -113,10 +113,9 @@ export default function MyBookingsPage() {
                       </Link>
                     )}
                     {booking.status === 'CONFIRMED' && (
-                      <Link href={`/booking/${booking.id}`}
-                        className="bg-green-50 text-green-700 px-4 py-1.5 rounded-lg text-sm hover:bg-green-100 transition">
-                        View Details
-                      </Link>
+                      <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
+                        ✈️ Have a safe and wonderful trip!
+                      </div>
                     )}
                     {booking.status !== 'CANCELLED' && (
                       <button onClick={() => handleCancel(booking.id)}
