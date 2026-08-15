@@ -101,6 +101,29 @@ export const sendBookingConfirmationEmail = async (data: BookingEmailData): Prom
           <p style="margin:0;color:#15803d;font-weight:bold;font-size:14px;">🎉 You saved ₹${discountAmount.toLocaleString('en-IN')} with our Group Discount!</p>
         </div>` : ''}
 
+        <!-- Important Notice -->
+        <div style="background:#eff6ff;border:2px solid #3b82f6;border-radius:12px;padding:18px 20px;margin-bottom:24px;">
+          <h3 style="margin:0 0 12px;color:#1e40af;font-size:15px;font-weight:bold;">📋 Important — Please Carry These</h3>
+          <table style="width:100%;border-collapse:collapse;">
+            <tr>
+              <td style="padding:5px 0;color:#1e40af;font-size:14px;vertical-align:top;width:24px;">✅</td>
+              <td style="padding:5px 0;color:#1e3a8a;font-size:13px;"><strong>This booking confirmation email</strong> (printed or on your phone)</td>
+            </tr>
+            <tr>
+              <td style="padding:5px 0;color:#1e40af;font-size:14px;vertical-align:top;">✅</td>
+              <td style="padding:5px 0;color:#1e3a8a;font-size:13px;"><strong>Valid Government-issued Photo ID</strong> — Aadhaar Card, Passport, Voter ID, or Driving Licence</td>
+            </tr>
+            <tr>
+              <td style="padding:5px 0;color:#1e40af;font-size:14px;vertical-align:top;">✅</td>
+              <td style="padding:5px 0;color:#1e3a8a;font-size:13px;"><strong>Booking ID: ${bookingId.slice(-8).toUpperCase()}</strong> — for quick verification at check-in</td>
+            </tr>
+            <tr>
+              <td style="padding:5px 0;color:#1e40af;font-size:14px;vertical-align:top;">ℹ️</td>
+              <td style="padding:5px 0;color:#1e3a8a;font-size:13px;">All travellers must carry their own valid ID. IDs will be verified at hotel check-in and during sightseeing activities.</td>
+            </tr>
+          </table>
+        </div>
+
         <!-- Cancellation Policy -->
         <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:16px 20px;margin-bottom:24px;">
           <h3 style="margin:0 0 8px;color:#c2410c;font-size:14px;">⚠️ Cancellation Policy</h3>
