@@ -5,24 +5,27 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Globe, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Globe, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     try {
       await login(form.email, form.password);
       toast.success('Welcome back!');
       router.push('/packages');
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Login failed');
+      const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Login failed';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -30,14 +33,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600" alt="bg" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-        {/* Glass card */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2">
@@ -46,33 +47,49 @@ export default function LoginPage() {
             <p className="text-white/60 text-sm mt-1">Sign in to continue your journey</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-white/80 mb-1.5">Email</label>
               <div className="relative">
                 <Mail className="absolute left-3.5 top-3 w-4 h-4 text-white/40" />
                 <input
-                  type="email" required value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => { setForm({ ...form, email: e.target.value.toLowerCase() }); setError(''); }}
+                  className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   placeholder="you@example.com"
                 />
               </div>
             </div>
+
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-white/80 mb-1.5">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-3 w-4 h-4 text-white/40" />
                 <input
-                  type="password" required value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  type={showPassword ? 'text' : 'password'}
+                  value={form.password}
+                  onChange={(e) => { setForm({ ...form, password: e.target.value }); setError(''); }}
+                  className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl pl-10 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   placeholder="••••••••"
                 />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-white/40 hover:text-white/70 transition">
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
-            <button type="submit" disabled={loading}
+            {/* Error message */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-400/40 rounded-xl px-4 py-3 text-sm text-red-200">
+                {error}
+              </div>
+            )}
+
+            <button type="submit" disabled={loading || !form.email || !form.password}
               className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 mt-2">
               {loading ? 'Signing in...' : (<>Sign In <ArrowRight className="w-4 h-4" /></>)}
             </button>

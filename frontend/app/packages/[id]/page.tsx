@@ -38,8 +38,6 @@ export default function PackageDetailPage() {
     fetchData();
   }, [id]);
 
-  const [formError, setFormError] = useState('');
-
   const selectedDeparture = departures.find((d) => d.id === form.departureLocationId);
   const packageAmount = pkg ? pkg.pricePerPerson * form.numberOfPeople : 0;
   const transportAmount = selectedDeparture ? selectedDeparture.transportPrice * form.numberOfPeople : 0;

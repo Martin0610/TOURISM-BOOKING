@@ -13,7 +13,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const existing = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (existing) {
       errorResponse(res, 'Email already registered', 409);
       return;
@@ -21,7 +21,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword, phone },
+      data: { name, email: email.toLowerCase(), password: hashedPassword, phone },
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     });
 
@@ -40,15 +40,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
     if (!user) {
-      errorResponse(res, 'Invalid credentials', 401);
+      errorResponse(res, 'No account found with this email address', 401);
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      errorResponse(res, 'Invalid credentials', 401);
+      errorResponse(res, 'Incorrect password. Please try again', 401);
       return;
     }
 

@@ -3,8 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
+}
+
+.dark {
+  --background: #030712;
+  --foreground: #f9fafb;
 }
 
 body {

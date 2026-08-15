@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X, Globe, Phone } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -17,7 +18,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2 text-blue-600 font-bold text-xl">
@@ -27,6 +28,7 @@ export default function Navbar() {
 
           {/* Desktop */}
           <div className="hidden md:flex items-center gap-6">
+            <ThemeToggle />
             <a href="tel:+917200336447" className="flex items-center gap-1.5 text-gray-500 hover:text-blue-600 transition text-sm">
               <Phone className="w-3.5 h-3.5" /> +91 72003 36447
             </a>
