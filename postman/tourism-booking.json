@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Tourism Booking API",
-    "description": "Complete API collection for the Tourism Package Booking and Management System",
+    "description": "Complete API collection for TourEase Tourism Package Booking System",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -22,44 +22,25 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data.token) {",
+                  "var res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
                   "  pm.collectionVariables.set('token', res.data.token);",
-                  "  console.log('Token saved:', res.data.token);",
+                  "  pm.collectionVariables.set('adminToken', res.data.token);",
                   "}"
-                ]
+                ],
+                "type": "text/javascript"
               }
             }
           ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{baseUrl}}/api/auth/register",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"+91 9876543210\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 201",
-              "status": "Created",
-              "code": 201,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Registration successful\",\n  \"data\": {\n    \"user\": {\n      \"id\": \"clx...\",\n      \"name\": \"John Doe\",\n      \"email\": \"john@example.com\",\n      \"role\": \"USER\"\n    },\n    \"token\": \"eyJhbGci...\"\n  }\n}"
+              "raw": "{\n  \"name\": \"Martin JV\",\n  \"email\": \"mjv3140@gmail.com\",\n  \"password\": \"password123\",\n  \"phone\": \"+91 7200336447\"\n}"
             },
-            {
-              "name": "Error - 409 Already exists",
-              "status": "Conflict",
-              "code": 409,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Email already registered\"\n}"
-            },
-            {
-              "name": "Error - 400 Validation",
-              "status": "Bad Request",
-              "code": 400,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [{\"field\": \"email\", \"message\": \"Invalid email address\"}]\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] }
+          }
         },
         {
           "name": "Login",
@@ -68,60 +49,33 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data.token) {",
+                  "var res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
                   "  pm.collectionVariables.set('token', res.data.token);",
-                  "  console.log('Token saved');",
+                  "  pm.collectionVariables.set('adminToken', res.data.token);",
                   "}"
-                ]
+                ],
+                "type": "text/javascript"
               }
             }
           ],
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{baseUrl}}/api/auth/login",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"data\": {\n    \"user\": { \"id\": \"clx...\", \"name\": \"John Doe\", \"email\": \"john@example.com\", \"role\": \"USER\" },\n    \"token\": \"eyJhbGci...\"\n  }\n}"
+              "raw": "{\n  \"email\": \"mjv3140@gmail.com\",\n  \"password\": \"password123\"\n}"
             },
-            {
-              "name": "Error - 401 Invalid credentials",
-              "status": "Unauthorized",
-              "code": 401,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Invalid credentials\"\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
         },
         {
           "name": "Get Current User (me)",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": "{{baseUrl}}/api/auth/me"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"clx...\",\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"+91 9876543210\",\n    \"role\": \"USER\",\n    \"createdAt\": \"2024-01-01T00:00:00.000Z\"\n  }\n}"
-            },
-            {
-              "name": "Error - 401 No token",
-              "status": "Unauthorized",
-              "code": 401,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Authentication required\"\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
         }
       ]
     },
@@ -132,48 +86,39 @@
           "name": "Get All Packages",
           "request": {
             "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/packages", "host": ["{{baseUrl}}"], "path": ["api", "packages"] }
+          }
+        },
+        {
+          "name": "Get All Packages - Filter by Category",
+          "request": {
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/packages",
+              "raw": "{{baseUrl}}/api/packages?category=Beach",
               "host": ["{{baseUrl}}"],
               "path": ["api", "packages"],
-              "query": [
-                { "key": "search", "value": "goa", "disabled": true },
-                { "key": "destination", "value": "Kerala", "disabled": true },
-                { "key": "minPrice", "value": "5000", "disabled": true },
-                { "key": "maxPrice", "value": "50000", "disabled": true },
-                { "key": "duration", "value": "5", "disabled": true }
-              ]
+              "query": [{ "key": "category", "value": "Beach" }]
             }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"clx...\",\n      \"name\": \"Goa Beach Paradise\",\n      \"destination\": \"Goa\",\n      \"description\": \"Enjoy the beaches of Goa\",\n      \"price\": 15000,\n      \"duration\": 5,\n      \"availableSeats\": 20,\n      \"imageUrl\": \"https://...\",\n      \"itinerary\": \"Day 1: Arrival...\",\n      \"createdAt\": \"2024-01-01T00:00:00.000Z\"\n    }\n  ]\n}"
+          }
+        },
+        {
+          "name": "Get All Packages - Search",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/packages?search=goa",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "packages"],
+              "query": [{ "key": "search", "value": "goa" }]
             }
-          ]
+          }
         },
         {
           "name": "Get Package by ID",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/packages/{{packageId}}"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"clx...\",\n    \"name\": \"Goa Beach Paradise\",\n    \"destination\": \"Goa\",\n    \"price\": 15000,\n    \"duration\": 5,\n    \"availableSeats\": 20\n  }\n}"
-            },
-            {
-              "name": "Error - 404 Not found",
-              "status": "Not Found",
-              "code": 404,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Package not found\"\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/packages/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api", "packages", "{{packageId}}"] }
+          }
         },
         {
           "name": "Create Package (Admin)",
@@ -182,11 +127,12 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data.id) {",
+                  "var res = pm.response.json();",
+                  "if (res.success && res.data && res.data.id) {",
                   "  pm.collectionVariables.set('packageId', res.data.id);",
                   "}"
-                ]
+                ],
+                "type": "text/javascript"
               }
             }
           ],
@@ -196,32 +142,12 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{adminToken}}" }
             ],
-            "url": "{{baseUrl}}/api/packages",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Goa Beach Paradise\",\n  \"destination\": \"Goa\",\n  \"description\": \"Enjoy the stunning beaches of Goa with this 5-day package.\",\n  \"price\": 15000,\n  \"duration\": 5,\n  \"availableSeats\": 20,\n  \"imageUrl\": \"https://images.unsplash.com/photo-1506905925346-21bda4d32df4\",\n  \"itinerary\": \"Day 1: Arrival and check-in\\nDay 2: North Goa beaches\\nDay 3: South Goa sightseeing\\nDay 4: Water sports\\nDay 5: Departure\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 201",
-              "status": "Created",
-              "code": 201,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Package created\",\n  \"data\": { \"id\": \"clx...\", \"name\": \"Goa Beach Paradise\", ... }\n}"
+              "raw": "{\n  \"name\": \"Test Beach Package\",\n  \"destination\": \"Goa\",\n  \"state\": \"Goa\",\n  \"shortDescription\": \"A beautiful beach getaway\",\n  \"description\": \"Enjoy the beautiful beaches of Goa with this amazing package.\",\n  \"pricePerPerson\": 12000,\n  \"durationDays\": 4,\n  \"durationNights\": 3,\n  \"category\": \"Beach\",\n  \"availableSeats\": 15,\n  \"hotelCategory\": \"3 Star\",\n  \"accommodation\": \"Beach-facing hotel\",\n  \"mealsIncluded\": \"Daily breakfast\",\n  \"transportIncluded\": false,\n  \"sightseeingIncluded\": true,\n  \"bestTimeToVisit\": \"November to February\",\n  \"itinerary\": \"Day 1: Arrival\\nDay 2: Beach tour\\nDay 3: Water sports\\nDay 4: Departure\",\n  \"inclusions\": \"Hotel accommodation\\nDaily breakfast\\nAirport transfers\",\n  \"exclusions\": \"Airfare\\nPersonal expenses\",\n  \"cancellationPolicy\": \"Free cancellation up to 7 days before travel.\",\n  \"imageUrl\": \"https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800\"\n}"
             },
-            {
-              "name": "Error - 403 Not admin",
-              "status": "Forbidden",
-              "code": 403,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Admin access required\"\n}"
-            },
-            {
-              "name": "Error - 400 Validation",
-              "status": "Bad Request",
-              "code": 400,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [{\"field\": \"price\", \"message\": \"Price must be positive\"}]\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/packages", "host": ["{{baseUrl}}"], "path": ["api", "packages"] }
+          }
         },
         {
           "name": "Update Package (Admin)",
@@ -231,36 +157,20 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{adminToken}}" }
             ],
-            "url": "{{baseUrl}}/api/packages/{{packageId}}",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"price\": 18000,\n  \"availableSeats\": 15,\n  \"description\": \"Updated description for the Goa package.\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Package updated\",\n  \"data\": { \"id\": \"clx...\", \"price\": 18000, ... }\n}"
-            }
-          ]
+              "raw": "{\n  \"pricePerPerson\": 14000,\n  \"availableSeats\": 10\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/packages/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api", "packages", "{{packageId}}"] }
+          }
         },
         {
           "name": "Delete Package (Admin)",
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
-            "url": "{{baseUrl}}/api/packages/{{packageId}}"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Package deleted\",\n  \"data\": null\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/packages/{{packageId}}", "host": ["{{baseUrl}}"], "path": ["api", "packages", "{{packageId}}"] }
+          }
         }
       ]
     },
@@ -277,25 +187,19 @@
               "path": ["api", "departures"],
               "query": [{ "key": "destination", "value": "Goa" }]
             }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"clx...\",\n      \"departureCity\": \"Chennai\",\n      \"departureState\": \"Tamil Nadu\",\n      \"destination\": \"Goa\",\n      \"transportMode\": \"FLIGHT\",\n      \"transportPrice\": 3500,\n      \"available\": true\n    }\n  ]\n}"
-            }
-          ]
+          }
         },
         {
-          "name": "Get Departure by ID",
+          "name": "Get All Departures",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/departures/:departureId"
+            "url": { "raw": "{{baseUrl}}/api/departures", "host": ["{{baseUrl}}"], "path": ["api", "departures"] }
           }
         }
       ]
     },
+    {
+      "name": "Bookings",
       "item": [
         {
           "name": "Create Booking",
@@ -304,11 +208,12 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data.id) {",
+                  "var res = pm.response.json();",
+                  "if (res.success && res.data && res.data.id) {",
                   "  pm.collectionVariables.set('bookingId', res.data.id);",
                   "}"
-                ]
+                ],
+                "type": "text/javascript"
               }
             }
           ],
@@ -318,58 +223,28 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": "{{baseUrl}}/api/bookings",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"packageId\": \"{{packageId}}\",\n  \"travelDate\": \"2025-03-15\",\n  \"numberOfPeople\": 2,\n  \"departureLocationId\": \"clx_departure_id_here\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 201",
-              "status": "Created",
-              "code": 201,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Booking created\",\n  \"data\": {\n    \"id\": \"clx...\",\n    \"packageId\": \"clx...\",\n    \"travelDate\": \"2025-03-15T00:00:00.000Z\",\n    \"numberOfPeople\": 2,\n    \"totalAmount\": 30000,\n    \"status\": \"PENDING\"\n  }\n}"
+              "raw": "{\n  \"packageId\": \"{{packageId}}\",\n  \"travelDate\": \"2025-06-15\",\n  \"numberOfPeople\": 4,\n  \"departureLocationId\": \"\"\n}"
             },
-            {
-              "name": "Error - 400 Not enough seats",
-              "status": "Bad Request",
-              "code": 400,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Only 1 seats available\"\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": ["{{baseUrl}}"], "path": ["api", "bookings"] }
+          }
         },
         {
           "name": "Get My Bookings",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": "{{baseUrl}}/api/bookings"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"clx...\",\n      \"status\": \"PENDING\",\n      \"totalAmount\": 30000,\n      \"package\": { \"name\": \"Goa Beach Paradise\" }\n    }\n  ]\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/bookings", "host": ["{{baseUrl}}"], "path": ["api", "bookings"] }
+          }
         },
         {
           "name": "Get Booking by ID",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": "{{baseUrl}}/api/bookings/{{bookingId}}"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"id\": \"clx...\",\n    \"status\": \"PENDING\",\n    \"totalAmount\": 30000,\n    \"package\": { \"name\": \"Goa Beach Paradise\" },\n    \"payment\": null\n  }\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}", "host": ["{{baseUrl}}"], "path": ["api", "bookings", "{{bookingId}}"] }
+          }
         },
         {
           "name": "Update Booking Status (Admin)",
@@ -379,42 +254,20 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{adminToken}}" }
             ],
-            "url": "{{baseUrl}}/api/bookings/{{bookingId}}",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"CONFIRMED\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Booking updated\",\n  \"data\": { \"id\": \"clx...\", \"status\": \"CONFIRMED\" }\n}"
-            }
-          ]
+            },
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}", "host": ["{{baseUrl}}"], "path": ["api", "bookings", "{{bookingId}}"] }
+          }
         },
         {
           "name": "Cancel Booking",
           "request": {
             "method": "DELETE",
             "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
-            "url": "{{baseUrl}}/api/bookings/{{bookingId}}"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Booking cancelled\",\n  \"data\": null\n}"
-            },
-            {
-              "name": "Error - 400 Already cancelled",
-              "status": "Bad Request",
-              "code": 400,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Booking already cancelled\"\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/bookings/{{bookingId}}", "host": ["{{baseUrl}}"], "path": ["api", "bookings", "{{bookingId}}"] }
+          }
         }
       ]
     },
@@ -429,20 +282,12 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": "{{baseUrl}}/api/payments/create-order",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"bookingId\": \"{{bookingId}}\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Order created\",\n  \"data\": {\n    \"orderId\": \"order_...\",\n    \"amount\": 3000000,\n    \"currency\": \"INR\",\n    \"keyId\": \"rzp_test_...\"\n  }\n}"
-            }
-          ]
+            },
+            "url": { "raw": "{{baseUrl}}/api/payments/create-order", "host": ["{{baseUrl}}"], "path": ["api", "payments", "create-order"] }
+          }
         },
         {
           "name": "Verify Payment",
@@ -452,26 +297,12 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{token}}" }
             ],
-            "url": "{{baseUrl}}/api/payments/verify",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"razorpay_order_id\": \"order_xxxx\",\n  \"razorpay_payment_id\": \"pay_xxxx\",\n  \"razorpay_signature\": \"abc123signature\",\n  \"bookingId\": \"{{bookingId}}\"\n}"
-            }
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Payment verified successfully\",\n  \"data\": null\n}"
+              "raw": "{\n  \"razorpay_order_id\": \"order_xxxx\",\n  \"razorpay_payment_id\": \"pay_xxxx\",\n  \"razorpay_signature\": \"signature_xxxx\",\n  \"bookingId\": \"{{bookingId}}\"\n}"
             },
-            {
-              "name": "Error - 400 Invalid signature",
-              "status": "Bad Request",
-              "code": 400,
-              "body": "{\n  \"success\": false,\n  \"message\": \"Payment verification failed\"\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/payments/verify", "host": ["{{baseUrl}}"], "path": ["api", "payments", "verify"] }
+          }
         }
       ]
     },
@@ -483,39 +314,15 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
-            "url": "{{baseUrl}}/api/admin/stats"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": {\n    \"totalPackages\": 5,\n    \"totalUsers\": 12,\n    \"totalBookings\": 30,\n    \"confirmedBookings\": 20,\n    \"pendingBookings\": 8,\n    \"totalRevenue\": 450000\n  }\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/admin/stats", "host": ["{{baseUrl}}"], "path": ["api", "admin", "stats"] }
+          }
         },
         {
           "name": "Get All Users",
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
-            "url": "{{baseUrl}}/api/admin/users"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"clx...\",\n      \"name\": \"John Doe\",\n      \"email\": \"john@example.com\",\n      \"role\": \"USER\",\n      \"bookings\": [{ \"id\": \"clx...\", \"status\": \"CONFIRMED\" }]\n    }\n  ]\n}"
-            }
-          ]
-        },
-        {
-          "name": "Get User by ID",
-          "request": {
-            "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
-            "url": "{{baseUrl}}/api/admin/users/:userId"
+            "url": { "raw": "{{baseUrl}}/api/admin/users", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users"] }
           }
         },
         {
@@ -523,16 +330,69 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
-            "url": "{{baseUrl}}/api/admin/payments"
-          },
-          "response": [
-            {
-              "name": "Success - 200",
-              "status": "OK",
-              "code": 200,
-              "body": "{\n  \"success\": true,\n  \"message\": \"Success\",\n  \"data\": [\n    {\n      \"id\": \"clx...\",\n      \"razorpayOrderId\": \"order_...\",\n      \"razorpayPaymentId\": \"pay_...\",\n      \"amount\": 30000,\n      \"status\": \"SUCCESS\",\n      \"booking\": {\n        \"user\": { \"name\": \"John Doe\", \"email\": \"john@example.com\" },\n        \"package\": { \"name\": \"Goa Beach Paradise\" }\n      }\n    }\n  ]\n}"
-            }
-          ]
+            "url": { "raw": "{{baseUrl}}/api/admin/payments", "host": ["{{baseUrl}}"], "path": ["api", "admin", "payments"] }
+          }
+        },
+        {
+          "name": "Get Revenue Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/admin/revenue", "host": ["{{baseUrl}}"], "path": ["api", "admin", "revenue"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation Tests",
+      "item": [
+        {
+          "name": "Register - Missing Fields (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"notvalid\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Access Protected Route - No Token (401)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        },
+        {
+          "name": "Create Package - Not Admin (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/packages", "host": ["{{baseUrl}}"], "path": ["api", "packages"] }
+          }
+        },
+        {
+          "name": "Get Package - Not Found (404)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/packages/invalid-id-123", "host": ["{{baseUrl}}"], "path": ["api", "packages", "invalid-id-123"] }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
         }
       ]
     }
