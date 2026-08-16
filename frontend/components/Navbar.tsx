@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Globe, Phone } from 'lucide-react';
+import { Menu, X, Globe, Phone, Heart } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
@@ -35,7 +35,9 @@ export default function Navbar() {
             <Link href="/packages" className="text-gray-600 hover:text-blue-600 transition">Packages</Link>
             {user ? (
               <>
-                <Link href="/wishlist" className="text-gray-600 hover:text-red-500 transition flex items-center gap-1">❤️ Wishlist</Link>
+                <Link href="/wishlist" className="text-gray-600 hover:text-red-500 transition flex items-center gap-1">
+                  <Heart className="w-4 h-4" /> Wishlist
+                </Link>
                 <Link href="/my-bookings" className="text-gray-600 hover:text-blue-600 transition">My Bookings</Link>
                 {user.role === 'ADMIN' && (
                   <Link href="/admin" className="text-purple-600 hover:text-purple-800 font-medium transition">Admin</Link>

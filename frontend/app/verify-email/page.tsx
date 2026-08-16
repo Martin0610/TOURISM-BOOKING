@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Globe, Mail, Key, ArrowRight, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Globe, Mail, Key, ArrowRight, ArrowLeft, RefreshCw, AlertTriangle } from 'lucide-react';
 
 function VerifyEmailContent() {
   const router = useRouter();
@@ -166,8 +166,9 @@ function VerifyEmailContent() {
                 </div>
               </div>
 
-              <div className="bg-yellow-500/20 border border-yellow-400/40 rounded-xl px-4 py-3 text-sm text-yellow-200">
-                ⚠️ Make sure you entered the correct email during registration. If you need to change it, please contact support.
+              <div className="bg-yellow-500/20 border border-yellow-400/40 rounded-xl px-4 py-3 text-sm text-yellow-200 flex items-start gap-2">
+                <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <span>Make sure you entered the correct email during registration. If you need to change it, please contact support.</span>
               </div>
 
               <div className="flex gap-3">

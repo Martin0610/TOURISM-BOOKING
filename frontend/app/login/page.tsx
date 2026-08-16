@@ -21,8 +21,20 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(form.email, form.password);
-      toast.success('Welcome back!');
-      router.push('/packages');
+      
+      // Get user from localStorage to check role
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        // Redirect based on role
+        if (user.role === 'ADMIN') {
+          toast.success('Welcome back, Admin!');
+          router.push('/admin');
+        } else {
+          toast.success('Welcome back!');
+          router.push('/packages');
+        }
+      }
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Login failed';
       setError(msg);

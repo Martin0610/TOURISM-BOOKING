@@ -7,7 +7,7 @@ import api from '@/lib/api';
 import { Package, DepartureLocation } from '@/lib/types';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
-import { MapPin, Clock, Users, Calendar, ArrowLeft, Hotel, Utensils, CheckCircle, XCircle, Star, Heart, Tag } from 'lucide-react';
+import { MapPin, Clock, Users, Calendar, ArrowLeft, Hotel, Utensils, CheckCircle, XCircle, Star, Heart, Tag, Plane, Train, Bus, Globe, PartyPopper } from 'lucide-react';
 import Link from 'next/link';
 
 interface Review {
@@ -82,7 +82,7 @@ export default function PackageDetailPage() {
       } else {
         await api.post('/api/wishlist', { packageId: id });
         setIsWishlisted(true);
-        toast.success('Added to wishlist ❤️');
+        toast.success('Added to wishlist');
       }
     } catch { toast.error('Failed to update wishlist'); }
   };
@@ -116,7 +116,11 @@ export default function PackageDetailPage() {
   const couponDiscount = couponResult?.discountAmount ?? 0;
   const totalAmount = subtotalBeforeCoupon - couponDiscount;
 
-  const transportIcon = (mode: string) => mode === 'FLIGHT' ? '✈️' : mode === 'TRAIN' ? '🚂' : '🚌';
+  const transportIcon = (mode: string) => {
+    if (mode === 'FLIGHT') return <Plane className="w-4 h-4" />;
+    if (mode === 'TRAIN') return <Train className="w-4 h-4" />;
+    return <Bus className="w-4 h-4" />;
+  };
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,7 +175,9 @@ export default function PackageDetailPage() {
                   {pkg.imageUrl ? (
                     <img src={pkg.imageUrl} alt={pkg.name} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-8xl">🌍</div>
+                    <div className="w-full h-full flex items-center justify-center text-gray-300">
+                      <Globe className="w-24 h-24" />
+                    </div>
                   )}
                   <span className="absolute top-4 left-4 bg-blue-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
                     {pkg.category}
@@ -201,8 +207,12 @@ export default function PackageDetailPage() {
                   </div>
                   <p className="text-gray-600 leading-relaxed">{pkg.description}</p>
                   <div className="mt-4 flex gap-4 text-sm">
-                    <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full">🏨 {pkg.accommodation}</span>
-                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full">📅 Best: {pkg.bestTimeToVisit}</span>
+                    <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full flex items-center gap-1">
+                      <Hotel className="w-3 h-3" /> {pkg.accommodation}
+                    </span>
+                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full flex items-center gap-1">
+                      <Calendar className="w-3 h-3" /> Best: {pkg.bestTimeToVisit}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -317,7 +327,9 @@ export default function PackageDetailPage() {
                       <p className="text-xs text-blue-500 mt-1">💡 3+ people → 20% off | 🎟️ Every 4 tickets = 1 FREE!</p>
                     )}
                     {form.numberOfPeople >= 3 && form.numberOfPeople < 4 && (
-                      <p className="text-xs text-green-600 mt-1 font-medium">🎉 20% group discount applied! Add 1 more for a free ticket!</p>
+                      <p className="text-xs text-green-600 mt-1 font-medium flex items-center gap-1">
+                        <PartyPopper className="w-3 h-3" /> 20% group discount applied! Add 1 more for a free ticket!
+                      </p>
                     )}
                     {freeTickets > 0 && (
                       <p className="text-xs text-purple-600 mt-1 font-medium">🎟️ {freeTickets} FREE ticket{freeTickets > 1 ? 's' : ''} included! Pay for {paidPeople}, travel as {form.numberOfPeople}!</p>
@@ -398,7 +410,9 @@ export default function PackageDetailPage() {
                       </button>
                     </div>
                     {couponResult && (
-                      <p className="text-green-600 text-xs mt-1 font-medium">✅ {couponResult.code} — ₹{couponResult.discountAmount.toLocaleString('en-IN')} off!</p>
+                      <p className="text-green-600 text-xs mt-1 font-medium flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3" /> {couponResult.code} — ₹{couponResult.discountAmount.toLocaleString('en-IN')} off!
+                      </p>
                     )}
                   </div>
 
@@ -416,7 +430,9 @@ export default function PackageDetailPage() {
                     )}
                     {form.numberOfPeople >= 3 && freeTickets === 0 && (
                       <div className="flex justify-between text-green-600 font-medium">
-                        <span>🎉 Group Discount (20% off, 3+ people)</span>
+                        <span className="flex items-center gap-1">
+                          <PartyPopper className="w-4 h-4" /> Group Discount (20% off, 3+ people)
+                        </span>
                         <span>-₹{discountAmount.toLocaleString()}</span>
                       </div>
                     )}

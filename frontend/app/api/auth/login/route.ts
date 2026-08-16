@@ -20,6 +20,11 @@ export async function POST(request: NextRequest) {
       return errorResponse('No account found with this email address', 401);
     }
 
+    // Check if email is verified
+    if (!user.emailVerified) {
+      return errorResponse('Please verify your email before logging in. Check your inbox for the verification OTP.', 403);
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return errorResponse('Incorrect password. Please try again', 401);

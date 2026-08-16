@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import HeroButtons from '@/components/HeroButtons';
-import { Globe, Shield, CreditCard, Star, MapPin, Users, Clock } from 'lucide-react';
+import { Globe, Shield, CreditCard, Star, MapPin, Users, Clock, Phone } from 'lucide-react';
 
 const featuredDestinations = [
   { name: 'Goa Beach Paradise', state: 'Goa', price: 15500, duration: '5D/4N', category: 'Beach', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600' },
@@ -196,8 +196,8 @@ export default function Home() {
           <Globe className="w-5 h-5 text-blue-400" /> TripEase
         </div>
         <p className="text-sm mb-2">© 2026 TripEase. Built with Next.js, Express, Supabase & Razorpay.</p>
-        <a href="tel:+917200336447" className="text-blue-400 hover:text-blue-300 text-sm font-medium">
-          📞 +91 72003 36447
+        <a href="tel:+917200336447" className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center justify-center gap-1">
+          <Phone className="w-4 h-4" /> +91 72003 36447
         </a>
       </footer>
     </>

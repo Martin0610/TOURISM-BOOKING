@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { Package } from '@/lib/types';
 import Link from 'next/link';
-import { MapPin, Clock, Users, Search, Filter, Heart } from 'lucide-react';
+import { MapPin, Clock, Users, Search, Filter, Heart, Plane, Car, Globe } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -46,8 +46,12 @@ export default function PackagesPage() {
       setPackages(pkgs);
       
       // Extract unique categories
-      const uniqueCategories = ['All', ...new Set(pkgs.map((p: Package) => p.category).filter(Boolean))];
-      setCategories(uniqueCategories);
+      const categorySet = new Set<string>();
+      categorySet.add('All');
+      pkgs.forEach((p: Package) => {
+        if (p.category) categorySet.add(p.category);
+      });
+      setCategories(Array.from(categorySet));
       
       setLoading(false);
     }).catch(() => {
@@ -74,12 +78,16 @@ export default function PackagesPage() {
       } else {
         await api.post('/api/wishlist', { packageId: pkgId });
         setWishlisted(prev => new Set([...prev, pkgId]));
-        toast.success('Added to wishlist ❤️');
+        toast.success('Added to wishlist');
       }
     } catch { toast.error('Failed'); }
   };
 
-  const transportIcon = (included: boolean) => included ? '✈️ Transport incl.' : '🚗 Self transport';
+  const transportIcon = (included: boolean) => included ? (
+    <span className="flex items-center gap-1"><Plane className="w-3 h-3" /> Transport incl.</span>
+  ) : (
+    <span className="flex items-center gap-1"><Car className="w-3 h-3" /> Self transport</span>
+  );
 
   return (
     <>
@@ -150,7 +158,9 @@ export default function PackagesPage() {
                     {pkg.imageUrl ? (
                       <img src={pkg.imageUrl} alt={pkg.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-5xl">🌍</div>
+                      <div className="w-full h-full flex items-center justify-center text-gray-300">
+                        <Globe className="w-16 h-16" />
+                      </div>
                     )}
                     <span className="absolute top-3 left-3 bg-white/90 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
                       {pkg.category}

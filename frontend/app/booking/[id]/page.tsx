@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { Booking } from '@/lib/types';
 import toast from 'react-hot-toast';
-import { CheckCircle, CreditCard, Calendar, Users, MapPin, ArrowLeft } from 'lucide-react';
+import { CheckCircle, CreditCard, Calendar, Users, MapPin, ArrowLeft, Star, Plane } from 'lucide-react';
 import Link from 'next/link';
 
 declare global {
@@ -170,8 +170,12 @@ export default function BookingPage() {
                   <span className="font-medium">Payment complete — booking confirmed!</span>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 p-4 rounded-xl text-center">
-                  <p className="text-lg font-bold mb-1">🌟 Have a wonderful journey!</p>
-                  <p className="text-sm">Stay safe and enjoy every moment of your trip! ✈️</p>
+                  <p className="text-lg font-bold mb-1 flex items-center justify-center gap-2">
+                    <Star className="w-5 h-5 fill-current" /> Have a wonderful journey!
+                  </p>
+                  <p className="text-sm flex items-center justify-center gap-2">
+                    Stay safe and enjoy every moment of your trip! <Plane className="w-4 h-4" />
+                  </p>
                   <p className="text-xs mt-2 text-blue-500">For any assistance: <a href="mailto:mjv3140@gmail.com" className="underline">mjv3140@gmail.com</a> | +91 72003 36447</p>
                 </div>
               </div>

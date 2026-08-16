@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Calendar, Users, MapPin, Plane, Star } from 'lucide-react';
+import { CheckCircle, Plane, Calendar, Users, MapPin, Star } from 'lucide-react';
 
 function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packageId: string; onDone: () => void }) {
   const [show, setShow] = useState(false);
@@ -31,7 +31,7 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
 
   if (submitted) return (
     <div className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium">
-      ✅ Thanks for your feedback!
+      <CheckCircle className="w-4 h-4" /> Thanks for your feedback!
     </div>
   );
 
@@ -169,7 +169,7 @@ export default function MyBookingsPage() {
                     )}
                     {booking.status === 'CONFIRMED' && (
                       <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
-                        ✈️ Have a safe and wonderful trip!
+                        <Plane className="w-4 h-4" /> Have a safe and wonderful trip!
                       </div>
                     )}
                     {booking.status === 'CONFIRMED' && !booking.review && (
