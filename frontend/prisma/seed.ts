@@ -297,7 +297,16 @@ async function main() {
 
   await prisma.package.deleteMany();
   await prisma.departureLocation.deleteMany();
+  await prisma.user.deleteMany();
   console.log('Cleared existing data');
+
+  // Create admin user
+  const bcrypt = await import('bcryptjs');
+  const adminPassword = await bcrypt.hash('admin123', 12);
+  await prisma.user.create({
+    data: { name: 'Admin', email: 'admin@tourease.com', password: adminPassword, role: 'ADMIN' },
+  });
+  console.log('✓ Admin user: admin@tourease.com / admin123');
 
   for (const pkg of packages) {
     const created = await prisma.package.create({ data: pkg });
