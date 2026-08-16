@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
         bookingId, 
         rating: parseInt(rating), 
         comment, 
-        approved: false 
+        approved: true  // Auto-approved, admin marks as read/unread
       },
       include: { user: { select: { name: true } } },
     });
 
-    return successResponse(review, 'Review submitted and pending approval', 201);
+    return successResponse(review, 'Thanks for your feedback!', 201);
   } catch (err) {
     if (err instanceof Error && err.message === 'UNAUTHORIZED') {
       return errorResponse('Authentication required', 401);

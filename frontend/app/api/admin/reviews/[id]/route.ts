@@ -18,7 +18,7 @@ export async function PUT(
       data: { approved: Boolean(approved) },
     });
     
-    return successResponse(review, `Review ${approved ? 'approved' : 'rejected'}`);
+    return successResponse(review, `Review marked as ${approved ? 'read' : 'unread'}`);
   } catch (err) {
     if (err instanceof Error && err.message === 'UNAUTHORIZED') {
       return errorResponse('Authentication required', 401);
@@ -26,7 +26,7 @@ export async function PUT(
     if (err instanceof Error && err.message === 'FORBIDDEN') {
       return errorResponse('Admin access required', 403);
     }
-    return errorResponse('Failed to moderate review', 500);
+    return errorResponse('Failed to update review status', 500);
   }
 }
 

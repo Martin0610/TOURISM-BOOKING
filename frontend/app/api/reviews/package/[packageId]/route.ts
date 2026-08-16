@@ -9,7 +9,7 @@ export async function GET(
   try {
     const { packageId } = await params;
     const reviews = await prisma.review.findMany({
-      where: { packageId, approved: true },
+      where: { packageId },  // Show all reviews (no approval filter)
       include: { user: { select: { name: true } } },
       orderBy: { createdAt: 'desc' },
     });
