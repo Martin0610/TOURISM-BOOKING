@@ -15,18 +15,25 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const submit = async () => {
     setLoading(true);
     try {
       await api.post('/api/reviews', { packageId, bookingId, rating, comment });
-      toast.success('Review submitted! Pending admin approval.');
+      setSubmitted(true);
       setShow(false);
       onDone();
     } catch (err: unknown) {
       toast.error((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed');
     } finally { setLoading(false); }
   };
+
+  if (submitted) return (
+    <div className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium">
+      ✅ Thanks for your feedback!
+    </div>
+  );
 
   if (!show) return (
     <button onClick={() => setShow(true)} className="flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-lg text-sm hover:bg-yellow-100 transition">

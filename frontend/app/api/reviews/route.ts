@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         bookingId, 
         rating: parseInt(rating), 
         comment, 
-        approved: true  // Auto-approved, admin marks as read/unread
+        approved: true
       },
       include: { user: { select: { name: true } } },
     });
