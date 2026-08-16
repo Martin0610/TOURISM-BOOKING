@@ -242,54 +242,91 @@ const packages = [
 ];
 
 const departures = [
-  // Goa
-  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 3500 },
-  { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 2800 },
+  // Goa (7 cities)
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Goa', transportMode: 'TRAIN' as const, transportPrice: 1200 },
+  { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 2800 },
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 3500 },
   { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 3200 },
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 4500 },
-  // Kerala
-  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Alleppey', transportMode: 'TRAIN' as const, transportPrice: 1500 },
-  { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Alleppey', transportMode: 'TRAIN' as const, transportPrice: 1800 },
+  { departureCity: 'Pune', departureState: 'Maharashtra', destination: 'Goa', transportMode: 'BUS' as const, transportPrice: 900 },
+  { departureCity: 'Ahmedabad', departureState: 'Gujarat', destination: 'Goa', transportMode: 'FLIGHT' as const, transportPrice: 3800 },
+
+  // Kerala / Alleppey (7 cities)
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Alleppey', transportMode: 'FLIGHT' as const, transportPrice: 4000 },
+  { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Alleppey', transportMode: 'TRAIN' as const, transportPrice: 1800 },
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Alleppey', transportMode: 'TRAIN' as const, transportPrice: 1500 },
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Alleppey', transportMode: 'FLIGHT' as const, transportPrice: 5000 },
-  // Rajasthan
+  { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Alleppey', transportMode: 'FLIGHT' as const, transportPrice: 3500 },
+  { departureCity: 'Coimbatore', departureState: 'Tamil Nadu', destination: 'Alleppey', transportMode: 'BUS' as const, transportPrice: 800 },
+  { departureCity: 'Kolkata', departureState: 'West Bengal', destination: 'Alleppey', transportMode: 'FLIGHT' as const, transportPrice: 5200 },
+
+  // Rajasthan (7 cities)
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'TRAIN' as const, transportPrice: 1000 },
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'FLIGHT' as const, transportPrice: 3800 },
-  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'FLIGHT' as const, transportPrice: 5200 },
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'FLIGHT' as const, transportPrice: 4800 },
-  // Manali
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'FLIGHT' as const, transportPrice: 5200 },
+  { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'FLIGHT' as const, transportPrice: 4200 },
+  { departureCity: 'Ahmedabad', departureState: 'Gujarat', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'TRAIN' as const, transportPrice: 1200 },
+  { departureCity: 'Pune', departureState: 'Maharashtra', destination: 'Jaipur–Jodhpur–Jaisalmer', transportMode: 'FLIGHT' as const, transportPrice: 3600 },
+
+  // Manali (6 cities)
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Manali', transportMode: 'BUS' as const, transportPrice: 800 },
   { departureCity: 'Chandigarh', departureState: 'Punjab', destination: 'Manali', transportMode: 'BUS' as const, transportPrice: 600 },
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Manali', transportMode: 'FLIGHT' as const, transportPrice: 4200 },
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Manali', transportMode: 'FLIGHT' as const, transportPrice: 5000 },
-  // Andaman
+  { departureCity: 'Amritsar', departureState: 'Punjab', destination: 'Manali', transportMode: 'BUS' as const, transportPrice: 700 },
+  { departureCity: 'Jaipur', departureState: 'Rajasthan', destination: 'Manali', transportMode: 'BUS' as const, transportPrice: 1100 },
+
+  // Andaman (6 cities)
   { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Port Blair–Havelock–Neil Island', transportMode: 'FLIGHT' as const, transportPrice: 5500 },
   { departureCity: 'Kolkata', departureState: 'West Bengal', destination: 'Port Blair–Havelock–Neil Island', transportMode: 'FLIGHT' as const, transportPrice: 4800 },
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Port Blair–Havelock–Neil Island', transportMode: 'FLIGHT' as const, transportPrice: 6500 },
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Port Blair–Havelock–Neil Island', transportMode: 'FLIGHT' as const, transportPrice: 5800 },
-  // Varanasi
+  { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Port Blair–Havelock–Neil Island', transportMode: 'FLIGHT' as const, transportPrice: 6200 },
+  { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Port Blair–Havelock–Neil Island', transportMode: 'FLIGHT' as const, transportPrice: 5900 },
+
+  // Varanasi (7 cities)
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Varanasi', transportMode: 'TRAIN' as const, transportPrice: 900 },
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Varanasi', transportMode: 'FLIGHT' as const, transportPrice: 4000 },
   { departureCity: 'Kolkata', departureState: 'West Bengal', destination: 'Varanasi', transportMode: 'TRAIN' as const, transportPrice: 1100 },
-  // Kashmir
+  { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Varanasi', transportMode: 'FLIGHT' as const, transportPrice: 4800 },
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Varanasi', transportMode: 'FLIGHT' as const, transportPrice: 4500 },
+  { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Varanasi', transportMode: 'FLIGHT' as const, transportPrice: 3800 },
+  { departureCity: 'Patna', departureState: 'Bihar', destination: 'Varanasi', transportMode: 'TRAIN' as const, transportPrice: 400 },
+
+  // Kashmir (6 cities)
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Srinagar–Gulmarg–Pahalgam', transportMode: 'FLIGHT' as const, transportPrice: 3500 },
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Srinagar–Gulmarg–Pahalgam', transportMode: 'FLIGHT' as const, transportPrice: 5000 },
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Srinagar–Gulmarg–Pahalgam', transportMode: 'FLIGHT' as const, transportPrice: 5500 },
-  // Ladakh
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Srinagar–Gulmarg–Pahalgam', transportMode: 'FLIGHT' as const, transportPrice: 5800 },
+  { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Srinagar–Gulmarg–Pahalgam', transportMode: 'FLIGHT' as const, transportPrice: 5200 },
+  { departureCity: 'Amritsar', departureState: 'Punjab', destination: 'Srinagar–Gulmarg–Pahalgam', transportMode: 'BUS' as const, transportPrice: 1200 },
+
+  // Ladakh (6 cities)
   { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Leh–Nubra–Pangong', transportMode: 'FLIGHT' as const, transportPrice: 4500 },
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Leh–Nubra–Pangong', transportMode: 'FLIGHT' as const, transportPrice: 6000 },
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Leh–Nubra–Pangong', transportMode: 'FLIGHT' as const, transportPrice: 6500 },
-  // Golden Triangle
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Leh–Nubra–Pangong', transportMode: 'FLIGHT' as const, transportPrice: 6800 },
+  { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Leh–Nubra–Pangong', transportMode: 'FLIGHT' as const, transportPrice: 6200 },
+  { departureCity: 'Srinagar', departureState: 'Jammu & Kashmir', destination: 'Leh–Nubra–Pangong', transportMode: 'FLIGHT' as const, transportPrice: 2500 },
+
+  // Golden Triangle (7 cities)
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 3500 },
-  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 4200 },
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 4000 },
+  { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 4200 },
   { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 3800 },
-  // Coorg
+  { departureCity: 'Kolkata', departureState: 'West Bengal', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 4000 },
+  { departureCity: 'Ahmedabad', departureState: 'Gujarat', destination: 'Delhi–Agra–Jaipur', transportMode: 'TRAIN' as const, transportPrice: 1500 },
+  { departureCity: 'Pune', departureState: 'Maharashtra', destination: 'Delhi–Agra–Jaipur', transportMode: 'FLIGHT' as const, transportPrice: 3600 },
+
+  // Coorg (7 cities)
   { departureCity: 'Bangalore', departureState: 'Karnataka', destination: 'Coorg', transportMode: 'BUS' as const, transportPrice: 600 },
   { departureCity: 'Chennai', departureState: 'Tamil Nadu', destination: 'Coorg', transportMode: 'BUS' as const, transportPrice: 1200 },
   { departureCity: 'Mumbai', departureState: 'Maharashtra', destination: 'Coorg', transportMode: 'FLIGHT' as const, transportPrice: 3800 },
   { departureCity: 'Hyderabad', departureState: 'Telangana', destination: 'Coorg', transportMode: 'BUS' as const, transportPrice: 1500 },
+  { departureCity: 'Kochi', departureState: 'Kerala', destination: 'Coorg', transportMode: 'BUS' as const, transportPrice: 900 },
+  { departureCity: 'Mysore', departureState: 'Karnataka', destination: 'Coorg', transportMode: 'BUS' as const, transportPrice: 350 },
+  { departureCity: 'Delhi', departureState: 'Delhi', destination: 'Coorg', transportMode: 'FLIGHT' as const, transportPrice: 5000 },
 ];
 
 async function main() {
