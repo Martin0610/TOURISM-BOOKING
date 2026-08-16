@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import HeroButtons from '@/components/HeroButtons';
 import { Globe, Shield, CreditCard, Star, MapPin, Users, Clock } from 'lucide-react';
 
 const featuredDestinations = [
@@ -47,19 +48,14 @@ export default function Home() {
             >
               Browse Packages
             </Link>
-            <Link
-              href="/register"
-              className="bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 text-lg"
-            >
-              Get Started Free
-            </Link>
+            <HeroButtons />
           </div>
 
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8 mt-16">
             {[
               { value: '10+', label: 'Destinations' },
-              { value: '38', label: 'Departure Routes' },
+              { value: '66', label: 'Departure Routes' },
               { value: '100%', label: 'Secure Payments' },
             ].map(({ value, label }) => (
               <div key={label} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center">
@@ -183,13 +179,13 @@ export default function Home() {
           <h2 className="text-4xl font-bold mb-4">Ready for Your Next Adventure?</h2>
           <p className="text-blue-100 text-lg mb-10">Join thousands of travellers who book with TourEase.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register"
+            <Link href="/packages"
               className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-blue-50 transition-all hover:scale-105 duration-300">
-              Start Booking
+              Explore Packages
             </Link>
             <Link href="/packages"
               className="bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold px-8 py-4 rounded-full hover:bg-white/20 transition-all duration-300">
-              View Packages
+              View All Destinations
             </Link>
           </div>
         </div>
