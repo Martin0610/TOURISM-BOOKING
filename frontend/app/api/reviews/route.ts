@@ -21,9 +21,6 @@ export async function POST(request: NextRequest) {
     if (!booking || booking.userId !== authUser!.id) {
       return errorResponse('You can only review packages you have booked', 403);
     }
-    if (booking.status !== 'CONFIRMED') {
-      return errorResponse('You can only review after booking is confirmed', 400);
-    }
 
     const existing = await prisma.review.findUnique({ where: { bookingId } });
     if (existing) {
