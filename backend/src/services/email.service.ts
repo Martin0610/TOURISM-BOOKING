@@ -54,7 +54,7 @@ export const sendBookingConfirmationEmail = async (data: BookingEmailData): Prom
       
       <!-- Header -->
       <div style="background:linear-gradient(135deg,#2563eb,#4f46e5);padding:32px 40px;text-align:center;">
-        <h1 style="color:white;margin:0;font-size:28px;letter-spacing:-0.5px;">🌍 TourEase</h1>
+        <h1 style="color:white;margin:0;font-size:28px;letter-spacing:-0.5px;">🌍 TripEase</h1>
         <p style="color:#bfdbfe;margin:8px 0 0;font-size:14px;">Your booking is confirmed!</p>
       </div>
 
@@ -141,16 +141,16 @@ export const sendBookingConfirmationEmail = async (data: BookingEmailData): Prom
 
       <!-- Footer -->
       <div style="background:#f9fafb;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
-        <p style="margin:0;color:#9ca3af;font-size:12px;">© 2026 TourEase · Secure payments by Razorpay</p>
+        <p style="margin:0;color:#9ca3af;font-size:12px;">© 2026 TripEase · Secure payments by Razorpay</p>
       </div>
     </div>
   </body>
   </html>`;
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'TourEase <noreply@tourease.com>',
+    from: process.env.EMAIL_FROM || 'TripEase <noreply@tripease.com>',
     to: userEmail,
-    subject: `✅ Booking Confirmed — ${packageName} | TourEase`,
+    subject: `✅ Booking Confirmed — ${packageName} | TripEase`,
     html,
   });
 };

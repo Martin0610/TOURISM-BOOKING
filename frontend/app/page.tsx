@@ -78,7 +78,7 @@ export default function Home() {
       <section className="py-24 px-4 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Why Choose TourEase?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Why Choose TripEase?</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">Everything you need for a perfect trip, from discovery to confirmation.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -177,7 +177,7 @@ export default function Home() {
         </div>
         <div className="relative z-10 max-w-3xl mx-auto text-center text-white">
           <h2 className="text-4xl font-bold mb-4">Ready for Your Next Adventure?</h2>
-          <p className="text-blue-100 text-lg mb-10">Join thousands of travellers who book with TourEase.</p>
+          <p className="text-blue-100 text-lg mb-10">Join thousands of travellers who book with TripEase.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/packages"
               className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-blue-50 transition-all hover:scale-105 duration-300">
@@ -193,9 +193,9 @@ export default function Home() {
 
       <footer className="bg-gray-900 text-gray-400 py-10 px-4 text-center">
         <div className="flex items-center justify-center gap-2 text-white font-bold text-xl mb-3">
-          <Globe className="w-5 h-5 text-blue-400" /> TourEase
+          <Globe className="w-5 h-5 text-blue-400" /> TripEase
         </div>
-        <p className="text-sm mb-2">© 2026 TourEase. Built with Next.js, Express, Supabase & Razorpay.</p>
+        <p className="text-sm mb-2">© 2026 TripEase. Built with Next.js, Express, Supabase & Razorpay.</p>
         <a href="tel:+917200336447" className="text-blue-400 hover:text-blue-300 text-sm font-medium">
           📞 +91 72003 36447
         </a>

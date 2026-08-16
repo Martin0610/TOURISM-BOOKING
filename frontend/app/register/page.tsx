@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -24,15 +23,69 @@ const getPasswordStrength = (password: string) => {
 const inputCls = "w-full bg-white/20 border border-white/40 text-white placeholder-white/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white/25";
 
 export default function RegisterPage() {
-  const { register } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [emailSuggestion, setEmailSuggestion] = useState('');
+  const [emailWarning, setEmailWarning] = useState('');
+  const [validatingEmail, setValidatingEmail] = useState(false);
 
   const strength = getPasswordStrength(form.password);
   const canSubmit = form.name && form.email && form.password && strength.score >= 3;
+
+  // Email validation with debounce
+  const validateEmail = async (email: string) => {
+    if (!email || email.length < 5) return;
+    
+    setValidatingEmail(true);
+    setEmailWarning('');
+    setEmailSuggestion('');
+    
+    try {
+      const res = await fetch('/api/auth/validate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase() }),
+      });
+
+      const data = await res.json();
+      
+      if (!data.valid) {
+        setError(data.message);
+      } else {
+        setError('');
+        if (data.suggestion) {
+          setEmailSuggestion(data.suggestion);
+          setEmailWarning(data.warning || `Did you mean ${data.suggestion}?`);
+        }
+      }
+    } catch (err) {
+      console.error('Email validation error:', err);
+    } finally {
+      setValidatingEmail(false);
+    }
+  };
+
+  const handleEmailChange = (email: string) => {
+    setForm({ ...form, email: email.toLowerCase() });
+    setError('');
+    setEmailWarning('');
+    setEmailSuggestion('');
+    
+    // Debounce email validation
+    const timeoutId = setTimeout(() => validateEmail(email), 800);
+    return () => clearTimeout(timeoutId);
+  };
+
+  const applySuggestion = () => {
+    if (emailSuggestion) {
+      setForm({ ...form, email: emailSuggestion });
+      setEmailSuggestion('');
+      setEmailWarning('');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,11 +93,24 @@ export default function RegisterPage() {
     setError('');
     setLoading(true);
     try {
-      await register(form.name, form.email, form.password, form.phone);
-      toast.success('Account created!');
-      router.push('/packages');
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email.toLowerCase(),
+          password: form.password,
+          phone: form.phone || undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      toast.success('Registration successful! Check your email for verification OTP.');
+      router.push(`/verify-email?email=${encodeURIComponent(form.email)}`);
     } catch (err: unknown) {
-      setError((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Registration failed');
+      setError((err as Error).message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -62,7 +128,7 @@ export default function RegisterPage() {
         <div className="bg-white/10 backdrop-blur-2xl border border-white/25 rounded-3xl p-8 shadow-2xl">
           <div className="text-center mb-7">
             <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-2xl">
-              <Globe className="w-7 h-7 text-blue-400" /> TourEase
+              <Globe className="w-7 h-7 text-blue-400" /> TripEase
             </Link>
             <p className="text-white text-sm mt-1 font-medium">Create your free account</p>
           </div>
@@ -82,9 +148,26 @@ export default function RegisterPage() {
               <div className="relative">
                 <Mail className="absolute left-3.5 top-3 w-4 h-4 text-white/70" />
                 <input type="email" value={form.email}
-                  onChange={(e) => { setForm({ ...form, email: e.target.value.toLowerCase() }); setError(''); }}
+                  onChange={(e) => handleEmailChange(e.target.value)}
                   placeholder="you@example.com" className={inputCls} />
+                {validatingEmail && (
+                  <div className="absolute right-3 top-3">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </div>
+                )}
               </div>
+              {emailWarning && emailSuggestion && (
+                <div className="mt-2 bg-yellow-500/20 border border-yellow-400/40 rounded-lg px-3 py-2 flex items-center justify-between">
+                  <p className="text-xs text-yellow-200">{emailWarning}</p>
+                  <button
+                    type="button"
+                    onClick={applySuggestion}
+                    className="text-xs text-yellow-300 hover:text-yellow-100 font-semibold underline ml-2"
+                  >
+                    Use this
+                  </button>
+                </div>
+              )}
             </div>
 
             <div>

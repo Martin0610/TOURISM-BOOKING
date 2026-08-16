@@ -61,7 +61,7 @@ export default function BookingPage() {
         key: keyId,
         amount,
         currency,
-        name: 'TourEase',
+        name: 'TripEase',
         description: booking?.package?.name || 'Tourism Package',
         order_id: orderId,
         handler: async (response) => {

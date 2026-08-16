@@ -42,7 +42,7 @@ export default function LoginPage() {
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2">
-              <Globe className="w-7 h-7 text-blue-400" /> TourEase
+              <Globe className="w-7 h-7 text-blue-400" /> TripEase
             </Link>
             <p className="text-white/60 text-sm mt-1">Sign in to continue your journey</p>
           </div>
@@ -65,7 +65,12 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-1.5">Password</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm font-medium text-white/80">Password</label>
+                <Link href="/forgot-password" className="text-xs text-blue-400 hover:text-blue-300 font-medium">
+                  Forgot Password?
+                </Link>
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-3 w-4 h-4 text-white/40" />
                 <input

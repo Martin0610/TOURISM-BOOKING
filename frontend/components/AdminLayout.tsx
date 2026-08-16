@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Globe className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-bold text-white">TourEase</p>
+            <p className="font-bold text-white">TripEase</p>
             <p className="text-xs text-gray-400">Admin Panel</p>
           </div>
           <button className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)}>

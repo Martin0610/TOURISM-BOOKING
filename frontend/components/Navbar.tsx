@@ -23,7 +23,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2 text-blue-600 font-bold text-xl">
             <Globe className="w-6 h-6" />
-            TourEase
+            TripEase
           </Link>
 
           {/* Desktop */}
