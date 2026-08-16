@@ -8,7 +8,55 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Calendar, Users, MapPin, Plane } from 'lucide-react';
+import { Calendar, Users, MapPin, Plane, Star } from 'lucide-react';
+
+function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packageId: string; onDone: () => void }) {
+  const [show, setShow] = useState(false);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const submit = async () => {
+    setLoading(true);
+    try {
+      await api.post('/api/reviews', { packageId, bookingId, rating, comment });
+      toast.success('Review submitted! Pending admin approval.');
+      setShow(false);
+      onDone();
+    } catch (err: unknown) {
+      toast.error((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed');
+    } finally { setLoading(false); }
+  };
+
+  if (!show) return (
+    <button onClick={() => setShow(true)} className="flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-lg text-sm hover:bg-yellow-100 transition">
+      <Star className="w-3.5 h-3.5" /> Write Review
+    </button>
+  );
+
+  return (
+    <div className="w-full mt-3 bg-yellow-50 rounded-xl p-4 space-y-3">
+      <p className="text-sm font-semibold text-gray-700">Rate this package</p>
+      <div className="flex gap-1">
+        {[1,2,3,4,5].map(s => (
+          <button key={s} type="button" onClick={() => setRating(s)}>
+            <Star className={`w-6 h-6 transition ${s <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+          </button>
+        ))}
+      </div>
+      <textarea value={comment} onChange={e => setComment(e.target.value)} rows={2}
+        placeholder="Share your experience (optional)"
+        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      <div className="flex gap-2">
+        <button onClick={submit} disabled={loading}
+          className="bg-yellow-500 text-white px-4 py-1.5 rounded-lg text-sm hover:bg-yellow-600 disabled:opacity-60 transition">
+          {loading ? 'Submitting...' : 'Submit'}
+        </button>
+        <button onClick={() => setShow(false)} className="text-gray-500 text-sm px-2">Cancel</button>
+      </div>
+    </div>
+  );
+}
 
 const statusColors: Record<string, string> = {
   PENDING: 'bg-yellow-100 text-yellow-800',
@@ -116,6 +164,11 @@ export default function MyBookingsPage() {
                       <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
                         ✈️ Have a safe and wonderful trip!
                       </div>
+                    )}
+                    {booking.status === 'CONFIRMED' && !booking.review && (
+                      <ReviewForm bookingId={booking.id} packageId={booking.packageId} onDone={() => {
+                        setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, review: { submitted: true } as unknown as typeof b.review } : b));
+                      }} />
                     )}
                     {booking.status !== 'CANCELLED' && (
                       <button onClick={() => handleCancel(booking.id)}

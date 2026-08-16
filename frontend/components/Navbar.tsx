@@ -33,6 +33,12 @@ export default function Navbar() {
               <Phone className="w-3.5 h-3.5" /> +91 72003 36447
             </a>
             <Link href="/packages" className="text-gray-600 hover:text-blue-600 transition">Packages</Link>
+            {user && (
+              <>
+                <Link href="/wishlist" className="text-gray-600 hover:text-red-500 transition">❤️ Wishlist</Link>
+                <Link href="/my-bookings" className="text-gray-600 hover:text-blue-600 transition">My Bookings</Link>
+              </>
+            )}
             {user ? (
               <>
                 <Link href="/my-bookings" className="text-gray-600 hover:text-blue-600 transition">My Bookings</Link>

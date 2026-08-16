@@ -60,6 +60,7 @@ export interface Booking {
   departureLocation?: DepartureLocation;
   user?: User;
   payment?: Payment;
+  review?: { id: string } | null;
 }
 
 export interface Payment {

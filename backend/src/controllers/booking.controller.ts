@@ -40,6 +40,8 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
     const { discountAmount, packageAmount } = calculateDiscount(pkg.pricePerPerson, numberOfPeople);
     let transportAmount = 0;
     let dep = null;
+    let couponDiscount = 0;
+    let couponId = null;
 
     if (departureLocationId) {
       dep = await prisma.departureLocation.findUnique({ where: { id: departureLocationId } });
@@ -48,7 +50,23 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
       transportAmount = dep.transportPrice * numberOfPeople;
     }
 
-    const totalAmount = packageAmount + transportAmount - discountAmount;
+    // Apply coupon if provided
+    if (req.body.couponCode) {
+      const coupon = await prisma.coupon.findUnique({ where: { code: req.body.couponCode.toUpperCase() } });
+      if (coupon && coupon.active && new Date() <= coupon.expiresAt && coupon.usedCount < coupon.maxUses) {
+        const subtotal = packageAmount + transportAmount - discountAmount;
+        if (subtotal >= coupon.minBookingAmount) {
+          couponDiscount = coupon.discountType === 'PERCENTAGE'
+            ? Math.round(subtotal * (coupon.discountValue / 100))
+            : Math.min(coupon.discountValue, subtotal);
+          couponId = coupon.id;
+          // Increment usage
+          await prisma.coupon.update({ where: { id: coupon.id }, data: { usedCount: { increment: 1 } } });
+        }
+      }
+    }
+
+    const totalAmount = packageAmount + transportAmount - discountAmount - couponDiscount;
 
     const booking = await prisma.booking.create({
       data: {
@@ -60,6 +78,8 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
         packageAmount,
         transportAmount,
         discountAmount,
+        couponDiscount,
+        couponId,
         totalAmount,
         status: 'PENDING',
       },
