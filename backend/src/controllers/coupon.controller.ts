@@ -3,6 +3,35 @@ import prisma from '../config/db';
 import { successResponse, errorResponse } from '../utils/apiResponse';
 import { AuthRequest } from '../middleware/auth.middleware';
 
+export const getAvailableCoupons = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const now = new Date();
+    const coupons = await prisma.coupon.findMany({
+      where: {
+        active: true,
+        expiresAt: { gt: now },
+      },
+      select: {
+        id: true,
+        code: true,
+        discountType: true,
+        discountValue: true,
+        minBookingAmount: true,
+        expiresAt: true,
+        maxUses: true,
+        usedCount: true,
+      },
+      orderBy: { discountValue: 'desc' },
+    });
+
+    // Filter out fully used coupons
+    const available = coupons.filter(c => c.usedCount < c.maxUses);
+    successResponse(res, available);
+  } catch {
+    errorResponse(res, 'Failed to fetch coupons', 500);
+  }
+};
+
 export const validateCoupon = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { code, bookingAmount } = req.body;

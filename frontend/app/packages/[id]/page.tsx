@@ -34,6 +34,11 @@ export default function PackageDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [avgRating, setAvgRating] = useState(0);
+  const [availableCoupons, setAvailableCoupons] = useState<{
+    id: string; code: string; discountType: string; discountValue: number;
+    minBookingAmount: number; expiresAt: string;
+  }[]>([]);
+  const [showCoupons, setShowCoupons] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,13 +46,15 @@ export default function PackageDetailPage() {
         const pkgRes = await api.get(`/api/packages/${id}`);
         const p: Package = pkgRes.data.data;
         setPkg(p);
-        const [depRes, reviewRes] = await Promise.all([
+        const [depRes, reviewRes, couponRes] = await Promise.all([
           api.get(`/api/departures?destination=${encodeURIComponent(p.destination)}`),
           api.get(`/api/reviews/package/${id}`),
+          api.get('/api/coupons/available'),
         ]);
         setDepartures(depRes.data.data);
         setReviews(reviewRes.data.data.reviews);
         setAvgRating(reviewRes.data.data.avgRating);
+        setAvailableCoupons(couponRes.data.data);
         // Check wishlist if logged in
         if (localStorage.getItem('token')) {
           try {
@@ -340,9 +347,50 @@ export default function PackageDetailPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
                       <Tag className="w-4 h-4" /> Coupon Code
                     </label>
+
+                    {/* Available coupons */}
+                    {availableCoupons.length > 0 && (
+                      <div className="mb-2">
+                        <button type="button" onClick={() => setShowCoupons(!showCoupons)}
+                          className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+                          🎟️ {availableCoupons.length} coupon{availableCoupons.length > 1 ? 's' : ''} available — tap to view
+                        </button>
+                        {showCoupons && (
+                          <div className="mt-2 space-y-2 bg-blue-50 rounded-xl p-3 border border-blue-100">
+                            {availableCoupons.map(c => {
+                              const eligible = subtotalBeforeCoupon >= c.minBookingAmount;
+                              return (
+                                <div key={c.id}
+                                  onClick={() => {
+                                    if (eligible) {
+                                      setCouponCode(c.code);
+                                      setCouponResult(null);
+                                      setShowCoupons(false);
+                                    }
+                                  }}
+                                  className={`flex items-center justify-between rounded-lg px-3 py-2 ${eligible ? 'cursor-pointer hover:bg-blue-100 bg-white border border-blue-200' : 'bg-gray-50 border border-gray-200 opacity-60 cursor-not-allowed'}`}>
+                                  <div>
+                                    <span className="font-mono font-bold text-blue-700 text-sm">{c.code}</span>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                      {c.discountType === 'PERCENTAGE' ? `${c.discountValue}% off` : `₹${c.discountValue} off`}
+                                      {c.minBookingAmount > 0 && ` · Min ₹${c.minBookingAmount.toLocaleString('en-IN')}`}
+                                    </p>
+                                    {!eligible && <p className="text-xs text-red-400">Need ₹{c.minBookingAmount.toLocaleString('en-IN')} min</p>}
+                                  </div>
+                                  <span className="text-xs text-gray-400">
+                                    Expires {new Date(c.expiresAt).toLocaleDateString('en-IN')}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     <div className="flex gap-2">
                       <input value={couponCode} onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponResult(null); }}
-                        placeholder="Enter code (e.g. SAVE10)"
+                        placeholder="Enter or select coupon code"
                         className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                       <button type="button" onClick={handleApplyCoupon} disabled={couponLoading || !couponCode.trim()}
                         className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 disabled:opacity-50 transition">

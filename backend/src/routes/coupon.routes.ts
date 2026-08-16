@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import { validateCoupon, createCoupon, getAllCoupons, updateCoupon, deleteCoupon } from '../controllers/coupon.controller';
+import { validateCoupon, createCoupon, getAllCoupons, updateCoupon, deleteCoupon, getAvailableCoupons } from '../controllers/coupon.controller';
 import { authenticate, authorizeAdmin } from '../middleware/auth.middleware';
 
 const router = Router();
 
 // User: validate a coupon
 router.post('/validate', authenticate, validateCoupon);
+
+// Public: get available coupons
+router.get('/available', getAvailableCoupons);
 
 // Admin only
 router.get('/', authenticate, authorizeAdmin, getAllCoupons);

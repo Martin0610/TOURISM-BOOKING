@@ -5,7 +5,7 @@ import { Globe, Shield, CreditCard, Star, MapPin, Users, Clock } from 'lucide-re
 const featuredDestinations = [
   { name: 'Goa Beach Paradise', state: 'Goa', price: 15500, duration: '5D/4N', category: 'Beach', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600' },
   { name: 'Kashmir Paradise', state: 'J&K', price: 31500, duration: '7D/6N', category: 'Hill Station', image: 'https://images.unsplash.com/photo-1597074866923-dc0589150358?w=600' },
-  { name: 'Rajasthan Heritage', state: 'Rajasthan', price: 27800, duration: '7D/6N', category: 'Heritage', image: 'https://images.unsplash.com/photo-1477587458883-47145ed31920?w=600' },
+  { name: 'Rajasthan Heritage', state: 'Rajasthan', price: 27800, duration: '7D/6N', category: 'Heritage', image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600' },
 ];
 
 export default function Home() {
