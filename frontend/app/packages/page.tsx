@@ -9,11 +9,11 @@ import { MapPin, Clock, Users, Search, Filter, Heart } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 
-const CATEGORIES = ['All', 'Beach', 'Hill Station', 'Adventure', 'Wildlife', 'Heritage', 'Spiritual', 'Nature', 'Luxury', 'Family', 'Cultural', 'Island', 'Pilgrimage'];
-
 export default function PackagesPage() {
   const { user } = useAuth();
   const [packages, setPackages] = useState<Package[]>([]);
+  const [allPackages, setAllPackages] = useState<Package[]>([]);
+  const [categories, setCategories] = useState<string[]>(['All']);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [state, setState] = useState('');
@@ -39,7 +39,21 @@ export default function PackagesPage() {
   };
 
   useEffect(() => {
-    fetchPackages();
+    // Fetch all packages to get unique categories
+    api.get('/api/packages').then(res => {
+      const pkgs = res.data.data;
+      setAllPackages(pkgs);
+      setPackages(pkgs);
+      
+      // Extract unique categories
+      const uniqueCategories = ['All', ...new Set(pkgs.map((p: Package) => p.category).filter(Boolean))];
+      setCategories(uniqueCategories);
+      
+      setLoading(false);
+    }).catch(() => {
+      setLoading(false);
+    });
+
     // Load wishlist if logged in
     if (localStorage.getItem('token')) {
       api.get('/api/wishlist').then(res => {
@@ -99,7 +113,7 @@ export default function PackagesPage() {
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Category</label>
               <select value={category} onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                {CATEGORIES.map((c) => <option key={c} value={c === 'All' ? '' : c}>{c}</option>)}
+                {categories.map((c) => <option key={c} value={c === 'All' ? '' : c}>{c}</option>)}
               </select>
             </div>
             <div className="flex-1 min-w-36">

@@ -19,6 +19,7 @@ export default function AdminReviewsPage() {
   const router = useRouter();
   const [reviews, setReviews] = useState<AdminReview[]>([]);
   const [filter, setFilter] = useState<'ALL'|'UNREAD'|'READ'>('UNREAD');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) { router.push('/login'); return; }
@@ -26,9 +27,20 @@ export default function AdminReviewsPage() {
   }, [user, authLoading]);
 
   const toggleReadStatus = async (id: string, markAsRead: boolean) => {
-    await api.put(`/api/admin/reviews/${id}`, { approved: markAsRead });
-    setReviews(prev => prev.map(r => r.id === id ? { ...r, approved: markAsRead } : r));
-    toast.success(markAsRead ? 'Marked as read' : 'Marked as unread');
+    try {
+      setLoading(true);
+      const response = await api.put(`/api/admin/reviews/${id}`, { approved: markAsRead });
+      console.log('API Response:', response.data);
+      
+      // Update state immediately
+      setReviews(prev => prev.map(r => r.id === id ? { ...r, approved: markAsRead } : r));
+      toast.success(markAsRead ? 'Marked as read' : 'Marked as unread');
+    } catch (error: any) {
+      console.error('Error updating review:', error);
+      toast.error(error.response?.data?.message || 'Failed to update review status');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteReview = async (id: string) => {
@@ -81,14 +93,16 @@ export default function AdminReviewsPage() {
                   {!r.approved ? (
                     <button 
                       onClick={() => toggleReadStatus(r.id, true)} 
-                      className="bg-blue-50 text-blue-600 hover:bg-blue-100 p-2 rounded-lg transition-colors" 
+                      disabled={loading}
+                      className="bg-blue-50 text-blue-600 hover:bg-blue-100 p-2 rounded-lg transition-colors disabled:opacity-50" 
                       title="Mark as Read">
                       <Eye className="w-4 h-4" />
                     </button>
                   ) : (
                     <button 
-                      onClick={() => toggleReadStatus(r.id, false)} 
-                      className="bg-gray-50 text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-colors" 
+                      onClick={() => toggleReadStatus(r.id, false)}
+                      disabled={loading}
+                      className="bg-gray-50 text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-colors disabled:opacity-50" 
                       title="Mark as Unread">
                       <EyeOff className="w-4 h-4" />
                     </button>
