@@ -5,17 +5,21 @@ import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { Package } from '@/lib/types';
 import Link from 'next/link';
-import { MapPin, Clock, Users, Search, Filter } from 'lucide-react';
+import { MapPin, Clock, Users, Search, Filter, Heart } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
 
 const CATEGORIES = ['All', 'Beach', 'Hill Station', 'Adventure', 'Wildlife', 'Heritage', 'Spiritual', 'Nature', 'Luxury', 'Family', 'Cultural', 'Island', 'Pilgrimage'];
 
 export default function PackagesPage() {
+  const { user } = useAuth();
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [state, setState] = useState('');
   const [category, setCategory] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [wishlisted, setWishlisted] = useState<Set<string>>(new Set());
 
   const fetchPackages = async () => {
     setLoading(true);
@@ -34,7 +38,32 @@ export default function PackagesPage() {
     }
   };
 
-  useEffect(() => { fetchPackages(); }, []);
+  useEffect(() => {
+    fetchPackages();
+    // Load wishlist if logged in
+    if (localStorage.getItem('token')) {
+      api.get('/api/wishlist').then(res => {
+        const ids = new Set<string>(res.data.data.map((w: { packageId: string }) => w.packageId));
+        setWishlisted(ids);
+      }).catch(() => {});
+    }
+  }, []);
+
+  const toggleWishlist = async (e: React.MouseEvent, pkgId: string) => {
+    e.preventDefault();
+    if (!user) { toast.error('Login to save to wishlist'); return; }
+    try {
+      if (wishlisted.has(pkgId)) {
+        await api.delete(`/api/wishlist/${pkgId}`);
+        setWishlisted(prev => { const s = new Set(prev); s.delete(pkgId); return s; });
+        toast.success('Removed from wishlist');
+      } else {
+        await api.post('/api/wishlist', { packageId: pkgId });
+        setWishlisted(prev => new Set([...prev, pkgId]));
+        toast.success('Added to wishlist ❤️');
+      }
+    } catch { toast.error('Failed'); }
+  };
 
   const transportIcon = (included: boolean) => included ? '✈️ Transport incl.' : '🚗 Self transport';
 
@@ -112,6 +141,12 @@ export default function PackagesPage() {
                     <span className="absolute top-3 left-3 bg-white/90 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
                       {pkg.category}
                     </span>
+                    <button
+                      onClick={(e) => toggleWishlist(e, pkg.id)}
+                      className="absolute top-3 right-3 bg-white/90 hover:bg-white p-1.5 rounded-full transition shadow"
+                      title={wishlisted.has(pkg.id) ? 'Remove from wishlist' : 'Add to wishlist'}>
+                      <Heart className={`w-4 h-4 transition ${wishlisted.has(pkg.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                    </button>
                     <span className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
                       {pkg.availableSeats} seats left
                     </span>
