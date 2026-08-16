@@ -79,11 +79,11 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-24 px-4 bg-gray-50">
+      <section className="py-24 px-4 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose TourEase?</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Everything you need for a perfect trip, from discovery to confirmation.</p>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Why Choose TourEase?</h2>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">Everything you need for a perfect trip, from discovery to confirmation.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -92,12 +92,12 @@ export default function Home() {
               { icon: CreditCard, title: 'Razorpay Payments', desc: 'Pay securely with UPI, cards, or net banking via Razorpay.', color: 'bg-violet-500' },
               { icon: Shield, title: 'Secure & Reliable', desc: 'JWT auth, backend price validation. Your data is safe.', color: 'bg-orange-500' },
             ].map(({ icon: Icon, title, desc, color }) => (
-              <div key={title} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-gray-100">
+              <div key={title} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700">
                 <div className={`${color} w-12 h-12 rounded-xl flex items-center justify-center mb-4`}>
                   <Icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-bold text-gray-800 text-lg mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+                <h3 className="font-bold text-gray-800 dark:text-white text-lg mb-2">{title}</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -105,12 +105,12 @@ export default function Home() {
       </section>
 
       {/* Featured Packages */}
-      <section className="py-24 px-4 bg-white">
+      <section className="py-24 px-4 bg-white dark:bg-gray-950">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-2">Featured Packages</h2>
-              <p className="text-gray-500">Most popular destinations this season</p>
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Featured Packages</h2>
+              <p className="text-gray-500 dark:text-gray-400">Most popular destinations this season</p>
             </div>
             <Link href="/packages" className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 text-sm">
               View all →
@@ -119,7 +119,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredDestinations.map((pkg) => (
               <Link key={pkg.name} href="/packages"
-                className="group rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                className="group rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-800">
                 <div className="relative h-56 overflow-hidden">
                   <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -127,9 +127,9 @@ export default function Home() {
                     {pkg.category}
                   </span>
                 </div>
-                <div className="p-5 bg-white">
-                  <h3 className="font-bold text-gray-800 text-lg mb-1">{pkg.name}</h3>
-                  <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
+                <div className="p-5">
+                  <h3 className="font-bold text-gray-800 dark:text-white text-lg mb-1">{pkg.name}</h3>
+                  <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm mb-3">
                     <MapPin className="w-3.5 h-3.5 text-blue-500" />{pkg.state}
                     <span className="mx-2">·</span>
                     <Clock className="w-3.5 h-3.5 text-blue-500" />{pkg.duration}
@@ -139,7 +139,7 @@ export default function Home() {
                       <span className="text-2xl font-bold text-blue-600">₹{pkg.price.toLocaleString()}</span>
                       <span className="text-gray-400 text-xs ml-1">/ person</span>
                     </div>
-                    <span className="bg-blue-50 text-blue-600 text-xs font-semibold px-3 py-1.5 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-semibold px-3 py-1.5 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-colors">
                       View →
                     </span>
                   </div>
@@ -151,10 +151,10 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="py-24 px-4 bg-gray-50">
+      <section className="py-24 px-4 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
-          <p className="text-gray-500 mb-16">Book your dream trip in 4 simple steps</p>
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">How It Works</h2>
+          <p className="text-gray-500 dark:text-gray-400 mb-16">Book your dream trip in 4 simple steps</p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
               { step: '01', title: 'Browse', desc: 'Explore packages by destination, category, or budget.', icon: Globe },
@@ -162,13 +162,11 @@ export default function Home() {
               { step: '03', title: 'Book', desc: 'Backend calculates exact cost — no hidden fees.', icon: Star },
               { step: '04', title: 'Pay', desc: 'Pay securely via Razorpay and get confirmation.', icon: CreditCard },
             ].map(({ step, title, desc, icon: Icon }) => (
-              <div key={step} className="relative">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                  <div className="text-4xl font-black text-blue-100 mb-3">{step}</div>
-                  <Icon className="w-6 h-6 text-blue-600 mb-3" />
-                  <h3 className="font-bold text-gray-800 mb-2">{title}</h3>
-                  <p className="text-gray-500 text-sm">{desc}</p>
-                </div>
+              <div key={step} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <div className="text-4xl font-black text-blue-100 dark:text-blue-900 mb-3">{step}</div>
+                <Icon className="w-6 h-6 text-blue-600 mb-3" />
+                <h3 className="font-bold text-gray-800 dark:text-white mb-2">{title}</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">{desc}</p>
               </div>
             ))}
           </div>
