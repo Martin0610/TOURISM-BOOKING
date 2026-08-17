@@ -36,15 +36,15 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    const packageIds = topPackages.map((p) => p.packageId);
+    const packageIds = topPackages.map((p: { packageId: string }) => p.packageId);
     const packages = await prisma.package.findMany({
       where: { id: { in: packageIds } },
       select: { id: true, name: true, destination: true, imageUrl: true },
     });
 
-    const topPackagesWithNames = topPackages.map((tp) => ({
+    const topPackagesWithNames = topPackages.map((tp: any) => ({
       ...tp,
-      package: packages.find((p) => p.id === tp.packageId),
+      package: packages.find((p: { id: string }) => p.id === tp.packageId),
     }));
 
     const sixMonthsAgo = new Date();
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
     });
 
     const monthlyRevenue: Record<string, number> = {};
-    recentPayments.forEach((p) => {
+    recentPayments.forEach((p: { createdAt: Date; amount: number }) => {
       const month = p.createdAt.toLocaleString('default', { month: 'short', year: '2-digit' });
       monthlyRevenue[month] = (monthlyRevenue[month] || 0) + p.amount;
     });

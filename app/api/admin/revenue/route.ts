@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     });
 
     const byMonth: Record<string, number> = {};
-    payments.forEach((p) => {
+    payments.forEach((p: { createdAt: Date; amount: number }) => {
       const key = `${p.createdAt.getFullYear()}-${String(p.createdAt.getMonth() + 1).padStart(2, '0')}`;
       byMonth[key] = (byMonth[key] || 0) + p.amount;
     });

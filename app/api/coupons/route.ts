@@ -23,7 +23,7 @@ export async function GET() {
       orderBy: { discountValue: 'desc' },
     });
 
-    const available = coupons.filter(c => c.usedCount < c.maxUses);
+    const available = coupons.filter((c: { usedCount: number; maxUses: number }) => c.usedCount < c.maxUses);
     return successResponse(available);
   } catch {
     return errorResponse('Failed to fetch coupons', 500);
