@@ -41,3 +41,24 @@ prisma/migrations/dev.db
 **/.windsurf/
 **/skills-lock.json
 **/prisma.config.ts
+
+# Unused folders (keep locally but don't deploy)
+/backend/
+/postman/
+
+# Documentation files (keep locally)
+CLEANUP-GUIDE.md
+COMPLETE-FEATURE-SUMMARY.md
+EMAIL-VALIDATION-ENHANCEMENT.md
+EMAIL-VERIFICATION-FEATURE.md
+EMOJI-TO-ICON-MIGRATION.md
+FINAL-TESTING-GUIDE.md
+FORGOT-PASSWORD-FEATURE.md
+MARK-EXISTING-USERS-VERIFIED.sql
+MIGRATION-COMPLETE.md
+REBRANDING-COMPLETE.md
+RESTRUCTURE.md
+DEPLOYMENT-READY.md
+INSTRUCTIONS.txt
+restructure.ps1
+README-NEW.md
