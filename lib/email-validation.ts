@@ -81,14 +81,17 @@ function checkTypo(email: string): string | null {
 
 /**
  * Verify domain has MX records (DNS check)
- * This runs on server-side only
+ * This runs on server-side only. Returns true on any error to avoid
+ * false-positives in serverless environments (Vercel) where DNS may be restricted.
  */
 async function verifyDomainMXRecords(domain: string): Promise<boolean> {
   try {
     const addresses = await dns.resolveMx(domain);
     return addresses && addresses.length > 0;
-  } catch (error) {
-    return false;
+  } catch {
+    // On serverless (Vercel), DNS lookups can fail even for valid domains.
+    // Fail open to avoid blocking legitimate registrations.
+    return true;
   }
 }
 
