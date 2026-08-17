@@ -40,7 +40,6 @@ prisma/migrations/dev.db
 **/.claude/
 **/.windsurf/
 **/skills-lock.json
-**/prisma.config.ts
 
 # Unused folders (keep locally but don't deploy)
 /backend/
