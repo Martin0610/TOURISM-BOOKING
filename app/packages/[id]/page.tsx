@@ -138,7 +138,7 @@ export default function PackageDetailPage() {
       router.push(`/booking/${res.data.data.id}`);
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
-      setError(error.response?.data?.message || 'Booking failed');
+      setFormError(error.response?.data?.message || 'Booking failed');
     } finally {
       setBookingLoading(false);
     }

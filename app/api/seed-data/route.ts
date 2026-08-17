@@ -17,12 +17,12 @@ export async function GET() {
       { departureCity: 'Delhi', departureState: 'Delhi', transportMode: 'FLIGHT', transportPrice: 4500, destination: 'Goa' },
       { departureCity: 'Mumbai', departureState: 'Maharashtra', transportMode: 'BUS', transportPrice: 1200, destination: 'Goa' },
       { departureCity: 'Delhi', departureState: 'Delhi', transportMode: 'FLIGHT', transportPrice: 12000, destination: 'Kashmir' },
-      { departureCity: 'Mumbai', departureState: 'Maharashtra', transportMode: 'FLIGHT', transportPrice: 15000, destination: 'Kashmir' },
-      { departureCity: 'Bangalore', departureState: 'Karnataka', transportMode: 'FLIGHT', transportPrice: 8500, destination: 'Alleppey' },
-      { departureCity: 'Mumbai', departureState: 'Maharashtra', transportMode: 'FLIGHT', transportPrice: 7000, destination: 'Alleppey' },
+      { departureCity: 'Mumbai', departureState: 'Maharashtra', transportMode: 'FLIGHT' as const, transportPrice: 15000, destination: 'Kashmir' },
+      { departureCity: 'Bangalore', departureState: 'Karnataka', transportMode: 'FLIGHT' as const, transportPrice: 8500, destination: 'Alleppey' },
+      { departureCity: 'Mumbai', departureState: 'Maharashtra', transportMode: 'FLIGHT' as const, transportPrice: 7000, destination: 'Alleppey' },
     ];
 
-    await prisma.departureLocation.createMany({ data: departures, skipDuplicates: true });
+    await prisma.departureLocation.createMany({ data: departures as any, skipDuplicates: true });
 
     // Add coupons
     const coupons = [
