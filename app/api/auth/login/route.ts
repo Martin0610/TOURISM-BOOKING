@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
       },
       token,
     }, 'Login successful');
-  } catch {
-    return errorResponse('Login failed', 500);
+  } catch (err) {
+    console.error('Login error:', err);
+    return errorResponse(`Login failed: ${err instanceof Error ? err.message : String(err)}`, 500);
   }
 }

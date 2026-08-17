@@ -35,8 +35,9 @@ export async function GET(request: NextRequest) {
     });
 
     return successResponse(packages);
-  } catch {
-    return errorResponse('Failed to fetch packages', 500);
+  } catch (err) {
+    console.error('Failed to fetch packages:', err);
+    return errorResponse(`Failed to fetch packages: ${err instanceof Error ? err.message : String(err)}`, 500);
   }
 }
 
