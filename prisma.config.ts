@@ -3,7 +3,6 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
 export default defineConfig({
-  earlyAccess: true,
   schema: 'prisma/schema.prisma',
   migrate: {
     adapter: () => {
