@@ -127,28 +127,28 @@ export default function AdminPackagesPage() {
       />
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">Manage Packages ({packages.length})</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Manage Packages ({packages.length})</h2>
           <button onClick={openCreate}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition text-sm font-medium">
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 transition text-sm font-bold shadow-md shadow-purple-600/25 cursor-pointer">
             <Plus className="w-4 h-4" /> Add Package
           </button>
         </div>
 
         {/* Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl">
               {/* Modal Header */}
-              <div className="flex justify-between items-center px-6 py-4 border-b">
-                <h3 className="text-lg font-bold">{editing ? 'Edit Package' : 'Add New Package'}</h3>
-                <button onClick={() => setShowForm(false)}><X className="w-5 h-5 text-gray-500 hover:text-gray-800" /></button>
+              <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">{editing ? 'Edit Package' : 'Add New Package'}</h3>
+                <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-gray-800 dark:hover:text-white cursor-pointer"><X className="w-5 h-5" /></button>
               </div>
 
               {/* Tabs */}
-              <div className="flex border-b px-6">
+              <div className="flex border-b border-slate-100 dark:border-slate-800 px-6">
                 {(['basic', 'details', 'policy'] as const).map((tab) => (
                   <button key={tab} onClick={() => setActiveTab(tab)}
-                    className={`py-3 px-4 text-sm font-medium border-b-2 transition capitalize ${activeTab === tab ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
+                    className={`py-3 px-4 text-sm font-medium border-b-2 transition capitalize cursor-pointer ${activeTab === tab ? 'border-purple-600 text-purple-600 dark:text-purple-400 font-bold' : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}>
                     {tab === 'basic' ? 'Basic Info' : tab === 'details' ? 'Itinerary & Details' : 'Policy & Image'}
                   </button>
                 ))}
@@ -182,46 +182,46 @@ export default function AdminPackagesPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div><label className={labelCls}>Available Seats *</label>
-                        <input type="number" className={inputCls} required min={0} value={form.availableSeats} onChange={(e) => set('availableSeats', e.target.value)} /></div>
+                        <input type="number" className={inputCls} required min={1} value={form.availableSeats} onChange={(e) => set('availableSeats', e.target.value)} /></div>
                       <div><label className={labelCls}>Hotel Category *</label>
                         <select className={inputCls} value={form.hotelCategory} onChange={(e) => set('hotelCategory', e.target.value)}>
                           {HOTEL_CATEGORIES.map((h) => <option key={h}>{h}</option>)}
                         </select></div>
                     </div>
-                    <div><label className={labelCls}>Accommodation Description *</label>
-                      <input className={inputCls} required value={form.accommodation} onChange={(e) => set('accommodation', e.target.value)} /></div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div><label className={labelCls}>Meals Included *</label>
-                        <input className={inputCls} required placeholder="e.g. Daily breakfast" value={form.mealsIncluded} onChange={(e) => set('mealsIncluded', e.target.value)} /></div>
-                      <div><label className={labelCls}>Best Time to Visit *</label>
-                        <input className={inputCls} required placeholder="e.g. October to March" value={form.bestTimeToVisit} onChange={(e) => set('bestTimeToVisit', e.target.value)} /></div>
-                    </div>
-                    <div className="flex gap-6">
-                      <label className="flex items-center gap-2 text-sm cursor-pointer">
-                        <input type="checkbox" checked={form.transportIncluded} onChange={(e) => set('transportIncluded', e.target.checked)} className="w-4 h-4 accent-blue-600" />
-                        Transport Included
-                      </label>
-                      <label className="flex items-center gap-2 text-sm cursor-pointer">
-                        <input type="checkbox" checked={form.sightseeingIncluded} onChange={(e) => set('sightseeingIncluded', e.target.checked)} className="w-4 h-4 accent-blue-600" />
-                        Sightseeing Included
-                      </label>
-                    </div>
-                    <div><label className={labelCls}>Short Description *</label>
-                      <textarea rows={2} className={inputCls} required value={form.shortDescription} onChange={(e) => set('shortDescription', e.target.value)} /></div>
+                    <div><label className={labelCls}>Short Description (1 sentence) *</label>
+                      <input className={inputCls} required value={form.shortDescription} onChange={(e) => set('shortDescription', e.target.value)} /></div>
                     <div><label className={labelCls}>Full Description *</label>
                       <textarea rows={3} className={inputCls} required value={form.description} onChange={(e) => set('description', e.target.value)} /></div>
                   </div>
                 )}
 
-                {/* Tab: Itinerary */}
+                {/* Tab: Details & Itinerary */}
                 {activeTab === 'details' && (
                   <div className="space-y-4">
-                    <div><label className={labelCls}>Itinerary (one line per day) *</label>
-                      <textarea rows={8} className={inputCls} required placeholder={'Day 1: Arrival...\nDay 2: Sightseeing...'} value={form.itinerary} onChange={(e) => set('itinerary', e.target.value)} /></div>
-                    <div><label className={labelCls}>Inclusions (one per line) *</label>
-                      <textarea rows={5} className={inputCls} required placeholder={'Hotel accommodation\nDaily breakfast\n...'} value={form.inclusions} onChange={(e) => set('inclusions', e.target.value)} /></div>
-                    <div><label className={labelCls}>Exclusions (one per line) *</label>
-                      <textarea rows={5} className={inputCls} required placeholder={'Airfare\nPersonal expenses\n...'} value={form.exclusions} onChange={(e) => set('exclusions', e.target.value)} /></div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div><label className={labelCls}>Accommodation Details *</label>
+                        <input className={inputCls} required placeholder="e.g. 4 Star luxury resort with pool" value={form.accommodation} onChange={(e) => set('accommodation', e.target.value)} /></div>
+                      <div><label className={labelCls}>Meals Included *</label>
+                        <input className={inputCls} required placeholder="e.g. Daily breakfast & dinner" value={form.mealsIncluded} onChange={(e) => set('mealsIncluded', e.target.value)} /></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div><label className={labelCls}>Best Time to Visit *</label>
+                        <input className={inputCls} required placeholder="e.g. October to March" value={form.bestTimeToVisit} onChange={(e) => set('bestTimeToVisit', e.target.value)} /></div>
+                      <div className="flex items-center gap-6 pt-5">
+                        <label className="flex items-center gap-2 cursor-pointer text-sm">
+                          <input type="checkbox" checked={form.sightseeingIncluded} onChange={(e) => set('sightseeingIncluded', e.target.checked)} className="rounded text-purple-600" />
+                          <span>Sightseeing Included</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div><label className={labelCls}>Daily Itinerary *</label>
+                      <textarea rows={6} className={inputCls} required placeholder="Day 1: ...&#10;Day 2: ..." value={form.itinerary} onChange={(e) => set('itinerary', e.target.value)} /></div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div><label className={labelCls}>Inclusions (one per line) *</label>
+                        <textarea rows={4} className={inputCls} required placeholder="Hotel stay&#10;Breakfast&#10;Transfers" value={form.inclusions} onChange={(e) => set('inclusions', e.target.value)} /></div>
+                      <div><label className={labelCls}>Exclusions (one per line) *</label>
+                        <textarea rows={4} className={inputCls} required placeholder="Flight tickets&#10;Personal expenses" value={form.exclusions} onChange={(e) => set('exclusions', e.target.value)} /></div>
+                    </div>
                   </div>
                 )}
 
@@ -239,26 +239,26 @@ export default function AdminPackagesPage() {
                   </div>
                 )}
 
-                <div className="flex gap-3 pt-4 mt-4 border-t">
+                <div className="flex gap-3 pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
                   {activeTab !== 'basic' && (
                     <button type="button" onClick={() => setActiveTab(activeTab === 'policy' ? 'details' : 'basic')}
-                      className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition">
+                      className="px-4 py-2 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-slate-700 transition cursor-pointer">
                       ← Back
                     </button>
                   )}
                   {activeTab !== 'policy' ? (
                     <button type="button" onClick={() => setActiveTab(activeTab === 'basic' ? 'details' : 'policy')}
-                      className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition text-sm">
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white py-2.5 rounded-xl font-bold transition text-sm cursor-pointer shadow-md shadow-purple-600/20">
                       Next →
                     </button>
                   ) : (
                     <button type="submit" disabled={saving}
-                      className="flex-1 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-60 transition text-sm">
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white py-2.5 rounded-xl font-bold disabled:opacity-60 transition text-sm cursor-pointer shadow-md">
                       {saving ? 'Saving...' : editing ? 'Update Package' : 'Create Package'}
                     </button>
                   )}
                   <button type="button" onClick={() => setShowForm(false)}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition">
+                    className="px-4 py-2 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-slate-700 transition cursor-pointer">
                     Cancel
                   </button>
                 </div>
@@ -268,46 +268,46 @@ export default function AdminPackagesPage() {
         )}
 
         {/* Packages Table */}
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-gray-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-800">
                 <tr>
                   {['Package', 'Destination', 'Category', 'Price/Person', 'Duration', 'Seats', 'Hotel', 'Actions'].map((h) => (
-                    <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600 whitespace-nowrap">{h}</th>
+                    <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {packages.map((pkg) => (
-                  <tr key={pkg.id} className="border-b hover:bg-gray-50">
+                  <tr key={pkg.id} className="border-b border-slate-100 dark:border-slate-800/60 hover:bg-gray-50 dark:hover:bg-slate-800/40">
                     <td className="px-4 py-3">
-                      <div className="font-medium text-gray-800 max-w-48 truncate">{pkg.name}</div>
+                      <div className="font-medium text-gray-800 dark:text-white max-w-48 truncate">{pkg.name}</div>
                       <div className="text-xs text-gray-400">{pkg.durationDays}D/{pkg.durationNights}N</div>
                     </td>
                     <td className="px-4 py-3">
-                      <div className="text-gray-700">{pkg.destination}</div>
+                      <div className="text-gray-700 dark:text-gray-300">{pkg.destination}</div>
                       <div className="text-xs text-gray-400">{pkg.state}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded-full">{pkg.category}</span>
+                      <span className="bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60 text-xs px-2.5 py-0.5 rounded-full font-semibold">{pkg.category}</span>
                     </td>
-                    <td className="px-4 py-3 text-blue-600 font-semibold">₹{pkg.pricePerPerson.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-gray-500">{pkg.durationDays}D</td>
+                    <td className="px-4 py-3 text-purple-600 dark:text-purple-400 font-bold">₹{pkg.pricePerPerson.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{pkg.durationDays}D</td>
                     <td className="px-4 py-3">
-                      <span className={`font-medium ${pkg.availableSeats < 5 ? 'text-red-500' : 'text-gray-700'}`}>
+                      <span className={`font-medium ${pkg.availableSeats < 5 ? 'text-red-500' : 'text-gray-700 dark:text-gray-300'}`}>
                         {pkg.availableSeats}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{pkg.hotelCategory}</td>
+                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400 whitespace-nowrap">{pkg.hotelCategory}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button onClick={() => openEdit(pkg)}
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Edit">
+                          className="p-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/50 rounded-lg transition cursor-pointer" title="Edit">
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button onClick={() => setConfirmDelete({ id: pkg.id, name: pkg.name })}
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition" title="Delete">
+                          className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-lg transition cursor-pointer" title="Delete">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -319,7 +319,7 @@ export default function AdminPackagesPage() {
             {packages.length === 0 && (
               <div className="text-center py-16 text-gray-400">
                 <p className="mb-3">No packages yet.</p>
-                <button onClick={openCreate} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">Add your first package</button>
+                <button onClick={openCreate} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold">Add your first package</button>
               </div>
             )}
           </div>

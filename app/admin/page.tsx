@@ -41,7 +41,7 @@ interface Stats {
   monthlyRevenue: { month: string; revenue: number }[];
 }
 
-const COLORS = ['#2563eb', '#f59e0b', '#ef4444', '#10b981'];
+const COLORS = ['#9333ea', '#f59e0b', '#ef4444', '#10b981'];
 
 const statusColor: Record<string, string> = {
   CONFIRMED: 'bg-green-100 text-green-700',
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   if (loading) return (
     <AdminLayout>
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600" />
       </div>
     </AdminLayout>
   );
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
     <AdminLayout>
       <div className="flex flex-col items-center justify-center h-64 gap-3">
         <p className="text-gray-500">{error ? 'Failed to load dashboard stats. Please refresh.' : 'No data available.'}</p>
-        <button onClick={() => window.location.reload()} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+        <button onClick={() => window.location.reload()} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition">
           Refresh
         </button>
       </div>
@@ -92,9 +92,9 @@ export default function AdminDashboard() {
   ].filter(d => d.value > 0);
 
   const statCards = [
-    { label: 'Total Packages', value: stats.totalPackages, icon: Package, color: 'bg-blue-500', change: 'Active listings' },
+    { label: 'Total Packages', value: stats.totalPackages, icon: Package, color: 'bg-purple-600', change: 'Active listings' },
     { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'bg-emerald-500', change: 'Registered' },
-    { label: 'Total Bookings', value: stats.totalBookings, icon: ShoppingBag, color: 'bg-violet-500', change: `${stats.confirmedBookings} confirmed` },
+    { label: 'Total Bookings', value: stats.totalBookings, icon: ShoppingBag, color: 'bg-indigo-600', change: `${stats.confirmedBookings} confirmed` },
     { label: 'Total Revenue', value: `₹${stats.totalRevenue.toLocaleString('en-IN')}`, icon: DollarSign, color: 'bg-orange-500', change: 'From payments' },
   ];
 
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
           {statCards.map(({ label, value, icon: Icon, color, change }) => (
             <div key={label} className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-3">
-                <div className={`${color} w-11 h-11 rounded-xl flex items-center justify-center`}>
+                <div className={`${color} w-11 h-11 rounded-xl flex items-center justify-center shadow-md`}>
                   <Icon className="w-5 h-5 text-white" />
                 </div>
                 <TrendingUp className="w-4 h-4 text-gray-300 dark:text-gray-600" />
@@ -147,7 +147,7 @@ export default function AdminDashboard() {
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `₹${(v/1000).toFixed(0)}k`} />
                   <Tooltip formatter={(v) => [`₹${(v as number).toLocaleString('en-IN')}`, 'Revenue']} />
-                  <Bar dataKey="revenue" fill="#2563eb" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#9333ea" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -185,7 +185,7 @@ export default function AdminDashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
               <h3 className="font-bold text-gray-800 dark:text-white">Recent Bookings</h3>
-              <a href="/admin/bookings" className="text-blue-600 dark:text-blue-400 text-sm hover:underline">View all →</a>
+              <a href="/admin/bookings" className="text-purple-600 dark:text-purple-400 text-sm font-semibold hover:underline">View all →</a>
             </div>
             <div className="divide-y divide-gray-50 dark:divide-gray-700">
               {stats.recentBookings.length === 0 ? (
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
               <h3 className="font-bold text-gray-800 dark:text-white">Top Packages</h3>
-              <a href="/admin/packages" className="text-blue-600 dark:text-blue-400 text-sm hover:underline">View all →</a>
+              <a href="/admin/packages" className="text-purple-600 dark:text-purple-400 text-sm font-semibold hover:underline">View all →</a>
             </div>
             <div className="divide-y divide-gray-50 dark:divide-gray-700">
               {stats.topPackages.length === 0 ? (
@@ -221,7 +221,7 @@ export default function AdminDashboard() {
               ) : (
                 stats.topPackages.map((tp, i) => (
                   <div key={tp.packageId} className="px-5 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold flex items-center justify-center flex-shrink-0">
+                    <span className="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-xs font-bold flex items-center justify-center flex-shrink-0">
                       {i + 1}
                     </span>
                     <div className="flex-1 min-w-0">

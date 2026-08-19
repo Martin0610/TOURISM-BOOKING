@@ -113,30 +113,30 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
 
       {/* Elegant, soft-blooming modal card */}
       <div 
-        className={`relative w-full max-w-2xl bg-slate-900/95 border border-purple-500/30 rounded-3xl shadow-2xl shadow-purple-950/80 overflow-hidden flex flex-col max-h-[85vh] z-10 text-white transition-all duration-400 ease-out transform ${
+        className={`relative w-full max-w-2xl bg-white dark:bg-slate-900 border-2 border-purple-500/30 rounded-3xl shadow-2xl shadow-purple-950/40 overflow-hidden flex flex-col max-h-[85vh] z-10 text-slate-900 dark:text-white transition-all duration-400 ease-out transform ${
           isVisible 
             ? 'opacity-100 scale-100 translate-y-0' 
             : 'opacity-0 scale-95 translate-y-8'
         }`}
       >
         {/* Header with Royal Purple branding */}
-        <div className="px-6 py-5 border-b border-purple-500/20 flex items-center justify-between bg-purple-950/30 backdrop-blur-md">
+        <div className="px-6 py-5 border-b border-purple-100 dark:border-purple-500/20 flex items-center justify-between bg-gradient-to-r from-purple-50/80 via-white to-purple-50/80 dark:from-purple-950/40 dark:via-slate-900 dark:to-purple-950/40 backdrop-blur-md">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-500 via-indigo-600 to-purple-700 flex items-center justify-center text-white shadow-lg shadow-purple-500/30 ring-1 ring-white/20">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 via-purple-700 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 ring-2 ring-purple-400/30">
               {activeType === 'terms' && <FileText className="w-5 h-5" />}
               {activeType === 'privacy' && <ShieldCheck className="w-5 h-5" />}
               {activeType === 'cancellation' && <RotateCcw className="w-5 h-5" />}
             </div>
             <div>
-              <h3 className="font-extrabold text-lg text-white flex items-center gap-2">
+              <h3 className="font-extrabold text-lg text-slate-900 dark:text-white flex items-center gap-2">
                 <span>
                   {activeType === 'terms' && 'Terms of Service'}
                   {activeType === 'privacy' && 'Privacy Policy'}
                   {activeType === 'cancellation' && 'Cancellation & Refund Guarantee'}
                 </span>
-                <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
+                <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 animate-pulse" />
               </h3>
-              <p className="text-xs text-purple-200/80">
+              <p className="text-xs text-purple-600 dark:text-purple-300 font-medium">
                 TripEase Holidays • Last Updated August 2026
               </p>
             </div>
@@ -144,7 +144,7 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
 
           <button
             onClick={handleClose}
-            className="p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition cursor-pointer"
+            className="p-2 rounded-xl text-slate-400 dark:text-white/60 hover:text-purple-600 dark:hover:text-white hover:bg-purple-100/60 dark:hover:bg-white/10 transition cursor-pointer"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -155,55 +155,55 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
         <div 
           ref={contentRef}
           onScroll={handleScroll}
-          className="p-6 overflow-y-auto space-y-5 text-sm text-slate-200 leading-relaxed max-h-[55vh] selection:bg-purple-500 selection:text-white"
+          className="p-6 overflow-y-auto space-y-4 text-sm text-slate-600 dark:text-slate-200 leading-relaxed max-h-[55vh] selection:bg-purple-500 selection:text-white"
         >
           {activeType === 'terms' && (
             <>
-              <div className="p-4 bg-purple-500/15 rounded-2xl border border-purple-400/30 text-xs text-purple-100 font-medium">
+              <div className="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-500/30 text-xs text-purple-900 dark:text-purple-200 font-semibold leading-relaxed">
                 Welcome to TripEase. By accessing our platform, booking packages, or registering an account, you agree to comply with the following contractual terms.
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 1. Booking & Account Agreement
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 1. Booking & Account Agreement
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Users must provide accurate, verified information during registration. Bookings are confirmed upon valid payment confirmation via our authorized payment partner Razorpay. Instant digital trip vouchers will be generated in your account dashboard.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 2. Special Offers & Discounts
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 2. Special Offers & Discounts
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Group discounts (e.g., 20% off for 3+ passengers) and the 4+1 Free Ticket promotion are automatically computed based on adult headcount. Only one promo coupon can be combined per checkout transaction.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 3. Departure & Transit Arrangements
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 3. Departure & Transit Arrangements
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Multi-city departures via Flight, Train, or AC Bus are operated by verified transit partners. Travelers must arrive at the designated departure hub 2 hours before scheduled departure times with valid government photo identification.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 4. Traveler Conduct & Responsibilities
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 4. Traveler Conduct & Responsibilities
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Travelers agree to abide by local cultural, state, and national park regulations. TripEase reserves the right to cancel bookings without refund in instances of misconduct or safety violations.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 5. Modifications & Amendments
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 5. Modifications & Amendments
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   TripEase reserves the right to update these terms at any time. Continued usage of the platform constitutes acceptance of the latest revised terms.
                 </p>
               </div>
@@ -212,43 +212,43 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
 
           {activeType === 'privacy' && (
             <>
-              <div className="p-4 bg-emerald-500/15 rounded-2xl border border-emerald-400/30 text-xs text-emerald-200 font-medium flex items-center gap-2.5">
-                <Lock className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <div className="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-500/30 text-xs text-purple-900 dark:text-purple-200 font-semibold flex items-center gap-2.5">
+                <Lock className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
                 <span>Your privacy and data security are our top priority. We never sell or share your personal data with third-party advertisers.</span>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 1. Data Collection & Purpose
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 1. Data Collection & Purpose
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   We collect your name, email address, contact phone number, and booking travel preferences strictly to fulfill your tourism bookings, generate digital tickets, and provide 24/7 customer support.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 2. Bank-Grade Payment Security
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 2. Bank-Grade Payment Security
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Payment processing is secured via Razorpay PCI-DSS Level 1 compliant tokenized gateway. TripEase never stores card numbers, CVVs, or NetBanking credentials on our database servers.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 3. Account Protection & Encryption
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 3. Account Protection & Encryption
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   All user passwords are cryptographically hashed using industry-standard bcrypt. Session tokens are encrypted and transmitted exclusively over secure HTTPS protocols.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 4. Data Retention & User Rights
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 4. Data Retention & User Rights
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   You have the right to request deletion of your account history and associated booking metadata at any time by contacting our privacy compliance team.
                 </p>
               </div>
@@ -257,33 +257,33 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
 
           {activeType === 'cancellation' && (
             <>
-              <div className="p-4 bg-amber-500/15 rounded-2xl border border-amber-400/30 text-xs text-amber-200 font-medium">
+              <div className="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-500/30 text-xs text-purple-900 dark:text-purple-200 font-semibold leading-relaxed">
                 TripEase provides a transparent, guaranteed cancellation policy designed to give you complete peace of mind while planning your holidays.
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 1. 100% Free Cancellation Window
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 1. 100% Free Cancellation Window
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Cancel up to <strong>7 to 10 days</strong> before your scheduled trip departure date and receive a <strong>100% full refund</strong> with zero cancellation penalties or hidden processing deductions.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 2. Partial Refund (3 to 7 Days)
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 2. Partial Refund (3 to 7 Days)
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Cancellations requested between 3 and 7 days prior to departure qualify for a <strong>50% refund</strong> of the package booking value, with the remainder allocated towards pre-reserved accommodations.
                 </p>
               </div>
 
-              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-1.5">
-                <h4 className="font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" /> 3. Fast Automated Refund Processing
+              <div className="p-4 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-700/60 space-y-1.5 shadow-sm">
+                <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 flex-shrink-0" /> 3. Fast Automated Refund Processing
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed pl-6">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                   Refunds are authorized immediately upon cancellation and credited directly back to your original payment source (UPI / NetBanking / Card) within <strong>5 to 7 business days</strong>.
                 </p>
               </div>
@@ -291,10 +291,10 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
           )}
 
           {/* Concierge Help box */}
-          <div className="p-4 bg-purple-950/40 rounded-2xl border border-purple-500/30 flex items-center justify-between">
+          <div className="p-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 rounded-2xl border border-purple-500/40 flex items-center justify-between text-white shadow-md shadow-purple-950/20">
             <div>
               <p className="text-xs font-bold text-white">Have questions about this policy?</p>
-              <p className="text-[11px] text-purple-200/70">Our customer support concierge is available 24/7.</p>
+              <p className="text-[11px] text-purple-200/80">Our customer support concierge is available 24/7.</p>
             </div>
             <a 
               href="tel:+917200336447"
@@ -306,18 +306,18 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
         </div>
 
         {/* Footer actions with smooth scroll-to-bottom indicator */}
-        <div className="px-6 py-4 border-t border-purple-500/20 bg-purple-950/40 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="px-6 py-4 border-t border-purple-100 dark:border-purple-500/20 bg-purple-50/70 dark:bg-purple-950/40 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs">
             {!hasScrolledToBottom ? (
               <button
                 type="button"
                 onClick={scrollToBottom}
-                className="inline-flex items-center gap-1.5 text-amber-300 font-medium hover:underline cursor-pointer transition-colors"
+                className="inline-flex items-center gap-1.5 text-purple-700 dark:text-purple-300 font-bold hover:underline cursor-pointer transition-colors"
               >
-                <ChevronDown className="w-4 h-4 animate-bounce" /> Please scroll down to the bottom to continue
+                <ChevronDown className="w-4 h-4 animate-bounce text-purple-600 dark:text-purple-400" /> Please scroll down to the bottom to continue
               </button>
             ) : (
-              <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
+              <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
                 <CheckCircle2 className="w-4 h-4" /> Policy completely read & reviewed
               </span>
             )}
@@ -329,7 +329,7 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
             className={`px-6 py-2.5 rounded-xl font-bold text-xs transition-all duration-300 shadow-md flex items-center gap-2 cursor-pointer ${
               hasScrolledToBottom
                 ? 'bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-purple-600/30 hover:scale-105 active:scale-95'
-                : 'bg-white/10 text-white/40 cursor-not-allowed opacity-50'
+                : 'bg-gray-200 dark:bg-white/10 text-gray-400 dark:text-white/40 cursor-not-allowed opacity-60'
             }`}
           >
             {hasScrolledToBottom ? (

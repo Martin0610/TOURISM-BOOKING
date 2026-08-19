@@ -82,36 +82,36 @@ export default function AdminUsersPage() {
           <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Search users by name or email..."
-            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* User Grid */}
           <div className="lg:col-span-2 space-y-3">
             {loading ? (
-              <div className="bg-white rounded-2xl p-8 text-center text-gray-400">Loading...</div>
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 text-center text-gray-400">Loading...</div>
             ) : filtered.length === 0 ? (
-              <div className="bg-white rounded-2xl p-8 text-center text-gray-400">No users found.</div>
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 text-center text-gray-400">No users found.</div>
             ) : (
               filtered.map(u => (
                 <div key={u.id} onClick={() => setSelected(u)}
-                  className={`bg-white rounded-xl p-4 shadow-sm border cursor-pointer transition-all hover:shadow-md ${selected?.id === u.id ? 'border-blue-400 bg-blue-50' : 'border-gray-100'}`}>
+                  className={`bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border cursor-pointer transition-all hover:shadow-md ${selected?.id === u.id ? 'border-purple-400 bg-purple-50/50 dark:bg-purple-950/30' : 'border-gray-100 dark:border-gray-800'}`}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                       {u.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-gray-800">{u.name}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.role === 'ADMIN' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
+                        <p className="font-semibold text-gray-800 dark:text-white">{u.name}</p>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.role === 'ADMIN' ? 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>
                           {u.role}
                         </span>
                       </div>
                       <p className="text-sm text-gray-400">{u.email}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <p className="text-sm font-semibold text-gray-700">{u.bookings.length} bookings</p>
-                      <p className="text-xs text-blue-600">₹{getUserRevenue(u).toLocaleString('en-IN')}</p>
+                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{u.bookings.length} bookings</p>
+                      <p className="text-xs text-purple-600 dark:text-purple-400 font-bold">₹{getUserRevenue(u).toLocaleString('en-IN')}</p>
                     </div>
                   </div>
                 </div>
@@ -120,15 +120,15 @@ export default function AdminUsersPage() {
           </div>
 
           {/* Detail Panel */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5">
             {selected ? (
               <div className="space-y-4">
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-3">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-3 shadow-md shadow-purple-500/25">
                     {selected.name.charAt(0).toUpperCase()}
                   </div>
-                  <h3 className="font-bold text-gray-800 text-lg">{selected.name}</h3>
-                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${selected.role === 'ADMIN' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600'}`}>
+                  <h3 className="font-bold text-gray-800 dark:text-white text-lg">{selected.name}</h3>
+                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${selected.role === 'ADMIN' ? 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>
                     {selected.role}
                   </span>
                 </div>

@@ -98,7 +98,7 @@ export default function AdminCouponsPage() {
     setConfirmDeleteId(null);
   };
 
-  const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
+  const inputCls = 'w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500';
 
   return (
     <AdminLayout>
@@ -112,60 +112,60 @@ export default function AdminCouponsPage() {
       />
       <div className="space-y-5">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">Coupon Management</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Coupon Management</h2>
           <button onClick={() => { setShowForm(!showForm); setEditing(null); setForm(empty); }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 text-sm">
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 text-sm font-bold shadow-md shadow-purple-600/25 cursor-pointer">
             <Plus className="w-4 h-4" /> New Coupon
           </button>
         </div>
 
         {showForm && (
-          <form onSubmit={handleSave} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 grid grid-cols-2 gap-4">
+          <form onSubmit={handleSave} className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                 {editing ? 'Edit Coupon' : 'Create New Coupon'}
               </h3>
             </div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Code</label>
+            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Code</label>
               <input required value={form.code} onChange={e => setForm({...form, code: e.target.value.toUpperCase()})} placeholder="SAVE20" className={inputCls} disabled={!!editing} /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Type</label>
               <select value={form.discountType} onChange={e => setForm({...form, discountType: e.target.value})} className={inputCls}>
                 <option value="PERCENTAGE">Percentage (%)</option>
                 <option value="FIXED">Fixed Amount (₹)</option>
               </select></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Value</label>
               <input required type="number" value={form.discountValue} onChange={e => setForm({...form, discountValue: e.target.value})} placeholder={form.discountType === 'PERCENTAGE' ? '20' : '500'} className={inputCls} /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Min Booking Amount (₹)</label>
+            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Min Booking Amount (₹)</label>
               <input type="number" value={form.minBookingAmount} onChange={e => setForm({...form, minBookingAmount: e.target.value})} placeholder="0" className={inputCls} /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Max Uses</label>
+            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Max Uses</label>
               <input type="number" value={form.maxUses} onChange={e => setForm({...form, maxUses: e.target.value})} className={inputCls} /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-1">Expires At</label>
+            <div><label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expires At</label>
               <input required type="datetime-local" value={form.expiresAt} onChange={e => setForm({...form, expiresAt: e.target.value})} className={inputCls} /></div>
             <div className="col-span-2 flex gap-3">
-              <button type="submit" disabled={saving} className="bg-green-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-green-700 disabled:opacity-60">
+              <button type="submit" disabled={saving} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white px-6 py-2.5 rounded-xl font-bold text-sm disabled:opacity-60 cursor-pointer shadow-md">
                 {saving ? 'Saving...' : editing ? 'Update Coupon' : 'Create Coupon'}
               </button>
-              <button type="button" onClick={handleCancel} className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg text-sm hover:bg-gray-200">Cancel</button>
+              <button type="button" onClick={handleCancel} className="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 px-6 py-2.5 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-slate-700 cursor-pointer font-medium">Cancel</button>
             </div>
           </form>
         )}
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-gray-50 dark:bg-slate-800/60 border-b border-gray-100 dark:border-gray-800">
               <tr>{['Code','Type','Value','Min Amount','Used/Max','Expires','Status','Actions'].map(h => (
-                <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600 whitespace-nowrap">{h}</th>
+                <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300 whitespace-nowrap">{h}</th>
               ))}</tr>
             </thead>
             <tbody>
               {coupons.map(c => (
-                <tr key={c.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 font-mono font-bold text-blue-700">{c.code}</td>
-                  <td className="px-4 py-3 text-gray-600">{c.discountType}</td>
+                <tr key={c.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-mono font-bold text-purple-700 dark:text-purple-400">{c.code}</td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{c.discountType}</td>
                   <td className="px-4 py-3 text-green-600 font-semibold">{c.discountType === 'PERCENTAGE' ? `${c.discountValue}%` : `₹${c.discountValue}`}</td>
-                  <td className="px-4 py-3 text-gray-500">₹{c.minBookingAmount.toLocaleString('en-IN')}</td>
-                  <td className="px-4 py-3 text-gray-500">{c.usedCount}/{c.maxUses}</td>
-                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{new Date(c.expiresAt).toLocaleDateString('en-IN')}</td>
+                  <td className="px-4 py-3 text-gray-500 dark:text-gray-400">₹{c.minBookingAmount.toLocaleString('en-IN')}</td>
+                  <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{c.usedCount}/{c.maxUses}</td>
+                  <td className="px-4 py-3 text-gray-500 dark:text-gray-400 whitespace-nowrap">{new Date(c.expiresAt).toLocaleDateString('en-IN')}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${c.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                       {c.active ? 'Active' : 'Inactive'}
@@ -173,7 +173,7 @@ export default function AdminCouponsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex gap-2">
-                      <button onClick={() => handleEdit(c)} className="text-blue-500 hover:bg-blue-50 p-1.5 rounded-lg" title="Edit">
+                      <button onClick={() => handleEdit(c)} className="text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950/50 p-1.5 rounded-lg cursor-pointer transition" title="Edit">
                         <Edit className="w-4 h-4" />
                       </button>
                       <button onClick={() => toggleActive(c)} className="text-green-500 hover:bg-green-50 p-1.5 rounded-lg" title={c.active ? 'Deactivate' : 'Activate'}>

@@ -83,7 +83,7 @@ export default function AdminBookingsPage() {
                         <span className="text-gray-400 text-xs">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-blue-600 font-medium">₹{b.totalAmount.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-purple-600 dark:text-purple-400 font-bold">₹{b.totalAmount.toLocaleString()}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusColors[b.status]}`}>{b.status}</span>
                     </td>

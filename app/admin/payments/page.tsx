@@ -90,12 +90,12 @@ export default function AdminPaymentsPage() {
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search by user, order ID, payment ID..."
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
           </div>
           <div className="flex gap-2">
             {['ALL', 'SUCCESS', 'PENDING', 'FAILED'].map(s => (
               <button key={s} onClick={() => setStatusFilter(s)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${statusFilter === s ? 'bg-purple-600 text-white shadow-sm' : 'bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50'}`}>
                 {s}
               </button>
             ))}
@@ -104,14 +104,14 @@ export default function AdminPaymentsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Payments Table */}
-          <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
             <div className="overflow-x-auto">
               {loading ? <div className="p-8 text-center text-gray-400">Loading...</div> : (
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-50 border-b">
+                  <thead className="bg-gray-50 dark:bg-slate-800/60 border-b border-gray-100 dark:border-gray-800">
                     <tr>
                       {['User', 'Package', 'Amount', 'Status', 'Date'].map(h => (
-                        <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600">{h}</th>
+                        <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600 dark:text-gray-300">{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -121,13 +121,13 @@ export default function AdminPaymentsPage() {
                       const Icon = cfg.icon;
                       return (
                         <tr key={p.id} onClick={() => setSelected(p)}
-                          className={`border-b hover:bg-blue-50 cursor-pointer ${selected?.id === p.id ? 'bg-blue-50' : ''}`}>
+                          className={`border-b border-gray-100 dark:border-gray-800 hover:bg-purple-50/50 dark:hover:bg-purple-950/30 cursor-pointer ${selected?.id === p.id ? 'bg-purple-50 dark:bg-purple-950/40' : ''}`}>
                           <td className="px-4 py-3">
-                            <p className="font-medium text-gray-800">{p.booking?.user?.name}</p>
+                            <p className="font-medium text-gray-800 dark:text-white">{p.booking?.user?.name}</p>
                             <p className="text-xs text-gray-400">{p.booking?.user?.email}</p>
                           </td>
-                          <td className="px-4 py-3 text-gray-700 max-w-32 truncate">{p.booking?.package?.name}</td>
-                          <td className="px-4 py-3 text-blue-600 font-semibold">₹{p.amount.toLocaleString('en-IN')}</td>
+                          <td className="px-4 py-3 text-gray-700 dark:text-gray-300 max-w-32 truncate">{p.booking?.package?.name}</td>
+                          <td className="px-4 py-3 text-purple-600 dark:text-purple-400 font-bold">₹{p.amount.toLocaleString('en-IN')}</td>
                           <td className="px-4 py-3">
                             <span className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold w-fit ${cfg.color}`}>
                               <Icon className="w-3 h-3" />{p.status}
