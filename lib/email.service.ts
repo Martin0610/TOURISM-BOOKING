@@ -128,3 +128,92 @@ export const sendVerificationOTP = async (email: string, otp: string, userName: 
     html,
   });
 };
+
+export const sendBookingConfirmation = async (
+  email: string,
+  userName: string,
+  details: {
+    packageName: string;
+    destination: string;
+    travelDate: string;
+    numberOfPeople: number;
+    totalAmount: number;
+    bookingId: string;
+  }
+): Promise<void> => {
+  const html = `
+  <!DOCTYPE html>
+  <html>
+  <head><meta charset="UTF-8"></head>
+  <body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,sans-serif;">
+    <div style="max-width:600px;margin:32px auto;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#7c3aed,#db2777);padding:24px;text-align:center;">
+        <h1 style="color:white;margin:0;font-size:26px;">TripEase</h1>
+        <p style="color:#f9a8d4;margin:8px 0 0;font-size:14px;">Your booking is confirmed!</p>
+      </div>
+
+      <!-- Body -->
+      <div style="padding:32px 24px;">
+        <p style="color:#374151;font-size:16px;margin:0 0 8px;">Hi ${userName},</p>
+        <p style="color:#374151;font-size:15px;margin:0 0 24px;line-height:1.6;">
+          Great news! Your payment was successful and your booking is confirmed. Here are your trip details:
+        </p>
+
+        <!-- Booking Details -->
+        <div style="background:#f9fafb;border-radius:8px;padding:20px;margin-bottom:24px;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr>
+              <td style="padding:8px 0;color:#6b7280;font-size:14px;width:40%;">Package</td>
+              <td style="padding:8px 0;color:#111827;font-size:14px;font-weight:600;">${details.packageName}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:#6b7280;font-size:14px;">Destination</td>
+              <td style="padding:8px 0;color:#111827;font-size:14px;">${details.destination}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:#6b7280;font-size:14px;">Travel Date</td>
+              <td style="padding:8px 0;color:#111827;font-size:14px;">${details.travelDate}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:#6b7280;font-size:14px;">No. of People</td>
+              <td style="padding:8px 0;color:#111827;font-size:14px;">${details.numberOfPeople}</td>
+            </tr>
+            <tr style="border-top:2px solid #e5e7eb;">
+              <td style="padding:12px 0 0;color:#6b7280;font-size:14px;font-weight:600;">Amount Paid</td>
+              <td style="padding:12px 0 0;color:#7c3aed;font-size:18px;font-weight:700;">₹${details.totalAmount.toLocaleString('en-IN')}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Success message -->
+        <div style="background:#ecfdf5;border-left:4px solid #10b981;padding:12px 16px;margin-bottom:24px;">
+          <p style="margin:0;color:#065f46;font-size:13px;line-height:1.6;">
+            ✅ Payment successful · Booking ID: <strong>${details.bookingId.slice(0, 8).toUpperCase()}</strong>
+          </p>
+        </div>
+
+        <p style="color:#374151;font-size:14px;line-height:1.6;">
+          Have questions or need help? We're here for you.
+        </p>
+        <p style="color:#6b7280;font-size:13px;text-align:center;margin:24px 0 0;">
+          Contact us at <a href="mailto:mjv3140@gmail.com" style="color:#7c3aed;text-decoration:none;">mjv3140@gmail.com</a> | +91 72003 36447
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background:#f9fafb;padding:16px 24px;text-align:center;border-top:1px solid #e5e7eb;">
+        <p style="margin:0;color:#9ca3af;font-size:12px;">© 2026 TripEase. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+  </html>`;
+
+  await transporter.sendMail({
+    from: `TripEase <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: `🎉 Booking Confirmed — ${details.packageName}`,
+    html,
+  });
+};

@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import prisma from '@/lib/db';
 import { successResponse, errorResponse } from '@/lib/apiResponse';
 import { getAuthUser, requireAuth } from '@/lib/auth';
+import { sendBookingConfirmation } from '@/lib/email.service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,7 +40,29 @@ export async function POST(request: NextRequest) {
       data: { status: 'CONFIRMED' },
     });
 
-    // TODO: Send confirmation email (async)
+    // Send booking confirmation email to user
+    try {
+      const booking = await prisma.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+          user: { select: { name: true, email: true } },
+          package: { select: { name: true, destination: true, state: true } },
+        },
+      });
+      if (booking && booking.user && booking.package) {
+        await sendBookingConfirmation(booking.user.email, booking.user.name, {
+          packageName: booking.package.name,
+          destination: `${booking.package.destination}, ${booking.package.state}`,
+          travelDate: new Date(booking.travelDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+          numberOfPeople: booking.numberOfPeople,
+          totalAmount: booking.totalAmount,
+          bookingId: booking.id,
+        });
+      }
+    } catch (emailErr) {
+      // Don't fail the payment verification if email fails
+      console.error('Failed to send confirmation email:', emailErr);
+    }
 
     return successResponse(null, 'Payment verified successfully');
   } catch (err) {
