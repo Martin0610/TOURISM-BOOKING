@@ -481,7 +481,261 @@ export const sendVipAnnouncementEmail = async (
   await transporter.sendMail({
     from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: `TripEase VIP: ${details.title}`,
+    subject: `👑 TripEase VIP: ${details.title}`,
+    html,
+  });
+};
+
+/**
+ * 1. VIP Membership Approval & Welcome Email
+ */
+export const sendVipWelcomeEmail = async (email: string, userName: string): Promise<void> => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://tourism-booking-murex.vercel.app';
+
+  const html = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to TripEase VIP Club</title>
+  </head>
+  <body style="margin:0;padding:0;background:#030712;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#030712;padding:36px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" style="max-width:600px;background:#0b132b;border-radius:20px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);" cellspacing="0" cellpadding="0">
+            
+            <!-- Royal Gold Header -->
+            <tr>
+              <td style="background:linear-gradient(135deg, #1e1b4b 0%, #311042 50%, #0f172a 100%);padding:36px 30px;text-align:center;border-bottom:2px solid #f59e0b;">
+                <div style="display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);padding:6px 16px;border-radius:30px;margin-bottom:14px;">
+                  <span style="color:#fbbf24;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Official VIP Membership</span>
+                </div>
+                <h1 style="color:#ffffff;margin:0;font-size:28px;font-weight:800;letter-spacing:-0.5px;">TripEase VIP Travel Club</h1>
+                <p style="color:#cbd5e1;margin:8px 0 0;font-size:14px;font-weight:500;">Membership Status: <span style="color:#4ade80;font-weight:700;">APPROVED & ACTIVE ⭐</span></p>
+              </td>
+            </tr>
+
+            <!-- Body Content -->
+            <tr>
+              <td style="padding:36px 32px;background:#0b132b;">
+                <p style="color:#f8fafc;font-size:18px;font-weight:700;margin:0 0 16px;">
+                  Dear ${userName || 'Valued Traveler'},
+                </p>
+                <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 20px;">
+                  Congratulations! We are delighted to inform you that your application for the <strong>TripEase VIP Travel Club</strong> has been officially reviewed and <strong style="color:#4ade80;">APPROVED</strong>.
+                </p>
+                <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 26px;">
+                  At TripEase, our highest priority is to serve you with uncompromising luxury, precision, and heartfelt hospitality. Whether you are exploring the tranquil backwaters of Kerala, the royal palaces of Rajasthan, or the snowy peaks of Kashmir, our dedicated team is committed to ensuring every journey exceeds your highest expectations.
+                </p>
+
+                <!-- Welcome Highlight Card -->
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(59,130,246,0.05) 100%);border:1px solid rgba(245,158,11,0.3);border-radius:16px;margin-bottom:28px;">
+                  <tr>
+                    <td style="padding:22px 24px;">
+                      <h3 style="color:#fbbf24;font-size:15px;font-weight:700;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px;">
+                        👑 What This Means For You:
+                      </h3>
+                      <p style="color:#e2e8f0;font-size:14px;line-height:1.6;margin:0 0 10px;">
+                        • <strong>Private VIP Dispatches:</strong> You will now receive confidential flash sales & unlisted discounts sent straight to your inbox.
+                      </p>
+                      <p style="color:#e2e8f0;font-size:14px;line-height:1.6;margin:0 0 10px;">
+                        • <strong>Priority Concierge Desk:</strong> Direct access to our VIP travel managers via WhatsApp and dedicated phone lines.
+                      </p>
+                      <p style="color:#e2e8f0;font-size:14px;line-height:1.6;margin:0;">
+                        • <strong>Zero-Worry Booking:</strong> Flexible departure schedules, 4+1 group ticket priority, and guaranteed refund protection.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- CTA Button -->
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:30px;">
+                  <tr>
+                    <td align="center">
+                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#f59e0b 0%,#ea580c 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;letter-spacing:0.5px;box-shadow:0 10px 25px -5px rgba(245,158,11,0.4);">
+                        Explore VIP Escapes & Packages →
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Personal Message from Leadership -->
+                <div style="border-left:3px solid #38bdf8;padding:12px 18px;background:rgba(56,189,248,0.06);border-radius:0 12px 12px 0;margin-bottom:24px;">
+                  <p style="color:#e2e8f0;font-size:13px;line-height:1.6;margin:0;font-style:italic;">
+                    "We are honored to have you as part of our elite travel circle. A detailed guide containing your complete VIP perks and privileges has also been dispatched to your email."
+                  </p>
+                  <p style="color:#38bdf8;font-size:12px;font-weight:700;margin:6px 0 0;">
+                    — TripEase Executive Concierge Team
+                  </p>
+                </div>
+
+                <!-- 24/7 Support Box -->
+                <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;text-align:center;">
+                  Need assistance planning your next getaway? Call our VIP Desk at <a href="tel:+917200336447" style="color:#fbbf24;text-decoration:none;font-weight:700;">+91 72003 36447</a> or email <a href="mailto:mjv3140@gmail.com" style="color:#38bdf8;text-decoration:none;">mjv3140@gmail.com</a>.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background:#060a17;padding:22px 30px;text-align:center;border-top:1px solid #1e293b;">
+                <p style="color:#64748b;font-size:12px;margin:0 0 6px;">
+                  © 2026 TripEase Holidays Pvt. Ltd. • Luxury Indian Tourism
+                </p>
+                <p style="color:#475569;font-size:11px;margin:0;">
+                  This is an official VIP membership notification sent to ${email}.
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+
+  await transporter.sendMail({
+    from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: '👑 Welcome to TripEase VIP Club! Your Membership is Approved',
+    html,
+  });
+};
+
+/**
+ * 2. VIP Member Privileges & Perks Breakdown Email
+ */
+export const sendVipPerksEmail = async (email: string, userName: string): Promise<void> => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://tourism-booking-murex.vercel.app';
+
+  const html = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your VIP Member Perks Guide</title>
+  </head>
+  <body style="margin:0;padding:0;background:#030712;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#030712;padding:36px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" style="max-width:600px;background:#0b132b;border-radius:20px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);" cellspacing="0" cellpadding="0">
+            
+            <!-- Perks Header -->
+            <tr>
+              <td style="background:linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #042f2e 100%);padding:36px 30px;text-align:center;border-bottom:2px solid #38bdf8;">
+                <div style="display:inline-block;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.4);padding:6px 16px;border-radius:30px;margin-bottom:14px;">
+                  <span style="color:#38bdf8;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Member Privileges Guide</span>
+                </div>
+                <h1 style="color:#ffffff;margin:0;font-size:28px;font-weight:800;letter-spacing:-0.5px;">Your VIP Elite Benefits & Perks</h1>
+                <p style="color:#cbd5e1;margin:8px 0 0;font-size:14px;font-weight:500;">Exclusively for: <span style="color:#fbbf24;font-weight:700;">${userName || 'VIP Member'}</span></p>
+              </td>
+            </tr>
+
+            <!-- Body Content -->
+            <tr>
+              <td style="padding:36px 32px;background:#0b132b;">
+                <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 24px;">
+                  As an approved member of the <strong>TripEase VIP Travel Club</strong>, you now have instant access to a suite of elite travel perks designed to elevate every aspect of your journey:
+                </p>
+
+                <!-- Perk 1 -->
+                <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
+                  <h3 style="color:#fbbf24;font-size:15px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;">
+                    💎 1. Secret Flash Sales & Member-Only Pricing
+                  </h3>
+                  <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
+                    Receive private broadcast deals and exclusive coupon codes emailed directly to you before packages are published to the public.
+                  </p>
+                </div>
+
+                <!-- Perk 2 -->
+                <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
+                  <h3 style="color:#38bdf8;font-size:15px;font-weight:700;margin:0 0 6px;">
+                    🛎️ 2. Dedicated 24/7 VIP Concierge Desk
+                  </h3>
+                  <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
+                    Enjoy zero-wait priority on WhatsApp (+91 72003 36447) and phone support. Our travel specialists handle your customized itineraries, hotel upgrades, and flight timings personally.
+                  </p>
+                </div>
+
+                <!-- Perk 3 -->
+                <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
+                  <h3 style="color:#4ade80;font-size:15px;font-weight:700;margin:0 0 6px;">
+                    🎟️ 3. 4+1 Free Ticket & Group Discount Priority
+                  </h3>
+                  <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
+                    Bring family & friends along! Every 4th ticket is completely free on eligible packages, plus automatic 20% group discounts for 3+ passengers with stackable coupon savings.
+                  </p>
+                </div>
+
+                <!-- Perk 4 -->
+                <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
+                  <h3 style="color:#f472b6;font-size:15px;font-weight:700;margin:0 0 6px;">
+                    🛡️ 4. 100% Free Cancellation Window Guarantee
+                  </h3>
+                  <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
+                    Full refund protection up to 7–10 days before scheduled departure dates, with expedited refunds processed directly to your bank or UPI in 3–5 business days.
+                  </p>
+                </div>
+
+                <!-- Perk 5 -->
+                <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:28px;">
+                  <h3 style="color:#a78bfa;font-size:15px;font-weight:700;margin:0 0 6px;">
+                    🎫 5. Instant VIP Digital E-Pass & Vouchers
+                  </h3>
+                  <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
+                    Instant digital trip confirmation, QR boarding passes, and hotel vouchers accessible 24/7 directly from your TripEase dashboard.
+                  </p>
+                </div>
+
+                <!-- CTA Button -->
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:28px;">
+                  <tr>
+                    <td align="center">
+                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;letter-spacing:0.5px;box-shadow:0 10px 25px -5px rgba(37,99,235,0.4);">
+                        Book Your Next VIP Escape Now →
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Support & Contact -->
+                <p style="color:#64748b;font-size:12px;line-height:1.6;margin:0;text-align:center;">
+                  Questions regarding your membership or deals? Reply to this email anytime at <a href="mailto:mjv3140@gmail.com" style="color:#38bdf8;text-decoration:none;">mjv3140@gmail.com</a>.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background:#060a17;padding:22px 30px;text-align:center;border-top:1px solid #1e293b;">
+                <p style="color:#64748b;font-size:12px;margin:0 0 6px;">
+                  © 2026 TripEase Holidays Pvt. Ltd. • All rights reserved.
+                </p>
+                <p style="color:#475569;font-size:11px;margin:0;">
+                  Sent to ${email} as part of your active TripEase VIP Membership.
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+
+  await transporter.sendMail({
+    from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: '🌟 Your TripEase VIP Elite Privileges & Travel Perks Guide',
     html,
   });
 };

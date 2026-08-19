@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
 import { successResponse, errorResponse } from '@/lib/apiResponse';
 import { getAuthUser, requireAdmin } from '@/lib/auth';
+import { sendVipWelcomeEmail, sendVipPerksEmail } from '@/lib/email.service';
 
 export async function PATCH(
   request: NextRequest,
@@ -22,13 +23,36 @@ export async function PATCH(
       where: { id },
       data: {
         status,
+        active: status === 'APPROVED' ? true : undefined,
         reviewedAt: new Date(),
       },
     });
 
+    // If approved, send Welcome Email and Perks Guide Email in sequence
+    if (status === 'APPROVED' && updated.email) {
+      // Find registered user name if available
+      const matchedUser = await prisma.user.findUnique({
+        where: { email: updated.email.toLowerCase() },
+        select: { name: true },
+      });
+      const memberName = matchedUser?.name || 'VIP Member';
+
+      // 1. Send VIP Welcome & Dedication email
+      sendVipWelcomeEmail(updated.email, memberName).catch((err) =>
+        console.error('Failed to send VIP Welcome email:', err)
+      );
+
+      // 2. Send detailed VIP Perks & Privileges guide email 2.5s later
+      setTimeout(() => {
+        sendVipPerksEmail(updated.email, memberName).catch((err) =>
+          console.error('Failed to send VIP Perks email:', err)
+        );
+      }, 2500);
+    }
+
     const msg =
       status === 'APPROVED'
-        ? 'VIP Member Approved successfully! ⭐'
+        ? 'VIP Member Approved! Welcome & Perks emails sent ⭐'
         : status === 'REJECTED'
         ? 'VIP Application declined.'
         : 'Status reset to pending.';
