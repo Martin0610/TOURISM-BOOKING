@@ -190,7 +190,7 @@ export const sendBookingConfirmation = async (
         <!-- Success message -->
         <div style="background:#ecfdf5;border-left:4px solid #10b981;padding:12px 16px;margin-bottom:24px;">
           <p style="margin:0;color:#065f46;font-size:13px;line-height:1.6;">
-            ✅ Payment successful · Booking ID: <strong>${details.bookingId.slice(0, 8).toUpperCase()}</strong>
+            Payment successful · Booking ID: <strong>${details.bookingId.slice(0, 8).toUpperCase()}</strong>
           </p>
         </div>
 
@@ -213,7 +213,7 @@ export const sendBookingConfirmation = async (
   await transporter.sendMail({
     from: `TripEase <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: `🎉 Booking Confirmed — ${details.packageName}`,
+    subject: `Booking Confirmed — ${details.packageName}`,
     html,
   });
 };
@@ -280,7 +280,7 @@ export const sendCancellationEmail = async (
         <!-- Refund Info -->
         ${details.refundApplicable ? `
         <div style="background:#ecfdf5;border-left:4px solid #10b981;padding:16px;margin-bottom:24px;border-radius:4px;">
-          <p style="margin:0 0 6px;color:#065f46;font-size:14px;font-weight:600;">💰 Refund Initiated</p>
+          <p style="margin:0 0 6px;color:#065f46;font-size:14px;font-weight:600;">Refund Initiated</p>
           <p style="margin:0;color:#065f46;font-size:13px;line-height:1.6;">
             A full refund of <strong>₹${details.totalAmount.toLocaleString('en-IN')}</strong> has been initiated to your original payment method.
             It will be credited within <strong>5–7 business days</strong>.
@@ -289,7 +289,7 @@ export const sendCancellationEmail = async (
         ` : `
         <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;margin-bottom:24px;border-radius:4px;">
           <p style="margin:0;color:#92400e;font-size:13px;line-height:1.6;">
-            ⚠️ This booking was cancelled but no payment was made, so no refund is applicable.
+            This booking was cancelled but no payment was made, so no refund is applicable.
           </p>
         </div>
         `}
