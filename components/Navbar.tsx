@@ -41,6 +41,9 @@ export default function Navbar() {
                     <Link href="/my-bookings" className="text-gray-600 hover:text-purple-600 transition">My Bookings</Link>
                   </>
                 )}
+                {user.role === 'ADMIN' && (
+                  <Link href="/admin" className="text-purple-600 hover:text-purple-800 font-medium transition">Admin</Link>
+                )}
                 {user.role !== 'ADMIN' && (
                   <span className="text-gray-500 text-sm">Hi, {user.name}</span>
                 )}
