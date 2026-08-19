@@ -290,28 +290,32 @@ export default function Home() {
           <div className="absolute bottom-10 left-10 w-[28rem] h-[28rem] bg-indigo-500/15 rounded-full blur-[120px] pointer-events-none" />
         </div>
 
+        {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center text-white pt-2">
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+          {/* Interactive Destination Mood Selector Chips - Ultra High Contrast */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
             {HERO_THEMES.map((theme, idx) => {
               const Icon = theme.icon;
               const isActive = idx === activeHeroTheme;
               return (
                 <button
                   key={theme.id}
+                  type="button"
                   onClick={() => setActiveHeroTheme(idx)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold backdrop-blur-xl border transition-all duration-300 cursor-pointer ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-bold backdrop-blur-xl border transition-all duration-300 cursor-pointer ${
                     isActive
-                      ? 'bg-white text-slate-900 border-white shadow-lg shadow-white/20 scale-105'
-                      : 'bg-white/10 text-white/80 border-white/20 hover:bg-white/20 hover:text-white'
+                      ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 text-white border-cyan-300 shadow-xl shadow-cyan-500/30 scale-105 ring-2 ring-cyan-400/40'
+                      : 'bg-slate-900/60 text-slate-200 hover:text-white hover:bg-slate-800/80 border-white/20 hover:border-white/40'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600' : 'text-white/70'}`} />
-                  <span>{theme.name}</span>
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-300' : 'text-slate-300'}`} />
+                  <span className="font-bold tracking-wide text-white">{theme.name}</span>
                 </button>
               );
             })}
           </div>
 
+          {/* Main Headline with Dynamic Luminous Accent */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.12] mb-5 text-white">
             Discover The Soul Of India,<br />
             <span className={`bg-gradient-to-r ${currentTheme.titleAccent} bg-clip-text text-transparent drop-shadow-sm transition-all duration-700`}>
@@ -319,14 +323,16 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-slate-200/90 max-w-2xl mx-auto mb-8 leading-relaxed font-light">
+          <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-2xl mx-auto mb-8 leading-relaxed font-normal">
             Premium curated tour packages with handpicked luxury stays, multi-city departures, and transparent all-inclusive pricing.
           </p>
 
+          {/* Dynamic Interactive Trip Planner Search Widget */}
           <div className="relative z-30 max-w-3xl mx-auto bg-white/95 dark:bg-slate-950/95 backdrop-blur-2xl p-3.5 sm:p-4 rounded-3xl shadow-2xl shadow-black/60 border border-white/60 dark:border-slate-800 text-slate-900 dark:text-white mb-4">
             <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-              <div className="sm:col-span-5 text-left bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 focus-within:ring-2 focus-within:ring-blue-500 transition">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1.5">
+              {/* Destination Input */}
+              <div className="sm:col-span-5 text-left bg-slate-100/90 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-blue-500 transition">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-rose-500" /> Where to?
                 </label>
                 <input
@@ -334,18 +340,19 @@ export default function Home() {
                   value={searchDestination}
                   onChange={(e) => setSearchDestination(e.target.value)}
                   placeholder="Goa, Kashmir, Manali, Kerala..."
-                  className="w-full bg-transparent text-sm font-semibold text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none"
+                  className="w-full bg-transparent text-sm font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
                 />
               </div>
 
-              <div ref={vibeRef} className="sm:col-span-4 text-left bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 transition relative z-40">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1.5">
+              {/* Category Picker with Custom Icon Dropdown */}
+              <div ref={vibeRef} className="sm:col-span-4 text-left bg-slate-100/90 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 transition relative z-40">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                   <Compass className="w-3.5 h-3.5 text-cyan-500" /> Experience Vibe
                 </label>
                 <button
                   type="button"
                   onClick={() => setVibeDropdownOpen(!vibeDropdownOpen)}
-                  className="w-full flex items-center justify-between text-sm font-semibold text-slate-800 dark:text-white focus:outline-none cursor-pointer text-left"
+                  className="w-full flex items-center justify-between text-sm font-semibold text-slate-900 dark:text-white focus:outline-none cursor-pointer text-left"
                 >
                   <div className="flex items-center gap-2 truncate">
                     {(() => {
@@ -354,7 +361,7 @@ export default function Home() {
                       return (
                         <>
                           <Icon className={`w-4 h-4 ${selected.color} flex-shrink-0`} />
-                          <span className="truncate">{selected.label}</span>
+                          <span className="truncate text-slate-900 dark:text-white">{selected.label}</span>
                         </>
                       );
                     })()}
@@ -362,8 +369,9 @@ export default function Home() {
                   <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${vibeDropdownOpen ? 'rotate-180 text-blue-500' : ''}`} />
                 </button>
 
+                {/* Dropdown Menu */}
                 {vibeDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 py-1.5 z-50 max-h-60 overflow-y-auto no-scrollbar animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 py-1.5 z-50 max-h-60 overflow-y-auto no-scrollbar animate-in fade-in slide-in-from-top-2 duration-150">
                     {VIBE_OPTIONS.map((opt) => {
                       const Icon = opt.icon;
                       const isSelected = selectedCategory === opt.value;
@@ -393,6 +401,7 @@ export default function Home() {
                 )}
               </div>
 
+              {/* Dynamic Theme CTA Button */}
               <div className="sm:col-span-3">
                 <button
                   type="submit"
@@ -405,8 +414,9 @@ export default function Home() {
             </form>
           </div>
 
+          {/* Quick-Tap Trending Destination Pills */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-8 text-xs">
-            <span className="text-white/70 font-semibold flex items-center gap-1">
+            <span className="text-white font-bold flex items-center gap-1">
               <Flame className="w-3.5 h-3.5 text-amber-400" /> Popular:
             </span>
             {QUICK_DESTINATIONS.map((dest) => {
@@ -419,10 +429,10 @@ export default function Home() {
                     setSearchDestination(dest.query);
                     setActiveHeroTheme(dest.themeIdx);
                   }}
-                  className="bg-white/10 hover:bg-white/20 text-white/90 hover:text-white px-3 py-1 rounded-full border border-white/20 backdrop-blur-md transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  className="bg-slate-900/70 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded-full border border-white/25 backdrop-blur-md transition-all duration-200 flex items-center gap-1.5 cursor-pointer shadow-sm"
                 >
-                  <Icon className="w-3 h-3 text-amber-300" />
-                  <span>{dest.label}</span>
+                  <Icon className="w-3.5 h-3.5 text-amber-300" />
+                  <span className="font-semibold text-white">{dest.label}</span>
                   <span className="text-amber-300 font-bold">({dest.price})</span>
                 </button>
               );
