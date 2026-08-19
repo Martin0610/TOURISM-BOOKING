@@ -54,12 +54,14 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) { router.push('/login'); return; }
     if (user?.role === 'ADMIN') {
       api.get('/api/admin/stats')
         .then((res) => setStats(res.data.data))
+        .catch(() => setError(true))
         .finally(() => setLoading(false));
     }
   }, [user, authLoading]);
@@ -72,7 +74,16 @@ export default function AdminDashboard() {
     </AdminLayout>
   );
 
-  if (!stats) return null;
+  if (!stats) return (
+    <AdminLayout>
+      <div className="flex flex-col items-center justify-center h-64 gap-3">
+        <p className="text-gray-500">{error ? 'Failed to load dashboard stats. Please refresh.' : 'No data available.'}</p>
+        <button onClick={() => window.location.reload()} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+          Refresh
+        </button>
+      </div>
+    </AdminLayout>
+  );
 
   const bookingStatusData = [
     { name: 'Confirmed', value: stats.confirmedBookings },
