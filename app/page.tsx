@@ -169,20 +169,20 @@ export default function Home() {
       <WhatsAppButton />
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-8 pb-16 px-4 overflow-hidden">
+      <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 px-4 overflow-hidden">
         {/* Background Visual & Ambient Glow */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85"
-            alt="Incredible India Travel"
-            className="w-full h-full object-cover object-center scale-105 animate-pulse-glow"
+            src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1920&q=90"
+            alt="Incredible India Tourism - Iconic Taj Mahal"
+            className="w-full h-full object-cover object-center brightness-95 scale-105 transition-transform duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/70 to-slate-950/90 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-900/50 to-slate-950/90 backdrop-blur-[0.5px]" />
           
-          {/* Glowing colorful radial spotlights */}
-          <div className="absolute -top-40 left-1/4 w-96 h-96 bg-cyan-500/25 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/3 right-10 w-96 h-96 bg-rose-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-10 left-10 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+          {/* Glowing colorful radial spotlights for warm luxury tourism vibe */}
+          <div className="absolute -top-40 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/3 right-10 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl pointer-events-none" />
         </div>
 
         {/* Hero Content */}
