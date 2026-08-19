@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import AdminLayout from '@/components/AdminLayout';
-import { Plus, Trash2, ToggleLeft, ToggleRight, Edit } from 'lucide-react';
+import { Plus, Trash2, Edit } from 'lucide-react';
 import ConfirmDialog from '@/components/ConfirmDialog';
 
 interface Coupon {
@@ -167,19 +167,39 @@ export default function AdminCouponsPage() {
                   <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{c.usedCount}/{c.maxUses}</td>
                   <td className="px-4 py-3 text-gray-500 dark:text-gray-400 whitespace-nowrap">{new Date(c.expiresAt).toLocaleDateString('en-IN')}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${c.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${c.active ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}>
                       {c.active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex gap-2">
-                      <button onClick={() => handleEdit(c)} className="text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950/50 p-1.5 rounded-lg cursor-pointer transition" title="Edit">
+                    <div className="flex items-center gap-3">
+                      {/* Interactive Toggle Switch */}
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={c.active}
+                        onClick={() => toggleActive(c)}
+                        className={`w-11 h-6 flex items-center rounded-full p-0.5 transition-colors duration-300 ease-in-out cursor-pointer shadow-inner focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1 ${
+                          c.active ? 'bg-emerald-500 shadow-emerald-500/40' : 'bg-slate-300 dark:bg-slate-700'
+                        }`}
+                        title={c.active ? 'Coupon is Active — Click to Disable' : 'Coupon is Inactive — Click to Enable'}
+                      >
+                        <span
+                          className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ease-in-out flex items-center justify-center ${
+                            c.active ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+
+                      {/* Edit Button */}
+                      <button onClick={() => handleEdit(c)} className="text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/50 p-1.5 rounded-lg cursor-pointer transition" title="Edit Coupon">
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button onClick={() => toggleActive(c)} className="text-green-500 hover:bg-green-50 p-1.5 rounded-lg" title={c.active ? 'Deactivate' : 'Activate'}>
-                        {c.active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+
+                      {/* Delete Button */}
+                      <button onClick={() => setConfirmDeleteId(c.id)} className="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 p-1.5 rounded-lg cursor-pointer transition" title="Delete Coupon">
+                        <Trash2 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => setConfirmDeleteId(c.id)} className="text-red-400 hover:bg-red-50 p-1.5 rounded-lg" title="Delete"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </td>
                 </tr>
