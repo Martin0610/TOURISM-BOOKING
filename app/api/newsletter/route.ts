@@ -35,14 +35,14 @@ export async function POST(req: Request) {
       if (existing.status === 'APPROVED') {
         return NextResponse.json({
           success: true,
-          message: '🌟 You are already an Approved VIP Member! Enjoy your exclusive discounts.',
+          message: 'You are already an Approved VIP Member! Enjoy your exclusive discounts.',
         });
       }
 
       if (existing.status === 'PENDING') {
         return NextResponse.json({
           success: true,
-          message: '⏳ Your VIP application is under admin review. We will notify you once approved!',
+          message: 'Your VIP application is under admin review. We will notify you once approved!',
         });
       }
 

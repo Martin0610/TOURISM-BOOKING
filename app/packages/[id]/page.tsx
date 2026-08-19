@@ -199,9 +199,9 @@ export default function PackageDetailPage() {
   };
 
   const transportLabel = (mode: string) => {
-    if (mode === 'FLIGHT') return '✈️ Flight';
-    if (mode === 'TRAIN') return '🚆 Train';
-    return '🚌 AC Bus';
+    if (mode === 'FLIGHT') return 'Flight';
+    if (mode === 'TRAIN') return 'Train';
+    return 'AC Bus';
   };
 
   const handleBook = async (e: React.FormEvent) => {
