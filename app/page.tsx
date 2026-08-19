@@ -828,24 +828,28 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Col 4: Newsletter / Contact */}
+            {/* Col 4: VIP Club Application / Contact */}
             <div>
-              <h4 className="text-white font-bold text-sm mb-4">VIP Travel Deals</h4>
-              <p className="text-xs text-slate-400 mb-3">Get exclusive discount codes delivered straight to your inbox.</p>
+              <h4 className="text-white font-bold text-sm mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-400" /> VIP Travel Club
+              </h4>
+              <p className="text-xs text-slate-400 mb-3 leading-relaxed">
+                Apply for VIP Club status to unlock secret flash sales & tier discounts. Approved by admin based on your travel history.
+              </p>
               <form onSubmit={handleNewsletter} className="flex gap-1.5">
                 <input
                   type="email"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
-                  placeholder="Enter email..."
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Your account email..."
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
                 <button
                   type="submit"
                   disabled={subscribing || !newsletterEmail}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                  className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer whitespace-nowrap"
                 >
-                  {subscribing ? 'Joining...' : 'Join'}
+                  {subscribing ? 'Applying...' : 'Apply VIP'}
                 </button>
               </form>
 

@@ -177,11 +177,20 @@ model Coupon {
   bookings Booking[]
 }
 
+enum VipStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model NewsletterSubscriber {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
+  id         String    @id @default(cuid())
+  email      String    @unique
+  status     VipStatus @default(PENDING)
+  active     Boolean   @default(true)
+  reviewedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
 }
 
 model VipAnnouncement {
