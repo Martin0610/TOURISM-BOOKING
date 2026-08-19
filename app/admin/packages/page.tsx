@@ -8,6 +8,7 @@ import { Package } from '@/lib/types';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Plus, Pencil, Trash2, X } from 'lucide-react';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 const CATEGORIES = ['Beach','Hill Station','Adventure','Wildlife','Heritage','Spiritual','Nature','Luxury','Family','Cultural','Island','Pilgrimage'];
 const HOTEL_CATEGORIES = ['3 Star','4 Star','5 Star','Premium Resort','Houseboat','Boutique Hotel','Homestay'];
@@ -33,6 +34,7 @@ export default function AdminPackagesPage() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'basic' | 'details' | 'policy'>('basic');
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) { router.push('/login'); return; }
@@ -100,11 +102,12 @@ export default function AdminPackagesPage() {
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  const handleDelete = async () => {
+    if (!confirmDelete) return;
     try {
-      await api.delete(`/api/packages/${id}`);
+      await api.delete(`/api/packages/${confirmDelete.id}`);
       toast.success('Package deleted');
+      setConfirmDelete(null);
       fetchPackages();
     } catch { toast.error('Delete failed'); }
   };
@@ -114,6 +117,14 @@ export default function AdminPackagesPage() {
 
   return (
     <AdminLayout>
+      <ConfirmDialog
+        open={!!confirmDelete}
+        title="Delete Package"
+        message={`Are you sure you want to delete "${confirmDelete?.name}"? This cannot be undone.`}
+        confirmLabel="Yes, Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmDelete(null)}
+      />
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-800">Manage Packages ({packages.length})</h2>
@@ -295,7 +306,7 @@ export default function AdminPackagesPage() {
                           className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Edit">
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button onClick={() => handleDelete(pkg.id, pkg.name)}
+                        <button onClick={() => setConfirmDelete({ id: pkg.id, name: pkg.name })}
                           className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition" title="Delete">
                           <Trash2 className="w-4 h-4" />
                         </button>

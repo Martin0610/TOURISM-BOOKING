@@ -7,6 +7,7 @@ import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import AdminLayout from '@/components/AdminLayout';
 import { Plus, Trash2, ToggleLeft, ToggleRight, Edit } from 'lucide-react';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 interface Coupon {
   id: string; code: string; discountType: string; discountValue: number;
@@ -24,6 +25,7 @@ export default function AdminCouponsPage() {
   const [form, setForm] = useState(empty);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) { router.push('/login'); return; }
@@ -89,16 +91,25 @@ export default function AdminCouponsPage() {
     }
   };
 
-  const deleteCoupon = async (id: string) => {
-    if (!confirm('Delete this coupon?')) return;
-    await api.delete(`/api/admin/coupons/${id}`);
-    setCoupons(prev => prev.filter(c => c.id !== id));
+  const deleteCoupon = async () => {
+    if (!confirmDeleteId) return;
+    await api.delete(`/api/admin/coupons/${confirmDeleteId}`);
+    setCoupons(prev => prev.filter(c => c.id !== confirmDeleteId));
+    setConfirmDeleteId(null);
   };
 
   const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
 
   return (
     <AdminLayout>
+      <ConfirmDialog
+        open={!!confirmDeleteId}
+        title="Delete Coupon"
+        message="Are you sure you want to delete this coupon? This cannot be undone."
+        confirmLabel="Yes, Delete"
+        onConfirm={deleteCoupon}
+        onCancel={() => setConfirmDeleteId(null)}
+      />
       <div className="space-y-5">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-800">Coupon Management</h2>
@@ -168,7 +179,7 @@ export default function AdminCouponsPage() {
                       <button onClick={() => toggleActive(c)} className="text-green-500 hover:bg-green-50 p-1.5 rounded-lg" title={c.active ? 'Deactivate' : 'Activate'}>
                         {c.active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
                       </button>
-                      <button onClick={() => deleteCoupon(c.id)} className="text-red-400 hover:bg-red-50 p-1.5 rounded-lg" title="Delete"><Trash2 className="w-4 h-4" /></button>
+                      <button onClick={() => setConfirmDeleteId(c.id)} className="text-red-400 hover:bg-red-50 p-1.5 rounded-lg" title="Delete"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </td>
                 </tr>

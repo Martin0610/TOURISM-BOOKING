@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import AdminLayout from '@/components/AdminLayout';
+import ConfirmDialog from '@/components/ConfirmDialog';
 import { Star, Trash2 } from 'lucide-react';
 
 interface AdminReview {
@@ -21,6 +22,7 @@ export default function AdminReviewsPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [reviews, setReviews] = useState<AdminReview[]>([]);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) { router.push('/login'); return; }
@@ -29,15 +31,24 @@ export default function AdminReviewsPage() {
     }
   }, [user, authLoading]);
 
-  const deleteReview = async (id: string) => {
-    if (!confirm('Delete this review?')) return;
-    await api.delete(`/api/admin/reviews/${id}`);
-    setReviews(prev => prev.filter(r => r.id !== id));
+  const deleteReview = async () => {
+    if (!confirmId) return;
+    await api.delete(`/api/admin/reviews/${confirmId}`);
+    setReviews(prev => prev.filter(r => r.id !== confirmId));
+    setConfirmId(null);
     toast.success('Review deleted');
   };
 
   return (
     <AdminLayout>
+      <ConfirmDialog
+        open={!!confirmId}
+        title="Delete Review"
+        message="Are you sure you want to delete this review? This cannot be undone."
+        confirmLabel="Yes, Delete"
+        onConfirm={deleteReview}
+        onCancel={() => setConfirmId(null)}
+      />
       <div className="space-y-5">
         <h2 className="text-2xl font-bold text-gray-800">
           Customer Reviews
@@ -66,7 +77,7 @@ export default function AdminReviewsPage() {
                     <p className="text-gray-400 text-xs mt-2">{new Date(r.createdAt).toLocaleDateString('en-IN')}</p>
                   </div>
                   <button
-                    onClick={() => deleteReview(r.id)}
+                    onClick={() => setConfirmId(r.id)}
                     className="bg-red-50 text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors ml-4"
                     title="Delete Review">
                     <Trash2 className="w-4 h-4" />
