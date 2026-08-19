@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packageId: string; onDone: () => void }) {
   const [show, setShow] = useState(false);
@@ -122,6 +123,7 @@ export default function MyBookingsPage() {
   const router = useRouter();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancelConfirmId, setCancelConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -136,10 +138,14 @@ export default function MyBookingsPage() {
     }
   }, [user, authLoading, router]);
 
-  const handleCancel = async (bookingId: string) => {
-    if (!confirm('Are you sure you want to cancel this booking? Stays will be released and refund initiated.')) {
-      return;
-    }
+  const handleCancel = (bookingId: string) => {
+    setCancelConfirmId(bookingId);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!cancelConfirmId) return;
+    const bookingId = cancelConfirmId;
+    setCancelConfirmId(null);
     try {
       await api.post(`/api/bookings/${bookingId}/cancel`);
       setBookings((prev) =>
@@ -324,6 +330,17 @@ export default function MyBookingsPage() {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={!!cancelConfirmId}
+        title="Cancel Vacation Booking"
+        message="Are you sure you want to cancel this booking? Stays will be released and your refund will be initiated."
+        confirmLabel="Yes, Cancel Booking"
+        variant="danger"
+        onConfirm={handleConfirmCancel}
+        onCancel={() => setCancelConfirmId(null)}
+      />
+
       <Footer />
     </>
   );

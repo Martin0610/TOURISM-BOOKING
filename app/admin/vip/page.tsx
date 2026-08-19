@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import AdminLayout from '@/components/AdminLayout';
+import ConfirmDialog from '@/components/ConfirmDialog';
 import toast from 'react-hot-toast';
 import { 
   Sparkles, Users, Mail, Send, Trash2, Tag, Calendar, 
@@ -64,6 +65,19 @@ export default function AdminVipPage() {
     discount: '',
   });
   const [submitting, setSubmitting] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    open: boolean;
+    type: 'announcement' | 'applicant';
+    id: string;
+    title: string;
+    message: string;
+  }>({
+    open: false,
+    type: 'announcement',
+    id: '',
+    title: '',
+    message: '',
+  });
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) {
@@ -120,25 +134,47 @@ export default function AdminVipPage() {
     }
   };
 
-  const handleDeleteAnnouncement = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this announcement?')) return;
-    try {
-      await api.delete(`/api/admin/vip/${id}?type=announcement`);
-      toast.success('Announcement deleted');
-      setAnnouncements((prev) => prev.filter((a) => a.id !== id));
-    } catch {
-      toast.error('Failed to delete announcement');
-    }
+  const handleDeleteAnnouncement = (id: string) => {
+    setDeleteConfirm({
+      open: true,
+      type: 'announcement',
+      id,
+      title: 'Delete VIP Announcement',
+      message: 'Are you sure you want to delete this announcement? It will immediately disappear from the VIP club portal.',
+    });
   };
 
-  const handleDeleteApplicant = async (id: string) => {
-    if (!confirm('Are you sure you want to remove this applicant?')) return;
-    try {
-      await api.delete(`/api/admin/vip/${id}?type=subscriber`);
-      toast.success('Applicant record removed');
-      setSubscribers((prev) => prev.filter((s) => s.id !== id));
-    } catch {
-      toast.error('Failed to remove record');
+  const handleDeleteApplicant = (id: string) => {
+    setDeleteConfirm({
+      open: true,
+      type: 'applicant',
+      id,
+      title: 'Remove VIP Applicant',
+      message: 'Are you sure you want to remove this applicant record from the system?',
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    const { type, id } = deleteConfirm;
+    setDeleteConfirm((prev) => ({ ...prev, open: false }));
+    if (!id) return;
+
+    if (type === 'announcement') {
+      try {
+        await api.delete(`/api/admin/vip/${id}?type=announcement`);
+        toast.success('Announcement deleted');
+        setAnnouncements((prev) => prev.filter((a) => a.id !== id));
+      } catch {
+        toast.error('Failed to delete announcement');
+      }
+    } else if (type === 'applicant') {
+      try {
+        await api.delete(`/api/admin/vip/${id}?type=subscriber`);
+        toast.success('Applicant record removed');
+        setSubscribers((prev) => prev.filter((s) => s.id !== id));
+      } catch {
+        toast.error('Failed to remove record');
+      }
     }
   };
 
@@ -685,6 +721,16 @@ export default function AdminVipPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        open={deleteConfirm.open}
+        title={deleteConfirm.title}
+        message={deleteConfirm.message}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteConfirm((prev) => ({ ...prev, open: false }))}
+      />
     </AdminLayout>
   );
 }

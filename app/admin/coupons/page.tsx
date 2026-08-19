@@ -55,7 +55,7 @@ export default function AdminCouponsPage() {
     } catch (err: unknown) {
       const errorMsg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed';
       console.error('Save error:', err);
-      alert(errorMsg);
+      toast.error(errorMsg);
     } finally { setSaving(false); }
   };
 
@@ -84,7 +84,7 @@ export default function AdminCouponsPage() {
       setCoupons(prev => prev.map(x => x.id === c.id ? { ...x, active: !c.active } : x));
     } catch (err) {
       console.error('Toggle failed:', err);
-      alert('Failed to update coupon status');
+      toast.error('Failed to update coupon status');
       // Refresh to get correct state from database
       const r = await api.get('/api/coupons');
       setCoupons(r.data.data);

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import AdminLayout from '@/components/AdminLayout';
+import ConfirmDialog from '@/components/ConfirmDialog';
 import { Search, Shield, User, Mail, Phone, Calendar } from 'lucide-react';
 
 interface AdminUser {
@@ -26,6 +27,15 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<AdminUser | null>(null);
+  const [roleConfirm, setRoleConfirm] = useState<{
+    open: boolean;
+    user: AdminUser | null;
+    newRole: string;
+  }>({
+    open: false,
+    user: null,
+    newRole: '',
+  });
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) { router.push('/login'); return; }
@@ -45,15 +55,26 @@ export default function AdminUsersPage() {
     ));
   }, [search, users]);
 
-  const handleRoleToggle = async (u: AdminUser) => {
+  const handleRoleToggle = (u: AdminUser) => {
     const newRole = u.role === 'ADMIN' ? 'USER' : 'ADMIN';
-    if (!confirm(`Change ${u.name}'s role to ${newRole}?`)) return;
+    setRoleConfirm({
+      open: true,
+      user: u,
+      newRole,
+    });
+  };
+
+  const handleConfirmRoleChange = async () => {
+    const { user: targetUser, newRole } = roleConfirm;
+    setRoleConfirm((prev) => ({ ...prev, open: false }));
+    if (!targetUser) return;
+
     try {
-      await api.patch(`/api/admin/users/${u.id}/role`, { role: newRole });
+      await api.patch(`/api/admin/users/${targetUser.id}/role`, { role: newRole });
       toast.success('Role updated');
-      const updated = { ...u, role: newRole };
-      setUsers(prev => prev.map(x => x.id === u.id ? updated : x));
-      if (selected?.id === u.id) setSelected(updated);
+      const updated = { ...targetUser, role: newRole };
+      setUsers(prev => prev.map(x => x.id === targetUser.id ? updated : x));
+      if (selected?.id === targetUser.id) setSelected(updated);
     } catch { toast.error('Failed to update role'); }
   };
 
@@ -174,6 +195,16 @@ export default function AdminUsersPage() {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={roleConfirm.open}
+        title={roleConfirm.newRole === 'ADMIN' ? 'Grant Admin Privileges' : 'Revoke Admin Privileges'}
+        message={`Are you sure you want to change ${roleConfirm.user?.name || 'this user'}'s role to ${roleConfirm.newRole}?`}
+        confirmLabel={roleConfirm.newRole === 'ADMIN' ? 'Make Admin' : 'Revoke Admin'}
+        variant={roleConfirm.newRole === 'ADMIN' ? 'primary' : 'warning'}
+        onConfirm={handleConfirmRoleChange}
+        onCancel={() => setRoleConfirm((prev) => ({ ...prev, open: false }))}
+      />
     </AdminLayout>
   );
 }
