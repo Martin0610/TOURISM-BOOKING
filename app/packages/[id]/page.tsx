@@ -114,10 +114,16 @@ export default function PackageDetailPage() {
       if (isWishlisted) {
         await api.delete(`/api/wishlist/${id}`);
         setIsWishlisted(false);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('wishlist-updated'));
+        }
         toast.success('Removed from wishlist');
       } else {
         await api.post('/api/wishlist', { packageId: id });
         setIsWishlisted(true);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('wishlist-updated'));
+        }
         toast.success('Saved to wishlist');
       }
     } catch {

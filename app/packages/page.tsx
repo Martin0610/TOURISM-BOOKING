@@ -169,12 +169,21 @@ function PackagesContent() {
         setWishlisted((prev) => {
           const s = new Set(prev);
           s.delete(pkgId);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: s.size } }));
+          }
           return s;
         });
         toast.success('Removed from wishlist');
       } else {
         await api.post('/api/wishlist', { packageId: pkgId });
-        setWishlisted((prev) => new Set([...prev, pkgId]));
+        setWishlisted((prev) => {
+          const s = new Set([...prev, pkgId]);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: s.size } }));
+          }
+          return s;
+        });
         toast.success('Saved to wishlist');
       }
     } catch {

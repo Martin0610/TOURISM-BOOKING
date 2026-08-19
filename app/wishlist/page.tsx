@@ -51,7 +51,13 @@ export default function WishlistPage() {
     e.preventDefault();
     try {
       await api.delete(`/api/wishlist/${packageId}`);
-      setItems((prev) => prev.filter((i) => i.packageId !== packageId));
+      setItems((prev) => {
+        const next = prev.filter((i) => i.packageId !== packageId);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: next.length } }));
+        }
+        return next;
+      });
       toast.success('Removed from saved wishlist');
     } catch {
       toast.error('Failed to remove item');

@@ -24,8 +24,8 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (user && localStorage.getItem('token')) {
+  const fetchWishlistCount = () => {
+    if (user && user.role !== 'ADMIN' && localStorage.getItem('token')) {
       api.get('/api/wishlist')
         .then((res) => {
           if (res.data?.data) {
@@ -33,7 +33,25 @@ export default function Navbar() {
           }
         })
         .catch(() => {});
+    } else {
+      setWishlistCount(0);
     }
+  };
+
+  useEffect(() => {
+    fetchWishlistCount();
+
+    const handleWishlistUpdated = (e: Event) => {
+      const customEvent = e as CustomEvent<{ count?: number }>;
+      if (customEvent?.detail?.count !== undefined) {
+        setWishlistCount(customEvent.detail.count);
+      } else {
+        fetchWishlistCount();
+      }
+    };
+
+    window.addEventListener('wishlist-updated', handleWishlistUpdated);
+    return () => window.removeEventListener('wishlist-updated', handleWishlistUpdated);
   }, [user, pathname]);
 
   const handleLogout = () => {

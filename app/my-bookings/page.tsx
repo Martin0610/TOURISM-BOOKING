@@ -29,7 +29,7 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
       await api.post('/api/reviews', { packageId, bookingId, rating, comment });
       setSubmitted(true);
       setShow(false);
-      toast.success('Thank you! Your verified review has been submitted.');
+      toast.success('Thank you! Your review has been submitted.');
       onDone();
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to submit review';
