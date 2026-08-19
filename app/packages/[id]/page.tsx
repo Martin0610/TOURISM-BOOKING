@@ -495,6 +495,11 @@ export default function PackageDetailPage() {
                       <span>Total</span>
                       <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-purple-300 text-lg">₹{totalAmount.toLocaleString()}</span>
                     </div>
+                    {(discountAmount > 0 || freeTickets > 0) && (
+                      <p className="text-green-600 dark:text-green-300 text-xs text-center font-medium">
+                        You save ₹{(freeTickets > 0 ? packageAmount - packageAmountAfterFree : discountAmount).toLocaleString()}!
+                      </p>
+                    )}
                   </div>
 
                   {formError && (
