@@ -175,7 +175,7 @@ export default function Navbar() {
                   <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 rounded-full group-hover:opacity-90 transition-opacity" />
                   <span className="relative flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-md shadow-blue-500/20 group-hover:scale-[0.98] transition-transform">
                     <Sparkles className="w-3.5 h-3.5" />
-                    Get Started
+                    Sign Up
                   </span>
                 </Link>
               </div>
