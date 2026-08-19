@@ -46,6 +46,7 @@ export async function POST(
     if (err instanceof Error && err.message === 'UNAUTHORIZED') {
       return errorResponse('Authentication required', 401);
     }
-    return errorResponse('Failed to cancel booking', 500);
+    console.error('Cancel booking error:', err);
+    return errorResponse(`Failed to cancel booking: ${err instanceof Error ? err.message : String(err)}`, 500);
   }
 }

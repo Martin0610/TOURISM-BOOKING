@@ -90,7 +90,7 @@ export default function MyBookingsPage() {
   const handleCancel = async (bookingId: string) => {
     if (!confirm('Cancel this booking? Seats will be restored.')) return;
     try {
-      await api.delete(`/api/bookings/${bookingId}/cancel`);
+      await api.post(`/api/bookings/${bookingId}/cancel`);
       setBookings((prev) => prev.map((b) => b.id === bookingId ? { ...b, status: 'CANCELLED' } : b));
       toast.success('Booking cancelled');
     } catch (err: unknown) {
