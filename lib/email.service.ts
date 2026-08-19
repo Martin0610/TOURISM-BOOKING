@@ -343,27 +343,28 @@ export const sendVipAnnouncementEmail = async (
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${details.title}</title>
   </head>
-  <body style="margin:0;padding:0;background-color:#0b0f19;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#0b0f19;padding:40px 10px;">
+  <body style="margin:0;padding:0;background-color:#0b0f19;font-family:Arial,Helvetica,sans-serif;font-style:normal;-webkit-font-smoothing:antialiased;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#0b0f19;padding:40px 10px;font-family:Arial,Helvetica,sans-serif;">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" style="max-width:600px;background:#111827;border-radius:24px;overflow:hidden;border:1px solid #1f2937;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+          <table role="presentation" width="100%" style="max-width:600px;background:#111827;border-radius:20px;overflow:hidden;border:1px solid #1f2937;box-shadow:0 20px 40px rgba(0,0,0,0.5);">
             
-            <!-- VIP Elite Header Banner -->
+            <!-- VIP Header Banner -->
             <tr>
               <td style="background:linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);padding:36px 30px;text-align:center;border-bottom:1px solid #374151;">
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                   <tr>
                     <td align="center">
-                      <div style="display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:50px;padding:6px 18px;margin-bottom:16px;">
-                        <span style="color:#fbbf24;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;">
+                      <!-- Single Line Pill with only star emoji -->
+                      <div style="display:inline-block;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.4);border-radius:50px;padding:7px 22px;margin-bottom:16px;white-space:nowrap;">
+                        <span style="color:#fbbf24;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;display:inline-block;line-height:1;">
                           ⭐ VIP CLUB EXCLUSIVE DROP ⭐
                         </span>
                       </div>
-                      <h1 style="color:#ffffff;margin:0 0 10px;font-size:26px;font-weight:900;letter-spacing:-0.5px;line-height:1.3;">
+                      <h1 style="color:#ffffff;margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:700;letter-spacing:-0.3px;line-height:1.3;">
                         TripEase Private Collection
                       </h1>
-                      <p style="color:#cbd5e1;margin:0;font-size:14px;letter-spacing:0.5px;">
+                      <p style="color:#cbd5e1;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:0.3px;">
                         Curated Holiday Privileges for Verified VIP Members
                       </p>
                     </td>
@@ -376,37 +377,37 @@ export const sendVipAnnouncementEmail = async (
             <tr>
               <td style="padding:36px 30px;">
                 
-                <!-- Main Announcement Title -->
-                <h2 style="color:#ffffff;font-size:20px;font-weight:800;margin:0 0 16px;line-height:1.4;">
+                <!-- Announcement Title -->
+                <h2 style="color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:19px;font-weight:700;margin:0 0 14px;line-height:1.4;">
                   ${details.title}
                 </h2>
 
                 <!-- Main Message -->
-                <p style="color:#94a3b8;font-size:15px;line-height:1.7;margin:0 0 26px;">
+                <p style="color:#94a3b8;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;margin:0 0 24px;">
                   ${details.message.replace(/\n/g, '<br/>')}
                 </p>
 
-                <!-- Secret VIP Discount Code Box -->
+                <!-- Secret VIP Discount Box -->
                 ${(details.couponCode || details.discount) ? `
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:28px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:26px;">
                   <tr>
-                    <td style="background:linear-gradient(135deg, rgba(245,158,11,0.08), rgba(217,119,6,0.15));border:2px dashed #f59e0b;border-radius:18px;padding:24px;text-align:center;">
+                    <td style="background:rgba(245,158,11,0.06);border:1.5px dashed #f59e0b;border-radius:14px;padding:22px;text-align:center;">
                       ${details.discount ? `
-                        <div style="display:inline-block;background:#f59e0b;color:#000000;font-weight:900;font-size:12px;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
+                        <div style="display:inline-block;background:#f59e0b;color:#000000;font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:12px;padding:4px 14px;border-radius:16px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
                           ${details.discount}
                         </div>
                       ` : ''}
                       
                       ${details.couponCode ? `
-                        <p style="color:#e2e8f0;font-size:13px;margin:0 0 8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">
+                        <p style="color:#e2e8f0;font-family:Arial,Helvetica,sans-serif;font-size:12px;margin:0 0 8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">
                           Your Secret VIP Promo Code
                         </p>
-                        <div style="display:inline-block;background:#000000;border:1px solid #f59e0b;padding:12px 24px;border-radius:12px;margin-bottom:8px;">
-                          <span style="font-family:Courier,monospace;font-size:24px;font-weight:900;color:#fbbf24;letter-spacing:4px;">
+                        <div style="display:inline-block;background:#000000;border:1px solid #f59e0b;padding:10px 24px;border-radius:10px;margin-bottom:8px;">
+                          <span style="font-family:Courier,monospace;font-size:22px;font-weight:700;color:#fbbf24;letter-spacing:4px;">
                             ${details.couponCode}
                           </span>
                         </div>
-                        <p style="color:#94a3b8;font-size:12px;margin:6px 0 0;">
+                        <p style="color:#94a3b8;font-family:Arial,Helvetica,sans-serif;font-size:12px;margin:6px 0 0;">
                           Apply this code during checkout to unlock VIP pricing.
                         </p>
                       ` : ''}
@@ -416,48 +417,54 @@ export const sendVipAnnouncementEmail = async (
                 ` : ''}
 
                 <!-- CTA Button -->
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:30px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:28px;">
                   <tr>
                     <td align="center">
-                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;box-shadow:0 10px 25px -5px rgba(234,88,12,0.4);letter-spacing:0.5px;text-align:center;">
-                        ✈️ Explore Packages & Claim Deal →
+                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:#f59e0b;color:#000000;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;padding:15px 34px;border-radius:10px;letter-spacing:0.5px;text-align:center;">
+                        Explore Packages and Claim Deal
                       </a>
                     </td>
                   </tr>
                 </table>
 
                 <!-- VIP Perks List -->
-                <div style="background:#1e293b;border-radius:16px;padding:20px;margin-bottom:24px;border:1px solid #334155;">
-                  <h4 style="color:#f8fafc;font-size:13px;font-weight:700;margin:0 0 12px;text-transform:uppercase;letter-spacing:1px;">
-                    ✨ Your Active VIP Benefits:
+                <div style="background:#1e293b;border-radius:14px;padding:18px 20px;margin-bottom:22px;border:1px solid #334155;">
+                  <h4 style="color:#f8fafc;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px;">
+                    Your Active VIP Benefits:
                   </h4>
                   <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td style="color:#cbd5e1;font-size:13px;padding:4px 0;">✔ <strong>24/7 Support:</strong> Instant WhatsApp & trip management assistance.</td>
+                      <td style="color:#cbd5e1;font-family:Arial,Helvetica,sans-serif;font-size:13px;padding:4px 0;line-height:1.5;">
+                        • <strong>24/7 Dedicated Support:</strong> Instant WhatsApp and booking management assistance.
+                      </td>
                     </tr>
                     <tr>
-                      <td style="color:#cbd5e1;font-size:13px;padding:4px 0;">✔ <strong>Guaranteed Savings:</strong> Stackable coupon codes with zero hidden surcharges.</td>
+                      <td style="color:#cbd5e1;font-family:Arial,Helvetica,sans-serif;font-size:13px;padding:4px 0;line-height:1.5;">
+                        • <strong>Guaranteed Savings:</strong> Stackable coupon codes with zero hidden surcharges.
+                      </td>
                     </tr>
                     <tr>
-                      <td style="color:#cbd5e1;font-size:13px;padding:4px 0;">✔ <strong>Instant E-Passes:</strong> Digital boarding passes and refundable cancellation.</td>
+                      <td style="color:#cbd5e1;font-family:Arial,Helvetica,sans-serif;font-size:13px;padding:4px 0;line-height:1.5;">
+                        • <strong>Instant Digital E-Pass:</strong> Digital boarding passes and refundable cancellation.
+                      </td>
                     </tr>
                   </table>
                 </div>
 
                 <!-- Support & Contact -->
-                <p style="color:#64748b;font-size:12px;line-height:1.6;margin:0;text-align:center;">
-                  Need assistance with your booking? Reply to this email or reach our team at <a href="tel:+917200336447" style="color:#38bdf8;text-decoration:none;">+91 72003 36447</a>.
+                <p style="color:#64748b;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;margin:0;text-align:center;">
+                  Need assistance with your booking? Reply to this email or contact support at <a href="mailto:mjv3140@gmail.com" style="color:#38bdf8;text-decoration:none;">mjv3140@gmail.com</a>.
                 </p>
               </td>
             </tr>
 
             <!-- Footer -->
             <tr>
-              <td style="background:#0a0f1d;padding:24px 30px;text-align:center;border-top:1px solid #1e293b;">
-                <p style="color:#64748b;font-size:11px;line-height:1.6;margin:0 0 8px;">
-                  You are receiving this exclusive private dispatch because your account is a verified <strong>TripEase VIP Member</strong>.
+              <td style="background:#0a0f1d;padding:22px 30px;text-align:center;border-top:1px solid #1e293b;">
+                <p style="color:#64748b;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;margin:0 0 6px;">
+                  You are receiving this private dispatch because your account is a verified <strong>TripEase VIP Member</strong>.
                 </p>
-                <p style="color:#475569;font-size:11px;margin:0;">
+                <p style="color:#475569;font-family:Arial,Helvetica,sans-serif;font-size:11px;margin:0;">
                   © 2026 TripEase Holidays Pvt. Ltd. All rights reserved.
                 </p>
               </td>
@@ -474,7 +481,7 @@ export const sendVipAnnouncementEmail = async (
   await transporter.sendMail({
     from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: `⭐ VIP Secret Deal: ${details.title}`,
+    subject: `TripEase VIP: ${details.title}`,
     html,
   });
 };
