@@ -30,8 +30,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           localStorage.setItem('user', JSON.stringify(res.data.data));
         }
       }
-    } catch {
-      // Token expired or invalid
+    } catch (err: unknown) {
+      const error = err as { response?: { status?: number } };
+      if (error?.response?.status === 401) {
+        logout();
+      }
     }
   };
 
