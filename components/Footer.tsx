@@ -24,15 +24,33 @@ export default function Footer() {
     }
   }, [user]);
 
+  // Auto-scroll to VIP club if returning from login with #vip-club hash
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const scrollDown = () => {
+        if (window.location.hash === '#vip-club' || window.location.hash === '#footer') {
+          const el = document.getElementById('vip-club') || document.getElementById('footer');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      };
+
+      scrollDown();
+      const timer = setTimeout(scrollDown, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname]);
+
   const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // If not logged in, redirect to login page and return back to this page
+    // If not logged in, redirect to login page and return directly back to the VIP section at the bottom
     if (!user) {
-      toast('Please sign in to apply for VIP Club membership.', { icon: '🔐' });
+      toast('Please sign in with your account to apply for VIP Club membership.', { icon: '🔐' });
       const currentUrl = pathname || '/';
       const emailQuery = newsletterEmail.trim() ? `&email=${encodeURIComponent(newsletterEmail.trim())}` : '';
-      router.push(`/login?redirect=${encodeURIComponent(currentUrl)}${emailQuery}`);
+      router.push(`/login?redirect=${encodeURIComponent(currentUrl + '#vip-club')}${emailQuery}`);
       return;
     }
 
@@ -56,7 +74,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-slate-950 text-slate-400 pt-16 pb-12 px-4 border-t border-slate-800">
+      <footer id="footer" className="bg-slate-950 text-slate-400 pt-16 pb-12 px-4 border-t border-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
             {/* Col 1: Brand info */}
@@ -110,7 +128,7 @@ export default function Footer() {
             </div>
 
             {/* Col 4: VIP Club Application / Contact (or Admin Control Hub for Admin) */}
-            <div>
+            <div id="vip-club">
               {user?.role === 'ADMIN' ? (
                 <div className="space-y-2.5">
                   <h4 className="text-white font-bold text-sm flex items-center gap-1.5">
