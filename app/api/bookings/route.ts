@@ -55,8 +55,11 @@ export async function POST(request: NextRequest) {
       return errorResponse('packageId, travelDate and numberOfPeople are required', 400);
     }
 
-    if (phone && !/^\d{10}$/.test(phone)) {
-      return errorResponse('Phone number must be exactly 10 digits', 400);
+    if (phone) {
+      const digitsOnly = phone.replace(/\D/g, '');
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+        return errorResponse('Please provide a valid phone number', 400);
+      }
     }
 
     const pkg = await prisma.package.findUnique({ where: { id: packageId } });

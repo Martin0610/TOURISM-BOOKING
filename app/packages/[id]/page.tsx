@@ -16,6 +16,7 @@ import {
 import Link from 'next/link';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
+import { COUNTRY_CODES, parsePhoneNumber, formatPhoneNumber } from '@/lib/countryCodes';
 
 interface Review {
   id: string;
@@ -43,15 +44,28 @@ export default function PackageDetailPage() {
     }
   }, [user, authLoading, id, router]);
   
-  // Booking Form State
+  // Booking Form State with Country Code
   const [form, setForm] = useState({ 
     travelDate: '', 
     numberOfPeople: 1, 
     departureLocationId: '', 
-    phone: '' 
+    countryCode: '+91',
+    phone: '',
   });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [formError, setFormError] = useState('');
+
+  // Auto-fill phone & country code from logged-in user profile
+  useEffect(() => {
+    if (user?.phone) {
+      const parsed = parsePhoneNumber(user.phone);
+      setForm((prev) => ({
+        ...prev,
+        countryCode: parsed.countryCode,
+        phone: parsed.number,
+      }));
+    }
+  }, [user]);
   
   // Coupon State
   const [couponCode, setCouponCode] = useState('');
@@ -205,14 +219,16 @@ export default function PackageDetailPage() {
       setFormError('Please specify at least 1 traveler.');
       return;
     }
-    if (!form.phone) {
-      setFormError('Please enter your 10-digit phone number.');
+    const digits = form.phone.replace(/\D/g, '');
+    if (!digits) {
+      setFormError('Please enter your mobile number.');
       return;
     }
-    if (!/^\d{10}$/.test(form.phone)) {
-      setFormError('Phone number must be exactly 10 digits.');
+    if (digits.length < 7 || digits.length > 15) {
+      setFormError('Please enter a valid mobile number (7 to 15 digits).');
       return;
     }
+    const formattedPhone = formatPhoneNumber(form.countryCode, digits);
     setFormError('');
     setBookingLoading(true);
 
@@ -223,7 +239,7 @@ export default function PackageDetailPage() {
         numberOfPeople: form.numberOfPeople,
         departureLocationId: form.departureLocationId || undefined,
         couponCode: couponResult?.code || undefined,
-        phone: form.phone,
+        phone: formattedPhone,
       });
       toast.success('Booking initialized!');
       router.push(`/booking/${res.data.data.id}`);
@@ -731,23 +747,43 @@ export default function PackageDetailPage() {
                       )}
                     </div>
 
-                    {/* Phone Number Input */}
+                    {/* Phone Number with Country Code Dropdown */}
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-                        <Phone className="w-3.5 h-3.5 text-rose-500" /> Phone Number (10 Digits)
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <Phone className="w-3.5 h-3.5 text-rose-500" /> Mobile Number
+                        </span>
+                        {user?.phone && (
+                          <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Profile Auto-filled
+                          </span>
+                        )}
                       </label>
-                      <input
-                        type="tel"
-                        maxLength={10}
-                        value={form.phone}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                          setForm({ ...form, phone: val });
-                          setFormError('');
-                        }}
-                        placeholder="e.g. 9876543210"
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono tracking-wide"
-                      />
+                      <div className="flex gap-2">
+                        <select
+                          value={form.countryCode}
+                          onChange={(e) => setForm({ ...form, countryCode: e.target.value })}
+                          aria-label="Country Code"
+                          className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2.5 text-xs text-slate-800 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[105px] cursor-pointer"
+                        >
+                          {COUNTRY_CODES.map((c) => (
+                            <option key={c.code} value={c.code} className="bg-slate-900 text-white">
+                              {c.flag} {c.code}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="tel"
+                          value={form.phone}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, '');
+                            setForm({ ...form, phone: val });
+                            setFormError('');
+                          }}
+                          placeholder="e.g. 9876543210"
+                          className="flex-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono tracking-wide"
+                        />
+                      </div>
                     </div>
 
                     {/* Departure Location / Transit Selector */}

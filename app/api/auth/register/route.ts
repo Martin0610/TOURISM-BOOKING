@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
         id: true, 
         name: true, 
         email: true, 
+        phone: true,
         role: true, 
         emailVerified: true,
         createdAt: true 

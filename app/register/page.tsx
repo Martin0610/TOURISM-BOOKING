@@ -6,6 +6,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Compass, Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import PolicyModal, { PolicyType } from '@/components/PolicyModal';
+import { COUNTRY_CODES, formatPhoneNumber } from '@/lib/countryCodes';
 
 const getPasswordStrength = (password: string) => {
   let score = 0;
@@ -25,7 +26,9 @@ const inputCls = "w-full bg-white/20 border border-white/40 text-white placehold
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [countryCode, setCountryCode] = useState('+91');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -122,6 +125,7 @@ export default function RegisterPage() {
     setError('');
     setLoading(true);
     try {
+      const formattedPhone = formatPhoneNumber(countryCode, phone);
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -129,7 +133,7 @@ export default function RegisterPage() {
           name: form.name,
           email: form.email.toLowerCase(),
           password: form.password,
-          phone: form.phone || undefined,
+          phone: formattedPhone || undefined,
         }),
       });
 
@@ -208,12 +212,32 @@ export default function RegisterPage() {
               )}
             </div>
 
+            {/* Mobile Number with Country Code Dropdown */}
             <div>
-              <label className="block text-sm font-semibold text-white mb-1.5">Phone (optional)</label>
-              <div className="relative">
-                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-white/70" />
-                <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="+91 9876543210" className={inputCls} />
+              <label className="block text-sm font-semibold text-white mb-1.5">Mobile Number (Optional)</label>
+              <div className="flex gap-2">
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  aria-label="Country Code"
+                  className="bg-white/20 border border-white/40 text-white rounded-xl px-2.5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/25 max-w-[105px] font-semibold cursor-pointer"
+                >
+                  {COUNTRY_CODES.map((c) => (
+                    <option key={c.code} value={c.code} className="bg-slate-900 text-white">
+                      {c.flag} {c.code}
+                    </option>
+                  ))}
+                </select>
+                <div className="relative flex-1">
+                  <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    placeholder="9876543210"
+                    className="w-full bg-white/20 border border-white/40 text-white placeholder-white/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/25 font-mono tracking-wide"
+                  />
+                </div>
               </div>
             </div>
 
