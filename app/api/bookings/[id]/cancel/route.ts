@@ -25,6 +25,12 @@ export async function POST(
       return errorResponse('Booking already cancelled', 400);
     }
 
+    // Block cancellation within 7 days of travel
+    const daysUntilTravel = Math.ceil((new Date(booking.travelDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    if (daysUntilTravel <= 7) {
+      return errorResponse('Cancellation is not allowed within 7 days of travel date', 400);
+    }
+
     await prisma.booking.update({ 
       where: { id }, 
       data: { status: 'CANCELLED' } 

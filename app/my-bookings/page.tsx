@@ -92,10 +92,16 @@ export default function MyBookingsPage() {
     try {
       await api.delete(`/api/bookings/${bookingId}/cancel`);
       setBookings((prev) => prev.map((b) => b.id === bookingId ? { ...b, status: 'CANCELLED' } : b));
+      toast.success('Booking cancelled');
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
       alert(error.response?.data?.message || 'Failed to cancel');
     }
+  };
+
+  const canCancel = (travelDate: string) => {
+    const daysUntilTravel = Math.ceil((new Date(travelDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    return daysUntilTravel > 7;
   };
 
   return (
@@ -179,10 +185,16 @@ export default function MyBookingsPage() {
                       }} />
                     )}
                     {booking.status !== 'CANCELLED' && (
-                      <button onClick={() => handleCancel(booking.id)}
-                        className="bg-red-50 text-red-600 px-4 py-1.5 rounded-lg text-sm hover:bg-red-100 transition">
-                        Cancel
-                      </button>
+                      canCancel(booking.travelDate) ? (
+                        <button onClick={() => handleCancel(booking.id)}
+                          className="bg-red-50 text-red-600 px-4 py-1.5 rounded-lg text-sm hover:bg-red-100 transition font-medium">
+                          Cancel Booking
+                        </button>
+                      ) : (
+                        <span className="bg-gray-100 text-gray-400 px-4 py-1.5 rounded-lg text-sm font-medium cursor-not-allowed" title="Cannot cancel within 7 days of travel">
+                          No Cancellation
+                        </span>
+                      )
                     )}
                   </div>
                 </div>
