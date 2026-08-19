@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
 import { successResponse, errorResponse } from '@/lib/apiResponse';
 import { getAuthUser, requireAdmin } from '@/lib/auth';
-import { sendVipWelcomeEmail, sendVipPerksEmail } from '@/lib/email.service';
+import { sendVipWelcomeEmail, sendVipPerksEmail, sendVipAnnouncementEmail } from '@/lib/email.service';
 
 export async function PATCH(
   request: NextRequest,
@@ -28,7 +28,7 @@ export async function PATCH(
       },
     });
 
-    // If approved, send Welcome Email and Perks Guide Email in sequence
+    // If approved, send Welcome Email, Perks Guide Email, and all Active Broadcast Deals
     if (status === 'APPROVED' && updated.email) {
       // Find registered user name if available
       const matchedUser = await prisma.user.findUnique({
@@ -48,11 +48,30 @@ export async function PATCH(
           console.error('Failed to send VIP Perks email:', err)
         );
       }, 2500);
+
+      // 3. Dispatch all currently active VIP broadcast deals so the new member is immediately updated
+      prisma.vipAnnouncement.findMany({
+        where: { active: true },
+        orderBy: { createdAt: 'desc' },
+      }).then((activeDeals) => {
+        if (activeDeals && activeDeals.length > 0) {
+          activeDeals.forEach((deal, index) => {
+            setTimeout(() => {
+              sendVipAnnouncementEmail(updated.email, {
+                title: deal.title,
+                message: deal.message,
+                couponCode: deal.couponCode,
+                discount: deal.discount,
+              }).catch((err) => console.error('Failed to dispatch active VIP deal to new member:', err));
+            }, 5000 + (index * 2000));
+          });
+        }
+      }).catch((err) => console.error('Failed to fetch active VIP deals for new member:', err));
     }
 
     const msg =
       status === 'APPROVED'
-        ? 'VIP Member Approved! Welcome & Perks emails sent ⭐'
+        ? 'VIP Member Approved. Welcome, Perks & Active Deals sent successfully.'
         : status === 'REJECTED'
         ? 'VIP Application declined.'
         : 'Status reset to pending.';

@@ -47,7 +47,7 @@ export default function Footer() {
 
     // If not logged in, redirect to login page and return directly back to the VIP section at the bottom
     if (!user) {
-      toast('Please sign in with your account to apply for VIP Club membership.', { icon: '🔐' });
+      toast('Please sign in with your account to apply for VIP Club membership.');
       const currentUrl = pathname || '/';
       const emailQuery = newsletterEmail.trim() ? `&email=${encodeURIComponent(newsletterEmail.trim())}` : '';
       router.push(`/login?redirect=${encodeURIComponent(currentUrl + '#vip-club')}${emailQuery}`);
@@ -63,7 +63,7 @@ export default function Footer() {
     try {
       setSubscribing(true);
       const res = await api.post('/api/newsletter', { email: emailToSend });
-      toast.success(res.data.message || 'VIP Club Application Submitted! 🎉', { duration: 4000 });
+      toast.success(res.data.message || 'VIP Club Application Submitted.', { duration: 4000 });
       if (!user) setNewsletterEmail('');
     } catch {
       toast.error('Failed to submit VIP application. Please try again.');

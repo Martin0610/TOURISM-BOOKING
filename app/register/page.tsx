@@ -44,22 +44,22 @@ export default function RegisterPage() {
     if (acceptedType === 'terms') {
       setHasReadTerms(true);
       if (!hasReadPrivacy) {
-        toast.success('Terms of Service reviewed! Now opening Privacy Policy...', { duration: 3000 });
+        toast.success('Terms of Service reviewed. Opening Privacy Policy...', { duration: 3000 });
         setTimeout(() => setPolicyModal('privacy'), 400);
       } else {
         setAgreeTerms(true);
         if (error.includes('Terms')) setError('');
-        toast.success('Agreements confirmed & accepted! ✓', { duration: 3000 });
+        toast.success('Agreements confirmed and accepted.', { duration: 3000 });
       }
     } else if (acceptedType === 'privacy') {
       setHasReadPrivacy(true);
       if (!hasReadTerms) {
-        toast.success('Privacy Policy reviewed! Now opening Terms of Service...', { duration: 3000 });
+        toast.success('Privacy Policy reviewed. Opening Terms of Service...', { duration: 3000 });
         setTimeout(() => setPolicyModal('terms'), 400);
       } else {
         setAgreeTerms(true);
         if (error.includes('Terms')) setError('');
-        toast.success('Agreements confirmed & accepted! ✓', { duration: 3000 });
+        toast.success('Agreements confirmed and accepted.', { duration: 3000 });
       }
     }
   };
@@ -252,7 +252,7 @@ export default function RegisterPage() {
                 onChange={(e) => {
                   if (!hasReadTerms || !hasReadPrivacy) {
                     e.preventDefault();
-                    toast('Please review the agreements till the end before accepting.', { icon: '📜' });
+                    toast('Please review the agreements till the end before accepting.');
                     if (!hasReadTerms) setPolicyModal('terms');
                     else if (!hasReadPrivacy) setPolicyModal('privacy');
                     return;
@@ -267,7 +267,7 @@ export default function RegisterPage() {
                 onClick={(e) => {
                   if (!hasReadTerms || !hasReadPrivacy) {
                     e.preventDefault();
-                    toast('Please review the agreements till the end before accepting.', { icon: '📜' });
+                    toast('Please review the agreements till the end before accepting.');
                     if (!hasReadTerms) setPolicyModal('terms');
                     else if (!hasReadPrivacy) setPolicyModal('privacy');
                   }

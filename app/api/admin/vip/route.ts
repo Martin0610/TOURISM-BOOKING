@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
 
     return successResponse(
       announcement,
-      `VIP Announcement published & emailed to ${memberMsg}! 🚀`,
+      `VIP Announcement published and emailed to ${memberMsg}.`,
       201
     );
   } catch (err) {

@@ -77,7 +77,7 @@ export default function BookingPage() {
               razorpay_signature: response.razorpay_signature,
               bookingId: id,
             });
-            toast.success('Payment verified successfully! 🎉');
+            toast.success('Payment verified successfully.');
             router.push('/my-bookings');
           } catch {
             toast.error('Payment verification failed. Please contact support.');

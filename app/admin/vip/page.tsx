@@ -110,7 +110,7 @@ export default function AdminVipPage() {
     try {
       setSubmitting(true);
       await api.post('/api/admin/vip', form);
-      toast.success('VIP Announcement published successfully! 🚀');
+      toast.success('VIP Announcement published successfully.');
       setForm({ title: '', message: '', couponCode: '', discount: '' });
       fetchData();
     } catch (err: any) {
