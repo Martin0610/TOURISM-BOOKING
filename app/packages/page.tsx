@@ -413,7 +413,7 @@ function PackagesContent() {
               {filteredPackages.map((pkg) => (
                 <Link
                   key={pkg.id}
-                  href={`/packages/${pkg.id}`}
+                  href={user ? `/packages/${pkg.id}` : `/login?redirect=/packages/${pkg.id}`}
                   className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                 >
                   {/* Card Media Header */}
@@ -515,7 +515,7 @@ function PackagesContent() {
               {filteredPackages.map((pkg) => (
                 <Link
                   key={pkg.id}
-                  href={`/packages/${pkg.id}`}
+                  href={user ? `/packages/${pkg.id}` : `/login?redirect=/packages/${pkg.id}`}
                   className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row"
                 >
                   <div className="md:w-72 h-52 md:h-auto relative overflow-hidden bg-slate-200 dark:bg-slate-800 flex-shrink-0">

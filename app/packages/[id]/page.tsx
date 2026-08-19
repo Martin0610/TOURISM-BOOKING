@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { 
   MapPin, Clock, Users, Calendar, ArrowLeft, Hotel, Utensils, 
   CheckCircle2, XCircle, Star, Heart, Tag, Plane, Train, Bus, 
-  Globe, PartyPopper, Phone, Share2, Sparkles, ShieldCheck, 
+  Globe, PartyPopper, Phone, Copy, Sparkles, ShieldCheck, 
   ChevronRight, MessageCircle, AlertCircle, Check, Gift
 } from 'lucide-react';
 import Link from 'next/link';
@@ -27,11 +27,20 @@ interface Review {
 export default function PackageDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   
   const [pkg, setPkg] = useState<Package | null>(null);
   const [departures, setDepartures] = useState<DepartureLocation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  // Redirect unsigned users to login with redirect back to this package
+  useEffect(() => {
+    if (!authLoading && !user && typeof window !== 'undefined' && !localStorage.getItem('token')) {
+      router.push(`/login?redirect=/packages/${id}`);
+      return;
+    }
+  }, [user, authLoading, id, router]);
   
   // Booking Form State
   const [form, setForm] = useState({ 
@@ -97,7 +106,7 @@ export default function PackageDetailPage() {
   const handleWishlist = async () => {
     if (!user) {
       toast.error('Please login to save to wishlist');
-      router.push('/login');
+      router.push(`/login?redirect=/packages/${id}`);
       return;
     }
     try {
@@ -118,7 +127,9 @@ export default function PackageDetailPage() {
   const handleShare = () => {
     if (typeof window !== 'undefined') {
       navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
       toast.success('Package link copied to clipboard!');
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -266,10 +277,10 @@ export default function PackageDetailPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleShare}
-                className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-600 shadow-sm transition"
-                title="Share package"
+                className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-blue-600 shadow-sm transition cursor-pointer"
+                title="Copy package link"
               >
-                <Share2 className="w-4 h-4" />
+                {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
               </button>
 
               <button

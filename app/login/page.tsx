@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Compass, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginContent() {
   const { login } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || searchParams.get('next');
+
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -26,9 +29,11 @@ export default function LoginPage() {
       const userStr = localStorage.getItem('user');
       if (userStr) {
         const user = JSON.parse(userStr);
-        // Redirect based on role
+        // Redirect based on role and redirect query param
         if (user.role === 'ADMIN') {
           router.push('/admin');
+        } else if (redirectUrl && redirectUrl.startsWith('/')) {
+          router.push(redirectUrl);
         } else {
           router.push('/');
         }
@@ -122,10 +127,23 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-white/50 mt-6">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-purple-300 hover:text-purple-200 font-medium">Register</Link>
+            <Link
+              href={redirectUrl ? `/register?redirect=${encodeURIComponent(redirectUrl)}` : "/register"}
+              className="text-purple-300 hover:text-purple-200 font-medium"
+            >
+              Register
+            </Link>
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
