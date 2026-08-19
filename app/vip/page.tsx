@@ -30,6 +30,8 @@ interface VipStatusResponse {
     message: string;
     couponCode?: string | null;
     discount?: string | null;
+    packageId?: string | null;
+    packageName?: string | null;
     createdAt: string;
   }[];
 }
@@ -103,7 +105,7 @@ export default function VipClubPage() {
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-purple-500 selection:text-white transition-colors duration-300">
         
-        {/* Top Hero Banner - Matches /packages page background */}
+        {/* Top Hero Banner */}
         <section className="relative bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white pt-32 pb-16 px-4 overflow-hidden shadow-md border-b border-slate-800">
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
 
@@ -131,7 +133,6 @@ export default function VipClubPage() {
               <p className="text-xs text-slate-500 font-semibold">Loading membership data...</p>
             </div>
           ) : !user ? (
-            /* Guest / Not Logged In */
             <div className="bg-white dark:bg-slate-900 border border-purple-100 dark:border-slate-800 rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="space-y-2 text-center md:text-left">
                 <span className="text-xs font-bold text-amber-500 uppercase tracking-wider">Member Eligibility</span>
@@ -156,117 +157,122 @@ export default function VipClubPage() {
               </div>
             </div>
           ) : isVip ? (
-            /* Active VIP Member Card & Secret Deals Hub */
-            <div className="space-y-8">
-              {/* Digital Member Card */}
-              <div className="bg-gradient-to-br from-purple-950 via-slate-900 to-indigo-950 border-2 border-purple-400/40 rounded-3xl p-7 sm:p-9 shadow-2xl relative overflow-hidden text-white">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-purple-500/30">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/30">
-                      <Crown className="w-6 h-6 fill-slate-950" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-black text-amber-400 uppercase tracking-widest">VIP Elite Patron</span>
-                        <span className="bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded-full">
-                          ACTIVE
-                        </span>
-                      </div>
-                      <h2 className="text-2xl font-black text-white">{data?.userName || user.name}</h2>
-                    </div>
+            /* Active VIP Member Card */
+            <div className="bg-gradient-to-br from-amber-500/10 via-purple-600/10 to-indigo-600/10 border border-amber-400/40 dark:border-amber-500/30 rounded-3xl p-7 sm:p-9 shadow-xl space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-amber-300/30 dark:border-slate-800">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 shadow-lg shadow-amber-500/30">
+                    <Crown className="w-7 h-7 fill-slate-950" />
                   </div>
-
-                  <div className="text-left sm:text-right">
-                    <span className="text-[11px] text-purple-200/70 block font-mono">ACCOUNT EMAIL</span>
-                    <span className="text-xs font-bold text-slate-200 font-mono">{user.email}</span>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="bg-amber-400/20 text-amber-800 dark:text-amber-300 border border-amber-400/40 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        Active VIP Elite Member
+                      </span>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                      Welcome, {data?.userName || user?.name}!
+                    </h3>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-xs">
-                  <div>
-                    <span className="text-purple-200/70 block mb-1">Total Confirmed Spend</span>
-                    <span className="text-lg font-black text-amber-300">₹{totalSpent.toLocaleString('en-IN')}</span>
+                <div className="flex items-center gap-2">
+                  <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur border border-amber-300/40 dark:border-slate-800 px-4 py-2 rounded-2xl text-center">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Confirmed Spend</span>
+                    <span className="text-sm font-bold text-amber-700 dark:text-amber-300">₹{totalSpent.toLocaleString('en-IN')}</span>
                   </div>
-                  <div>
-                    <span className="text-purple-200/70 block mb-1">Completed Tours</span>
-                    <span className="text-lg font-black text-white">{data?.confirmedBookingsCount ?? 0} Trips</span>
-                  </div>
-                  <div>
-                    <span className="text-purple-200/70 block mb-1">Dedicated Concierge</span>
-                    <span className="text-sm font-bold text-cyan-300 block">+91 72003 36447</span>
-                  </div>
-                  <div>
-                    <span className="text-purple-200/70 block mb-1">Group Booking Bonus</span>
-                    <span className="text-sm font-bold text-emerald-400 block">4+1 Free & 20% Off</span>
+                  <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur border border-amber-300/40 dark:border-slate-800 px-4 py-2 rounded-2xl text-center">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Completed Trips</span>
+                    <span className="text-sm font-bold text-purple-700 dark:text-purple-300">{data?.confirmedBookingsCount || 0}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Active Broadcast Deals Feed */}
+              {/* Private Broadcast Announcements for VIPs */}
               {data?.announcements && data.announcements.length > 0 && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" /> Active VIP Broadcast Deals & Coupons
-                    </h3>
-                    <span className="text-xs text-purple-600 dark:text-purple-400 font-semibold">{data.announcements.length} Offers Available</span>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-amber-500" />
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                        Active VIP Exclusive Deals & Dispatches
+                      </h4>
+                    </div>
+                    <span className="text-xs text-purple-600 dark:text-purple-400 font-bold">
+                      {data.announcements.length} Available
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {data.announcements.map((deal) => (
-                      <div key={deal.id} className="bg-white dark:bg-slate-900 border border-purple-100 dark:border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-purple-300 dark:hover:border-purple-700 shadow-sm transition">
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <span className="text-[10px] text-slate-400 block mb-0.5">
-                              {new Date(deal.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </span>
-                            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition">
-                              {deal.title}
-                            </h4>
+                    {data.announcements.map((deal) => {
+                      const targetUrl = deal.packageId && deal.packageId !== 'ALL'
+                        ? `/packages/${deal.packageId}${deal.couponCode ? `?coupon=${encodeURIComponent(deal.couponCode)}` : ''}`
+                        : `/packages${deal.couponCode ? `?coupon=${encodeURIComponent(deal.couponCode)}` : ''}`;
+
+                      return (
+                        <div
+                          key={deal.id}
+                          className="group bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-purple-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-md hover:shadow-lg transition-all space-y-3"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-[10px] text-slate-400">
+                                  {new Date(deal.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                                {deal.packageName && (
+                                  <span className="bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-200 dark:border-purple-800/60">
+                                    🎯 {deal.packageName}
+                                  </span>
+                                )}
+                              </div>
+                              <h4 className="text-sm font-extrabold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition">
+                                {deal.title}
+                              </h4>
+                            </div>
+                            {deal.discount && (
+                              <span className="bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-xs font-black px-2.5 py-1 rounded-xl whitespace-nowrap shadow-sm">
+                                {deal.discount}
+                              </span>
+                            )}
                           </div>
-                          {deal.discount && (
-                            <span className="bg-purple-100 dark:bg-purple-950/60 border border-purple-200/60 dark:border-purple-800/60 text-purple-700 dark:text-purple-300 text-xs font-black px-2.5 py-1 rounded-xl whitespace-nowrap">
-                              {deal.discount}
-                            </span>
+
+                          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{deal.message}</p>
+
+                          {deal.couponCode && (
+                            <div className="pt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-purple-100 dark:border-slate-800">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-mono uppercase text-slate-400">VIP Code:</span>
+                                <span className="font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800/60 px-2 py-0.5 rounded text-xs">
+                                  {deal.couponCode}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => copyCoupon(deal.couponCode!)}
+                                  className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center gap-1 cursor-pointer"
+                                >
+                                  {copiedCode === deal.couponCode ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                                  <span>{copiedCode === deal.couponCode ? 'Copied' : 'Copy'}</span>
+                                </button>
+                                <Link
+                                  href={targetUrl}
+                                  className="bg-gradient-to-r from-amber-500 via-amber-600 to-purple-600 hover:from-amber-400 hover:to-purple-500 text-slate-950 font-black text-[11px] px-3.5 py-1 rounded-lg shadow-sm flex items-center gap-1 transition"
+                                >
+                                  <span>Claim Deal</span>
+                                  <ArrowRight className="w-3 h-3" />
+                                </Link>
+                              </div>
+                            </div>
                           )}
                         </div>
-
-                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{deal.message}</p>
-
-                        {deal.couponCode && (
-                          <div className="pt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-purple-100 dark:border-slate-800">
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-mono uppercase text-slate-400">Code:</span>
-                              <span className="font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/60 px-2 py-0.5 rounded text-xs">
-                                {deal.couponCode}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={() => copyCoupon(deal.couponCode!)}
-                                className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center gap-1 cursor-pointer"
-                              >
-                                {copiedCode === deal.couponCode ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                                <span>{copiedCode === deal.couponCode ? 'Copied' : 'Copy'}</span>
-                              </button>
-                              <Link
-                                href={`/packages?coupon=${encodeURIComponent(deal.couponCode)}`}
-                                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-[11px] font-black px-3 py-1 rounded-lg shadow-sm flex items-center gap-1 transition"
-                              >
-                                <span>Book Now</span>
-                                <ArrowRight className="w-3 h-3" />
-                              </Link>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
             </div>
           ) : user?.role === 'ADMIN' ? (
-            /* Admin Access Mode - No self-submission form, direct management shortcut */
+            /* Admin Access Mode */
             <div className="bg-white dark:bg-slate-900 border border-purple-200/80 dark:border-purple-800/60 rounded-3xl p-7 sm:p-9 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 via-purple-700 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 flex-shrink-0">

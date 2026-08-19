@@ -10,12 +10,22 @@ import {
   MapPin, Clock, Users, Search, Filter, Heart, Plane, Car, Globe, 
   Sparkles, Star, Hotel, Utensils, Tag, LayoutGrid, List, ArrowUpDown, 
   X, Check, Flame, ChevronRight, ShieldCheck, Gift, Palmtree, Mountain,
-  Landmark, Trees, Compass, Waves, TrendingDown, TrendingUp, ChevronDown, Crown
+  Landmark, Trees, Compass, Waves, TrendingDown, TrendingUp, ChevronDown, Crown, Lock
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
+
+interface AvailableCoupon {
+  id: string;
+  code: string;
+  discountType: string;
+  discountValue: number;
+  isVip: boolean;
+  packageId?: string | null;
+  packageName?: string | null;
+}
 
 const SORT_OPTIONS = [
   { value: 'featured', label: 'Featured & Recommended', icon: Sparkles, color: 'text-amber-500' },
@@ -32,6 +42,7 @@ function PackagesContent() {
   const [allPackages, setAllPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
   const [loading, setLoading] = useState(true);
+  const [vipCoupons, setVipCoupons] = useState<AvailableCoupon[]>([]);
   
   // Filter states
   const [search, setSearch] = useState('');
@@ -49,6 +60,10 @@ function PackagesContent() {
   const getPkgUrl = (pkgId: string) => {
     const q = couponParam ? `?coupon=${encodeURIComponent(couponParam)}` : '';
     return user ? `/packages/${pkgId}${q}` : `/login?redirect=/packages/${pkgId}${q ? encodeURIComponent(q) : ''}`;
+  };
+
+  const getVipDealForPkg = (pkgId: string) => {
+    return vipCoupons.find((c) => c.packageId === pkgId) || vipCoupons.find((c) => !c.packageId || c.packageId === 'ALL');
   };
 
   // Close dropdown on outside click
@@ -113,6 +128,15 @@ function PackagesContent() {
         })
         .catch(() => {});
     }
+
+    // Load active VIP coupons/deals
+    api.get('/api/coupons/available')
+      .then((res) => {
+        if (res.data?.data) {
+          setVipCoupons(res.data.data.filter((c: AvailableCoupon) => c.isVip));
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Filter & Sort computation
@@ -535,6 +559,26 @@ function PackagesContent() {
                       {pkg.category}
                     </span>
 
+                    {/* VIP Exclusive Deal Badge */}
+                    {(() => {
+                      const vipDeal = getVipDealForPkg(pkg.id);
+                      if (!vipDeal) return null;
+                      const isVipUser = user?.isVip || user?.vipStatus === 'APPROVED' || user?.role === 'ADMIN';
+
+                      if (isVipUser) {
+                        return (
+                          <span className="absolute top-3.5 right-14 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 border border-amber-300">
+                            <Crown className="w-3 h-3 fill-slate-950" /> VIP {vipDeal.discountType === 'PERCENTAGE' ? `${vipDeal.discountValue}% OFF` : `₹${vipDeal.discountValue} OFF`}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span className="absolute top-3.5 right-14 bg-slate-900/90 backdrop-blur text-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-md flex items-center gap-1">
+                          <Lock className="w-2.5 h-2.5 text-amber-400" /> VIP Deal
+                        </span>
+                      );
+                    })()}
+
                     {/* Wishlist Button (Users Only) */}
                     {user?.role !== 'ADMIN' && (
                       <button
@@ -627,6 +671,26 @@ function PackagesContent() {
                     <span className="absolute top-3 left-3 bg-amber-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">
                       {pkg.category}
                     </span>
+
+                    {/* VIP Exclusive Deal Badge */}
+                    {(() => {
+                      const vipDeal = getVipDealForPkg(pkg.id);
+                      if (!vipDeal) return null;
+                      const isVipUser = user?.isVip || user?.vipStatus === 'APPROVED' || user?.role === 'ADMIN';
+
+                      if (isVipUser) {
+                        return (
+                          <span className="absolute bottom-3 left-3 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 border border-amber-300">
+                            <Crown className="w-3 h-3 fill-slate-950" /> VIP {vipDeal.discountType === 'PERCENTAGE' ? `${vipDeal.discountValue}% OFF` : `₹${vipDeal.discountValue} OFF`}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span className="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur text-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-md flex items-center gap-1">
+                          <Lock className="w-2.5 h-2.5 text-amber-400" /> VIP Exclusive
+                        </span>
+                      );
+                    })()}
                   </div>
 
                   <div className="p-6 flex-1 flex flex-col justify-between">

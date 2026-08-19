@@ -13,18 +13,26 @@ export async function GET() {
       }),
       prisma.vipAnnouncement.findMany({
         where: { active: true, couponCode: { not: null } },
-        select: { couponCode: true, title: true, discount: true },
+        select: { couponCode: true, title: true, discount: true, packageId: true, packageName: true },
       }),
     ]);
 
-    const vipCodeSet = new Set(
-      vipAnnouncements.map((a) => a.couponCode?.toUpperCase()).filter(Boolean)
+    const announcementMap = new Map(
+      vipAnnouncements
+        .filter((a) => a.couponCode)
+        .map((a) => [a.couponCode!.toUpperCase(), a])
     );
 
-    const enrichedCoupons = coupons.map((c) => ({
-      ...c,
-      isVip: c.code.toUpperCase().startsWith('VIP') || vipCodeSet.has(c.code.toUpperCase()),
-    }));
+    const enrichedCoupons = coupons.map((c) => {
+      const match = announcementMap.get(c.code.toUpperCase());
+      const isVip = c.isVipOnly || c.code.toUpperCase().startsWith('VIP') || !!match;
+      return {
+        ...c,
+        isVip,
+        packageId: c.packageId || match?.packageId || null,
+        packageName: c.packageName || match?.packageName || null,
+      };
+    });
 
     return NextResponse.json({ success: true, data: enrichedCoupons });
   } catch (error: any) {

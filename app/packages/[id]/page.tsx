@@ -11,7 +11,7 @@ import {
   MapPin, Clock, Users, Calendar, ArrowLeft, Hotel, Utensils, 
   CheckCircle2, XCircle, Star, Heart, Tag, Plane, Train, Bus, Car, Crown,
   Globe, PartyPopper, Phone, Copy, Sparkles, ShieldCheck, 
-  ChevronRight, ChevronDown, MessageCircle, AlertCircle, Check, Gift
+  ChevronRight, ChevronDown, MessageCircle, AlertCircle, Check, Gift, Lock
 } from 'lucide-react';
 import Link from 'next/link';
 import WhatsAppButton from '@/components/WhatsAppButton';
@@ -95,8 +95,15 @@ export default function PackageDetailPage() {
   const [couponResult, setCouponResult] = useState<{ discountAmount: number; code: string } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [availableCoupons, setAvailableCoupons] = useState<{
-    id: string; code: string; discountType: string; discountValue: number;
-    minBookingAmount: number; expiresAt: string; isVip?: boolean;
+    id: string; 
+    code: string; 
+    discountType: string; 
+    discountValue: number;
+    minBookingAmount: number; 
+    expiresAt: string; 
+    isVip?: boolean;
+    packageId?: string | null;
+    packageName?: string | null;
   }[]>([]);
   const [showCoupons, setShowCoupons] = useState(false);
 
@@ -212,7 +219,8 @@ export default function PackageDetailPage() {
     try {
       const res = await api.post('/api/coupons/validate', { 
         code: couponCode.trim().toUpperCase(), 
-        bookingAmount: subtotalBeforeCoupon 
+        bookingAmount: subtotalBeforeCoupon,
+        packageId: id,
       });
       setCouponResult(res.data.data);
       toast.success(`Coupon ${res.data.data.code} applied successfully!`);
@@ -1023,14 +1031,23 @@ export default function PackageDetailPage() {
 
                       {showCoupons && (
                         <div className="mb-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-purple-100 dark:border-slate-700 space-y-2 max-h-56 overflow-y-auto">
-                          {availableCoupons.map((c) => {
+                          {availableCoupons
+                            .filter((c) => !c.packageId || c.packageId === 'ALL' || c.packageId === id)
+                            .map((c) => {
                             const eligible = subtotalBeforeCoupon >= c.minBookingAmount;
                             const isVipCoupon = c.isVip;
+                            const userIsVip = isUserVip || user?.role === 'ADMIN' || user?.isVip || user?.vipStatus === 'APPROVED';
+                            const isLockedForUser = isVipCoupon && !userIsVip;
 
                             return (
                               <div
                                 key={c.id}
                                 onClick={async () => {
+                                  if (isLockedForUser) {
+                                    toast.error('🔒 This coupon is reserved exclusively for TripEase VIP Elite Members. Upgrade to VIP to unlock.');
+                                    return;
+                                  }
+
                                   if (eligible) {
                                     setCouponCode(c.code);
                                     setCouponResult(null);
@@ -1040,6 +1057,7 @@ export default function PackageDetailPage() {
                                       const res = await api.post('/api/coupons/validate', {
                                         code: c.code,
                                         bookingAmount: subtotalBeforeCoupon,
+                                        packageId: id,
                                       });
                                       setCouponResult(res.data.data);
                                       toast.success(`Coupon ${res.data.data.code} applied!`);
@@ -1053,8 +1071,10 @@ export default function PackageDetailPage() {
                                   }
                                 }}
                                 className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition cursor-pointer ${
-                                  isVipCoupon
-                                    ? 'bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border-amber-300 dark:border-amber-500/40 hover:border-amber-400 shadow-sm'
+                                  isLockedForUser
+                                    ? 'bg-slate-100/80 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 opacity-75 hover:border-amber-400'
+                                    : isVipCoupon
+                                    ? 'bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-indigo-500/15 border-amber-400 dark:border-amber-500/50 hover:border-amber-500 shadow-sm'
                                     : eligible
                                     ? 'bg-white dark:bg-slate-700/80 border-purple-100 dark:border-slate-600 hover:border-purple-400'
                                     : 'opacity-50 cursor-not-allowed bg-slate-100 dark:bg-slate-800'
@@ -1062,22 +1082,46 @@ export default function PackageDetailPage() {
                               >
                                 <div className="space-y-0.5">
                                   <div className="flex items-center gap-1.5">
-                                    <span className={`font-mono font-black ${isVipCoupon ? 'text-amber-600 dark:text-amber-400' : 'text-purple-600 dark:text-purple-400'}`}>
+                                    <span className={`font-mono font-black ${isLockedForUser ? 'text-slate-500 dark:text-slate-400' : isVipCoupon ? 'text-amber-600 dark:text-amber-400' : 'text-purple-600 dark:text-purple-400'}`}>
                                       {c.code}
                                     </span>
                                     {isVipCoupon && (
-                                      <span className="bg-amber-400/20 text-amber-700 dark:text-amber-300 text-[9px] font-black px-1.5 py-0.2 rounded border border-amber-400/40 flex items-center gap-0.5">
-                                        <Crown className="w-2.5 h-2.5 text-amber-500 fill-amber-500" /> VIP ONLY
+                                      <span className={`text-[9px] font-black px-1.5 py-0.2 rounded border flex items-center gap-0.5 ${
+                                        isLockedForUser
+                                          ? 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-600'
+                                          : 'bg-amber-400/20 text-amber-700 dark:text-amber-300 border-amber-400/40'
+                                      }`}>
+                                        {isLockedForUser ? <Lock className="w-2.5 h-2.5 text-slate-500" /> : <Crown className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />}
+                                        {isLockedForUser ? 'VIP LOCKED' : 'VIP ONLY'}
                                       </span>
                                     )}
                                   </div>
                                   <p className="text-[10px] text-slate-500 dark:text-slate-400">
                                     {c.discountType === 'PERCENTAGE' ? `${c.discountValue}% OFF` : `₹${c.discountValue} OFF`}
                                     {c.minBookingAmount > 0 && ` (Min ₹${c.minBookingAmount.toLocaleString()})`}
+                                    {isLockedForUser && ' • Join VIP Club to unlock'}
                                   </p>
                                 </div>
-                                <span className={`text-[10px] font-bold ${isVipCoupon ? 'text-amber-600 dark:text-amber-400' : 'text-purple-600 dark:text-purple-400'}`}>
-                                  Tap to apply
+                                <span className={`text-[10px] font-bold flex items-center gap-1 ${
+                                  isLockedForUser
+                                    ? 'text-amber-600 dark:text-amber-400'
+                                    : isVipCoupon
+                                    ? 'text-amber-600 dark:text-amber-400'
+                                    : 'text-purple-600 dark:text-purple-400'
+                                }`}>
+                                  {isLockedForUser ? (
+                                    <>
+                                      <Lock className="w-3 h-3 text-amber-500" />
+                                      <span>VIP Locked</span>
+                                    </>
+                                  ) : isVipCoupon ? (
+                                    <>
+                                      <Crown className="w-3 h-3 text-amber-500 fill-amber-500" />
+                                      <span>Apply VIP Deal</span>
+                                    </>
+                                  ) : (
+                                    'Tap to apply'
+                                  )}
                                 </span>
                               </div>
                             );

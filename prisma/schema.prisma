@@ -171,6 +171,9 @@ model Coupon {
   usedCount      Int      @default(0)
   expiresAt      DateTime
   active         Boolean  @default(true)
+  packageId      String?
+  packageName    String?
+  isVipOnly      Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -194,12 +197,14 @@ model NewsletterSubscriber {
 }
 
 model VipAnnouncement {
-  id         String   @id @default(cuid())
-  title      String
-  message    String
-  couponCode String?
-  discount   String?
-  active     Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(cuid())
+  title       String
+  message     String
+  couponCode  String?
+  discount    String?
+  packageId   String?  // null or 'ALL' or specific package ID
+  packageName String?  // e.g. "Kerala Backwaters Houseboat" or "All Packages"
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

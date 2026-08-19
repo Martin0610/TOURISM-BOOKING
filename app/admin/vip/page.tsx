@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
@@ -11,7 +11,7 @@ import {
   Sparkles, Users, Mail, Send, Trash2, Tag, Calendar, 
   Copy, Check, Megaphone, ShieldCheck, Search, BellRing, 
   CheckCircle2, XCircle, Clock, IndianRupee, Plane, AlertTriangle, 
-  ChevronRight, Phone, RefreshCw, UserCheck, ShieldAlert
+  ChevronRight, Phone, RefreshCw, UserCheck, ShieldAlert, ChevronDown, Globe, MapPin, Crown
 } from 'lucide-react';
 
 interface EnrichedSubscriber {
@@ -36,12 +36,21 @@ interface EnrichedSubscriber {
   } | null;
 }
 
+interface PackageItem {
+  id: string;
+  name: string;
+  destination: string;
+  state: string;
+}
+
 interface Announcement {
   id: string;
   title: string;
   message: string;
   couponCode?: string | null;
   discount?: string | null;
+  packageId?: string | null;
+  packageName?: string | null;
   active: boolean;
   createdAt: string;
 }
@@ -52,17 +61,22 @@ export default function AdminVipPage() {
 
   const [subscribers, setSubscribers] = useState<EnrichedSubscriber[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [packagesList, setPackagesList] = useState<PackageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'rejected' | 'broadcast'>('pending');
   const [copiedAll, setCopiedAll] = useState(false);
+  const [packageDropdownOpen, setPackageDropdownOpen] = useState(false);
+  const packageDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Broadcaster Form
+  // Broadcaster Form with Package Selection
   const [form, setForm] = useState({
     title: '',
     message: '',
     couponCode: '',
     discount: '',
+    packageId: 'ALL',
+    packageName: 'All Packages (Site-wide VIP Exclusive)',
   });
   const [submitting, setSubmitting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -80,6 +94,16 @@ export default function AdminVipPage() {
   });
 
   useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (packageDropdownRef.current && !packageDropdownRef.current.contains(e.target as Node)) {
+        setPackageDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
     if (!authLoading && (!user || user.role !== 'ADMIN')) {
       router.push('/login');
       return;
@@ -94,6 +118,9 @@ export default function AdminVipPage() {
       if (res.data?.data) {
         setSubscribers(res.data.data.subscribers || []);
         setAnnouncements(res.data.data.announcements || []);
+        if (res.data.data.packages) {
+          setPackagesList(res.data.data.packages);
+        }
       }
     } catch {
       toast.error('Failed to load VIP data');
@@ -117,15 +144,32 @@ export default function AdminVipPage() {
   const handleCreateAnnouncement = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim() || !form.message.trim()) {
-      toast.error('Please fill in title and message');
+      toast.error('Please enter announcement title and details');
+      return;
+    }
+
+    if (!form.couponCode.trim()) {
+      toast.error('Coupon code is compulsory for VIP broadcasts');
+      return;
+    }
+
+    if (!form.discount.trim()) {
+      toast.error('Discount badge (e.g. 40% OFF or ₹5,000 OFF) is compulsory');
       return;
     }
 
     try {
       setSubmitting(true);
-      await api.post('/api/admin/vip', form);
-      toast.success('VIP Announcement published successfully.');
-      setForm({ title: '', message: '', couponCode: '', discount: '' });
+      const res = await api.post('/api/admin/vip', form);
+      toast.success(res.data.message || 'VIP Announcement published successfully.');
+      setForm({
+        title: '',
+        message: '',
+        couponCode: '',
+        discount: '',
+        packageId: 'ALL',
+        packageName: 'All Packages (Site-wide VIP Exclusive)',
+      });
       fetchData();
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Failed to post announcement');
@@ -587,6 +631,101 @@ export default function AdminVipPage() {
               </div>
 
               <form onSubmit={handleCreateAnnouncement} className="space-y-4">
+                {/* Target Package Selector */}
+                <div className="relative" ref={packageDropdownRef}>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                    <span>Target Vacation Package *</span>
+                    <span className="text-[10px] text-purple-600 dark:text-purple-400 font-bold lowercase">
+                      {form.packageId === 'ALL' ? 'site-wide VIP discount' : 'single package exclusive'}
+                    </span>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={() => setPackageDropdownOpen(!packageDropdownOpen)}
+                    className={`w-full bg-slate-50 dark:bg-slate-800/80 border rounded-xl px-3.5 py-2.5 text-sm text-left flex items-center justify-between transition cursor-pointer ${
+                      packageDropdownOpen
+                        ? 'border-purple-500 ring-2 ring-purple-500/20'
+                        : 'border-slate-200 dark:border-slate-700/80 hover:border-purple-400'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      <div className="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-950/60 flex items-center justify-center flex-shrink-0 text-purple-600 dark:text-purple-400">
+                        {form.packageId === 'ALL' ? <Globe className="w-4 h-4" /> : <MapPin className="w-4 h-4" />}
+                      </div>
+                      <span className="font-bold text-slate-900 dark:text-white truncate">
+                        {form.packageName}
+                      </span>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0 ${packageDropdownOpen ? 'rotate-180 text-purple-600' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Options */}
+                  {packageDropdownOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-purple-200/80 dark:border-slate-700 py-1.5 z-50 max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-slate-100 dark:divide-slate-800">
+                      {/* All Packages Option */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setForm({
+                            ...form,
+                            packageId: 'ALL',
+                            packageName: 'All Packages (Site-wide VIP Exclusive)',
+                          });
+                          setPackageDropdownOpen(false);
+                        }}
+                        className={`w-full px-3.5 py-2.5 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                          form.packageId === 'ALL'
+                            ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold'
+                            : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Globe className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                          <div>
+                            <span className="block font-bold">All Packages (Site-wide VIP Exclusive)</span>
+                            <span className="text-[10px] text-slate-400 font-normal">Valid on any tour booked by VIP members</span>
+                          </div>
+                        </div>
+                        {form.packageId === 'ALL' && <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 font-bold" />}
+                      </button>
+
+                      {/* Individual Package Options */}
+                      {packagesList.map((pkg) => {
+                        const isSelected = form.packageId === pkg.id;
+                        return (
+                          <button
+                            key={pkg.id}
+                            type="button"
+                            onClick={() => {
+                              setForm({
+                                ...form,
+                                packageId: pkg.id,
+                                packageName: `${pkg.name} (${pkg.destination})`,
+                              });
+                              setPackageDropdownOpen(false);
+                            }}
+                            className={`w-full px-3.5 py-2.5 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                              isSelected
+                                ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold'
+                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <MapPin className="w-4 h-4 text-amber-500" />
+                              <div>
+                                <span className="block font-bold">{pkg.name}</span>
+                                <span className="text-[10px] text-slate-400 font-normal">{pkg.destination}, {pkg.state}</span>
+                              </div>
+                            </div>
+                            {isSelected && <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 font-bold" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
                     Announcement Title *
@@ -596,7 +735,7 @@ export default function AdminVipPage() {
                     required
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    placeholder="e.g. 40% Secret Flash Sale on Kashmir Packages!"
+                    placeholder="e.g. 40% Secret Flash Sale on Kerala Backwaters!"
                     className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -617,24 +756,28 @@ export default function AdminVipPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
-                      Special Coupon Code (optional)
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                      <span>Special Coupon Code *</span>
+                      <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase">Required</span>
                     </label>
                     <input
                       type="text"
+                      required
                       value={form.couponCode}
                       onChange={(e) => setForm({ ...form, couponCode: e.target.value.toUpperCase() })}
-                      placeholder="e.g. VIP40, SECRET2026"
+                      placeholder="e.g. VIPKERALA, VIP40"
                       className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
-                      Discount Badge (optional)
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                      <span>Discount Badge *</span>
+                      <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase">Required</span>
                     </label>
                     <input
                       type="text"
+                      required
                       value={form.discount}
                       onChange={(e) => setForm({ ...form, discount: e.target.value })}
                       placeholder="e.g. 40% OFF, ₹5,000 OFF"
@@ -672,17 +815,23 @@ export default function AdminVipPage() {
                   <p className="text-sm font-semibold">No VIP announcements posted yet</p>
                 </div>
               ) : (
-                <div className="space-y-3.5 max-h-[380px] overflow-y-auto pr-1">
+                <div className="space-y-3.5 max-h-[460px] overflow-y-auto pr-1">
                   {announcements.map((ann) => (
                     <div
                       key={ann.id}
                       className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 flex items-start justify-between gap-4"
                     >
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
                           <span className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800/60">
                             ACTIVE
                           </span>
+                          {ann.packageName && (
+                            <span className="bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-200 dark:border-purple-800/60 flex items-center gap-1">
+                              <MapPin className="w-2.5 h-2.5" />
+                              <span className="truncate max-w-[150px]">{ann.packageName}</span>
+                            </span>
+                          )}
                           <span className="text-[11px] text-slate-400">
                             {new Date(ann.createdAt).toLocaleDateString()}
                           </span>
@@ -708,7 +857,7 @@ export default function AdminVipPage() {
 
                       <button
                         onClick={() => handleDeleteAnnouncement(ann.id)}
-                        className="p-2 text-slate-400 hover:text-rose-500 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+                        className="p-2 text-slate-400 hover:text-rose-500 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer flex-shrink-0"
                         title="Delete announcement"
                       >
                         <Trash2 className="w-4 h-4" />

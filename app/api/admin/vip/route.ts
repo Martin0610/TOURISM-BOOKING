@@ -9,8 +9,8 @@ export async function GET(request: NextRequest) {
     const authUser = await getAuthUser(request);
     requireAdmin(authUser);
 
-    // Fetch all applicants and announcements
-    const [subscribers, announcements, allUsers] = await Promise.all([
+    // Fetch all applicants, announcements, users and packages
+    const [subscribers, announcements, allUsers, allPackages] = await Promise.all([
       prisma.newsletterSubscriber.findMany({
         orderBy: { createdAt: 'desc' },
       }),
@@ -28,6 +28,10 @@ export async function GET(request: NextRequest) {
             orderBy: { createdAt: 'desc' },
           },
         },
+      }),
+      prisma.package.findMany({
+        select: { id: true, name: true, destination: true, state: true },
+        orderBy: { name: 'asc' },
       }),
     ]);
 
@@ -99,6 +103,7 @@ export async function GET(request: NextRequest) {
       approvedMembers: approved,
       rejectedApplicants: rejected,
       announcements,
+      packages: allPackages,
       stats: {
         totalApplicants: enrichedSubscribers.length,
         pendingCount: pending.length,
@@ -123,74 +128,85 @@ export async function POST(request: NextRequest) {
     const authUser = await getAuthUser(request);
     requireAdmin(authUser);
 
-    const { title, message, couponCode, discount } = await request.json();
+    const { title, message, couponCode, discount, packageId, packageName } = await request.json();
 
-    if (!title || !message) {
-      return errorResponse('Title and message are required', 400);
+    if (!title?.trim() || !message?.trim()) {
+      return errorResponse('Announcement title and message are required', 400);
     }
 
-    const cleanCode = couponCode ? couponCode.toUpperCase().trim() : null;
+    if (!couponCode?.trim() || !discount?.trim()) {
+      return errorResponse('Coupon code and discount badge are required for VIP announcements', 400);
+    }
 
-    // Auto-create or sync Coupon record in database so VIP members can instantly use it
-    if (cleanCode) {
-      let discountType = 'PERCENTAGE';
-      let discountValue = 15; // default 15%
+    const cleanCode = couponCode.toUpperCase().trim();
+    const cleanDiscount = discount.trim();
+    const targetPackageId = packageId && packageId !== 'ALL' ? packageId : null;
+    const targetPackageName = targetPackageId ? (packageName || 'Exclusive Package') : 'All Packages';
 
-      if (discount) {
-        const raw = discount.trim();
-        if (raw.includes('%')) {
+    // Auto-create or sync Coupon record in database with VIP exclusive flag
+    let discountType = 'PERCENTAGE';
+    let discountValue = 15; // default 15%
+
+    const raw = cleanDiscount;
+    if (raw.includes('%')) {
+      discountType = 'PERCENTAGE';
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      if (!isNaN(num) && num > 0) discountValue = num;
+    } else {
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      if (!isNaN(num) && num > 0) {
+        if (num <= 100 && !raw.includes('₹') && !raw.toLowerCase().includes('rs')) {
           discountType = 'PERCENTAGE';
-          const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
-          if (!isNaN(num) && num > 0) discountValue = num;
+          discountValue = num;
         } else {
-          const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
-          if (!isNaN(num) && num > 0) {
-            if (num <= 100 && !raw.includes('₹') && !raw.toLowerCase().includes('rs')) {
-              discountType = 'PERCENTAGE';
-              discountValue = num;
-            } else {
-              discountType = 'FIXED';
-              discountValue = num;
-            }
-          }
+          discountType = 'FIXED';
+          discountValue = num;
         }
       }
+    }
 
-      const existingCoupon = await prisma.coupon.findUnique({ where: { code: cleanCode } });
-      const sixtyDaysLater = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+    const existingCoupon = await prisma.coupon.findUnique({ where: { code: cleanCode } });
+    const sixtyDaysLater = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
 
-      if (existingCoupon) {
-        await prisma.coupon.update({
-          where: { id: existingCoupon.id },
-          data: {
-            discountType,
-            discountValue,
-            active: true,
-            expiresAt: sixtyDaysLater,
-          },
-        });
-      } else {
-        await prisma.coupon.create({
-          data: {
-            code: cleanCode,
-            discountType,
-            discountValue,
-            minBookingAmount: 0,
-            maxUses: 1000,
-            usedCount: 0,
-            expiresAt: sixtyDaysLater,
-            active: true,
-          },
-        });
-      }
+    if (existingCoupon) {
+      await prisma.coupon.update({
+        where: { id: existingCoupon.id },
+        data: {
+          discountType,
+          discountValue,
+          active: true,
+          isVipOnly: true,
+          packageId: targetPackageId,
+          packageName: targetPackageName,
+          expiresAt: sixtyDaysLater,
+        },
+      });
+    } else {
+      await prisma.coupon.create({
+        data: {
+          code: cleanCode,
+          discountType,
+          discountValue,
+          minBookingAmount: 0,
+          maxUses: 1000,
+          usedCount: 0,
+          expiresAt: sixtyDaysLater,
+          active: true,
+          isVipOnly: true,
+          packageId: targetPackageId,
+          packageName: targetPackageName,
+        },
+      });
     }
 
     const announcement = await prisma.vipAnnouncement.create({
       data: {
-        title,
-        message,
+        title: title.trim(),
+        message: message.trim(),
         couponCode: cleanCode,
-        discount: discount ? discount.trim() : null,
+        discount: cleanDiscount,
+        packageId: targetPackageId,
+        packageName: targetPackageName,
         active: true,
       },
     });
@@ -208,10 +224,12 @@ export async function POST(request: NextRequest) {
       Promise.allSettled(
         approvedVips.map((vip) =>
           sendVipAnnouncementEmail(vip.email, {
-            title,
-            message,
-            couponCode: couponCode ? couponCode.toUpperCase().trim() : null,
-            discount: discount ? discount.trim() : null,
+            title: title.trim(),
+            message: message.trim(),
+            couponCode: cleanCode,
+            discount: cleanDiscount,
+            packageId: targetPackageId,
+            packageName: targetPackageName,
           })
         )
       ).catch((err) => console.error('Failed to send some VIP emails:', err));
@@ -222,7 +240,7 @@ export async function POST(request: NextRequest) {
 
     return successResponse(
       announcement,
-      `VIP Announcement published and emailed to ${memberMsg}.`,
+      `VIP Announcement published and dispatched to ${memberMsg} (${targetPackageName}).`,
       201
     );
   } catch (err) {

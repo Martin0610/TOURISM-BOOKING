@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const authUser = requireAuth(await getAuthUser(request));
 
-    const { code, bookingAmount } = await request.json();
+    const { code, bookingAmount, packageId } = await request.json();
     if (!code || !bookingAmount) {
       return errorResponse('code and bookingAmount are required', 400);
     }
@@ -30,8 +30,16 @@ export async function POST(request: NextRequest) {
       return errorResponse(`Minimum booking amount is ₹${coupon.minBookingAmount.toLocaleString('en-IN')}`, 400);
     }
 
+    // Package-specific coupon restriction
+    if (coupon.packageId && packageId && coupon.packageId !== packageId) {
+      return errorResponse(
+        `This promo code is only valid for the "${coupon.packageName || 'designated'}" vacation package.`,
+        400
+      );
+    }
+
     // VIP Exclusivity Check
-    const isVipCode = coupon.code.toUpperCase().startsWith('VIP');
+    const isVipCode = coupon.code.toUpperCase().startsWith('VIP') || coupon.isVipOnly;
     const isVipAnnouncement = await prisma.vipAnnouncement.findFirst({
       where: { couponCode: coupon.code, active: true },
     });
@@ -50,7 +58,7 @@ export async function POST(request: NextRequest) {
 
       if (!isApprovedVip && authUser.role !== 'ADMIN') {
         return errorResponse(
-          'This exclusive promo code is reserved for TripEase VIP Elite Members. Apply or check your membership status at /vip.',
+          '🔒 This coupon code is reserved exclusively for TripEase VIP Elite Members. Standard accounts cannot apply this coupon.',
           403
         );
       }

@@ -331,9 +331,14 @@ export const sendVipAnnouncementEmail = async (
     message: string;
     couponCode?: string | null;
     discount?: string | null;
+    packageId?: string | null;
+    packageName?: string | null;
   }
 ): Promise<void> => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://tourism-booking-murex.vercel.app';
+  const targetLink = details.packageId && details.packageId !== 'ALL'
+    ? `${appUrl}/packages/${details.packageId}${details.couponCode ? `?coupon=${encodeURIComponent(details.couponCode)}` : ''}`
+    : `${appUrl}/packages${details.couponCode ? `?coupon=${encodeURIComponent(details.couponCode)}` : ''}`;
 
   const html = `
   <!DOCTYPE html>
@@ -357,7 +362,7 @@ export const sendVipAnnouncementEmail = async (
                     <td align="center">
                       <div style="display:inline-block;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.4);border-radius:50px;padding:7px 22px;margin-bottom:16px;white-space:nowrap;">
                         <span style="color:#fbbf24;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;display:inline-block;line-height:1;">
-                          VIP CLUB EXCLUSIVE DISPATCH
+                          👑 VIP CLUB EXCLUSIVE DISPATCH
                         </span>
                       </div>
                       <h1 style="color:#ffffff;margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:700;letter-spacing:-0.3px;line-height:1.3;">
@@ -391,6 +396,12 @@ export const sendVipAnnouncementEmail = async (
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:26px;">
                   <tr>
                     <td style="background:rgba(245,158,11,0.06);border:1.5px dashed #f59e0b;border-radius:14px;padding:22px;text-align:center;">
+                      ${details.packageName ? `
+                        <div style="color:#94a3b8;font-size:12px;font-weight:600;margin-bottom:8px;">
+                          🎯 Applicable Destination: <strong style="color:#ffffff;">${details.packageName}</strong>
+                        </div>
+                      ` : ''}
+
                       ${details.discount ? `
                         <div style="display:inline-block;background:#f59e0b;color:#000000;font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:12px;padding:4px 14px;border-radius:16px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
                           ${details.discount}
@@ -407,7 +418,7 @@ export const sendVipAnnouncementEmail = async (
                           </span>
                         </div>
                         <p style="color:#94a3b8;font-family:Arial,Helvetica,sans-serif;font-size:12px;margin:6px 0 0;">
-                          Apply this code during checkout to unlock VIP pricing.
+                          Exclusive for verified VIP Elite members.
                         </p>
                       ` : ''}
                     </td>
@@ -419,8 +430,8 @@ export const sendVipAnnouncementEmail = async (
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:28px;">
                   <tr>
                     <td align="center">
-                      <a href="${appUrl}/packages${details.couponCode ? `?coupon=${encodeURIComponent(details.couponCode)}` : ''}" target="_blank" style="display:inline-block;background:#f59e0b;color:#000000;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;padding:15px 34px;border-radius:10px;letter-spacing:0.5px;text-align:center;">
-                        Explore Packages and Claim Deal
+                      <a href="${targetLink}" target="_blank" style="display:inline-block;background:#f59e0b;color:#000000;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;padding:15px 34px;border-radius:10px;letter-spacing:0.5px;text-align:center;">
+                        ${details.packageName && details.packageName !== 'All Packages' ? `Book ${details.packageName} with VIP Discount →` : 'Explore Packages and Claim Deal →'}
                       </a>
                     </td>
                   </tr>
