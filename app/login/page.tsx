@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Globe, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Compass, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -51,10 +51,20 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2 text-white font-bold text-2xl mb-2">
-              <Globe className="w-7 h-7 text-purple-400" /> TripEase
+            <Link href="/" className="inline-flex items-center gap-3 group mb-2">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
+                <Compass className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex flex-col text-left">
+                <span className="font-extrabold text-2xl tracking-tight text-white group-hover:opacity-95">
+                  TripEase
+                </span>
+                <span className="text-[11px] font-bold text-amber-400 tracking-wider uppercase -mt-1">
+                  Explore India
+                </span>
+              </div>
             </Link>
-            <p className="text-white/60 text-sm mt-1">Sign in to continue your journey</p>
+            <p className="text-white/70 text-sm mt-1">Sign in to continue your journey</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
