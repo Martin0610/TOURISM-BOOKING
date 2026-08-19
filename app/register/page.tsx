@@ -150,17 +150,17 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 py-8">
-      {/* Background — Taj Mahal / India tourism */}
+      {/* Background — Majestic Scenic Alpine Sunset (Updated for Signup) */}
       <div className="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1600" alt="bg" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-pink-900/70 to-orange-900/75" />
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600" alt="bg" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/85 via-black/60 to-purple-900/80 backdrop-blur-sm" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="bg-white/10 backdrop-blur-2xl border border-white/25 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-white/10 backdrop-blur-2xl border border-white/25 rounded-3xl p-8 shadow-2xl shadow-purple-950/60">
           <div className="text-center mb-7">
             <Link href="/" className="inline-flex items-center gap-3 group mb-2">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-500 via-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform duration-300">
                 <Compass className="w-6 h-6 text-white" />
               </div>
               <div className="flex flex-col text-left">
@@ -179,21 +179,21 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-semibold text-white mb-1.5">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3.5 top-3 w-4 h-4 text-white/70" />
+                <User className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
                 <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="John Doe" className={inputCls} />
+                  placeholder="John Doe" className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium" />
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-white mb-1.5">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3 w-4 h-4 text-white/70" />
+                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
                 <input type="email" value={form.email}
                   onChange={(e) => handleEmailChange(e.target.value)}
-                  placeholder="you@example.com" className={inputCls} />
+                  placeholder="you@example.com" className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium" />
                 {validatingEmail && (
-                  <div className="absolute right-3 top-3">
+                  <div className="absolute right-3 top-3.5">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                   </div>
                 )}
@@ -220,7 +220,7 @@ export default function RegisterPage() {
                   value={countryCode}
                   onChange={(e) => setCountryCode(e.target.value)}
                   aria-label="Country Code"
-                  className="bg-white/20 border border-white/40 text-white rounded-xl px-2.5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/25 max-w-[105px] font-semibold cursor-pointer"
+                  className="bg-white/15 border border-white/30 text-white rounded-xl px-2.5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 max-w-[105px] font-semibold cursor-pointer"
                 >
                   {COUNTRY_CODES.map((c) => (
                     <option key={c.code} value={c.code} className="bg-slate-900 text-white">
@@ -235,7 +235,7 @@ export default function RegisterPage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                     placeholder="9876543210"
-                    className="w-full bg-white/20 border border-white/40 text-white placeholder-white/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/25 font-mono tracking-wide"
+                    className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-mono tracking-wide font-medium"
                   />
                 </div>
               </div>
@@ -244,12 +244,12 @@ export default function RegisterPage() {
             <div>
               <label className="block text-sm font-semibold text-white mb-1.5">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-white/70" />
+                <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
                 <input type={showPassword ? 'text' : 'password'} value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  placeholder="••••••••" className={`${inputCls} pr-10`} />
+                  placeholder="••••••••" className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-white/60 hover:text-white transition cursor-pointer">
+                  className="absolute right-3 top-3.5 text-white/70 hover:text-white transition cursor-pointer">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -305,13 +305,13 @@ export default function RegisterPage() {
                     e.stopPropagation();
                     setPolicyModal('terms');
                   }}
-                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer inline-flex items-center gap-0.5"
+                  className="text-purple-300 hover:text-white underline font-bold cursor-pointer inline-flex items-center gap-0.5"
                 >
                   <span>Terms of Service</span>
                   {hasReadTerms ? (
                     <span className="text-emerald-400 font-black text-[11px] ml-0.5">✓</span>
                   ) : (
-                    <span className="text-[10px] ml-1 bg-cyan-400/20 border border-cyan-400/40 text-cyan-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
+                    <span className="text-[10px] ml-1 bg-purple-400/20 border border-purple-400/40 text-purple-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
                   )}
                 </button>{' '}
                 and{' '}
@@ -321,13 +321,13 @@ export default function RegisterPage() {
                     e.stopPropagation();
                     setPolicyModal('privacy');
                   }}
-                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer inline-flex items-center gap-0.5"
+                  className="text-purple-300 hover:text-white underline font-bold cursor-pointer inline-flex items-center gap-0.5"
                 >
                   <span>Privacy Policy</span>
                   {hasReadPrivacy ? (
                     <span className="text-emerald-400 font-black text-[11px] ml-0.5">✓</span>
                   ) : (
-                    <span className="text-[10px] ml-1 bg-cyan-400/20 border border-cyan-400/40 text-cyan-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
+                    <span className="text-[10px] ml-1 bg-purple-400/20 border border-purple-400/40 text-purple-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
                   )}
                 </button>.
               </label>
@@ -336,22 +336,22 @@ export default function RegisterPage() {
             {error && <div className="bg-red-500/25 border border-red-400/50 rounded-xl px-4 py-3 text-sm text-white font-medium">{error}</div>}
 
             <button type="submit" disabled={loading || !canSubmit}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/25">
+              className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 cursor-pointer">
               {loading ? 'Creating account...' : (<>Create Account <ArrowRight className="w-4 h-4" /></>)}
             </button>
             {!canSubmit && form.password.length > 0 && strength.score < 3 && (
               <p className="text-xs text-center text-orange-300 font-medium">Improve password strength to enable signup</p>
             )}
             {!canSubmit && form.password.length > 0 && strength.score >= 3 && !agreeTerms && (
-              <p className="text-xs text-center text-amber-200 font-medium">
+              <p className="text-xs text-center text-purple-200 font-medium">
                 {!hasReadTerms || !hasReadPrivacy ? 'Please read the Terms & Privacy Policy to enable agreement' : 'Please tick the box above to accept the Terms & Conditions'}
               </p>
             )}
           </form>
 
-          <p className="text-center text-sm text-white/70 mt-6">
+          <p className="text-center text-sm text-white/80 mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-purple-300 hover:text-purple-200 font-semibold">Sign in</Link>
+            <Link href="/login" className="text-purple-300 hover:text-white font-bold underline transition-colors">Sign in</Link>
           </p>
         </div>
       </div>
