@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { Compass, Shield, CreditCard, Sparkles, Phone, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
@@ -10,23 +11,44 @@ import PolicyModal, { PolicyType } from './PolicyModal';
 
 export default function Footer() {
   const { user } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribing, setSubscribing] = useState(false);
   const [policyModal, setPolicyModal] = useState<PolicyType>(null);
 
+  // Auto-fill logged-in user email
+  useEffect(() => {
+    if (user?.email && !newsletterEmail) {
+      setNewsletterEmail(user.email);
+    }
+  }, [user]);
+
   const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+
+    // If not logged in, redirect to login page and return back to this page
+    if (!user) {
+      toast('Please sign in to apply for VIP Club membership.', { icon: '🔐' });
+      const currentUrl = pathname || '/';
+      const emailQuery = newsletterEmail.trim() ? `&email=${encodeURIComponent(newsletterEmail.trim())}` : '';
+      router.push(`/login?redirect=${encodeURIComponent(currentUrl)}${emailQuery}`);
+      return;
+    }
+
+    const emailToSend = (newsletterEmail.trim() || user.email).toLowerCase();
+    if (!emailToSend || !emailToSend.includes('@')) {
       toast.error('Please enter a valid email address');
       return;
     }
+
     try {
       setSubscribing(true);
-      const res = await api.post('/api/newsletter', { email: newsletterEmail });
-      toast.success(res.data.message || 'Subscribed to VIP Club! 🎉');
-      setNewsletterEmail('');
+      const res = await api.post('/api/newsletter', { email: emailToSend });
+      toast.success(res.data.message || 'VIP Club Application Submitted! 🎉', { duration: 4000 });
+      if (!user) setNewsletterEmail('');
     } catch {
-      toast.error('Failed to subscribe. Please try again.');
+      toast.error('Failed to submit VIP application. Please try again.');
     } finally {
       setSubscribing(false);
     }
