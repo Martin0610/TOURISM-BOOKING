@@ -58,6 +58,12 @@ export async function PUT(
     }
 
     const { status } = await request.json();
+
+    // Admin can only confirm bookings, not cancel them
+    if (authUser!.role === 'ADMIN' && status === 'CANCELLED') {
+      return errorResponse('Admin cannot cancel bookings. Only users can cancel their own bookings.', 403);
+    }
+
     const updated = await prisma.booking.update({
       where: { id },
       data: { ...(status && { status }) },

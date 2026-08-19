@@ -88,15 +88,15 @@ export default function AdminBookingsPage() {
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusColors[b.status]}`}>{b.status}</span>
                     </td>
                     <td className="px-4 py-3">
-                      <select
-                        value={b.status}
-                        onChange={(e) => handleStatus(b.id, e.target.value)}
-                        className="border border-gray-200 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      >
-                        <option value="PENDING">PENDING</option>
-                        <option value="CONFIRMED">CONFIRMED</option>
-                        <option value="CANCELLED">CANCELLED</option>
-                      </select>
+                      {b.status === 'PENDING' ? (
+                        <button
+                          onClick={() => handleStatus(b.id, 'CONFIRMED')}
+                          className="bg-green-600 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-green-700 transition font-medium">
+                          Confirm
+                        </button>
+                      ) : (
+                        <span className="text-gray-400 text-xs">—</span>
+                      )}
                     </td>
                   </tr>
                 ))}
