@@ -30,7 +30,7 @@ export default function LoginPage() {
         if (user.role === 'ADMIN') {
           router.push('/admin');
         } else {
-          router.push('/packages');
+          router.push('/');
         }
       }
     } catch (err: unknown) {
