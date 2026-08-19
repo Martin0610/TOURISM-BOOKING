@@ -201,35 +201,35 @@ export default function BookingPage() {
             {/* Ticket Specs Matrix */}
             <div className="p-6 sm:p-7 space-y-6 print:p-5 print:space-y-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-xs print:grid-cols-4 print:gap-3">
-                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl">
+                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl min-w-0">
                   <span className="text-slate-500 dark:text-slate-400 block mb-1 font-semibold text-[11px] print:text-slate-600">Travel Date</span>
-                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1 text-xs print:text-black">
-                    <Calendar className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 print:hidden" />
-                    {new Date(booking.travelDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs print:text-black whitespace-nowrap">
+                    <Calendar className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 flex-shrink-0 print:hidden" />
+                    <span className="truncate">{new Date(booking.travelDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                   </span>
                 </div>
 
-                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl">
+                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl min-w-0">
                   <span className="text-slate-500 dark:text-slate-400 block mb-1 font-semibold text-[11px] print:text-slate-600">Passengers</span>
-                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1 text-xs print:text-black">
-                    <Users className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 print:hidden" />
-                    {booking.numberOfPeople} Traveler{booking.numberOfPeople > 1 ? 's' : ''}
+                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs print:text-black whitespace-nowrap">
+                    <Users className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 print:hidden" />
+                    <span className="truncate">{booking.numberOfPeople} Traveler{booking.numberOfPeople > 1 ? 's' : ''}</span>
                   </span>
                 </div>
 
-                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl">
+                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl min-w-0">
                   <span className="text-slate-500 dark:text-slate-400 block mb-1 font-semibold text-[11px] print:text-slate-600">Contact Phone</span>
-                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1 text-xs print:text-black">
-                    <Phone className="w-3.5 h-3.5 text-emerald-500 print:hidden" />
-                    {booking.phone || 'On file'}
+                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs print:text-black whitespace-nowrap">
+                    <Phone className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 print:hidden" />
+                    <span className="font-mono tracking-tight whitespace-nowrap truncate">{booking.phone || 'On file'}</span>
                   </span>
                 </div>
 
-                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl">
+                <div className="p-3 bg-purple-50/40 dark:bg-slate-800/60 rounded-2xl border border-purple-100 dark:border-slate-800 print:border print:border-slate-300 print:bg-slate-50 print:rounded-xl min-w-0">
                   <span className="text-slate-500 dark:text-slate-400 block mb-1 font-semibold text-[11px] print:text-slate-600">Transit Departure</span>
-                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1 text-xs print:text-black">
-                    <Plane className="w-3.5 h-3.5 text-amber-500 print:hidden" />
-                    {booking.departureLocation ? `${booking.departureLocation.departureCity}` : 'Self Arranged'}
+                  <span className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs print:text-black whitespace-nowrap">
+                    <Plane className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 print:hidden" />
+                    <span className="truncate">{booking.departureLocation ? `${booking.departureLocation.departureCity}` : 'Self Arranged'}</span>
                   </span>
                 </div>
               </div>
