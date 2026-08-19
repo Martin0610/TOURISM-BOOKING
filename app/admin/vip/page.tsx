@@ -191,18 +191,20 @@ export default function AdminVipPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 text-center">
+          <div className="flex flex-wrap lg:flex-nowrap items-stretch gap-3">
+            <div className="flex-1 min-w-[115px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-3.5 py-3 text-center">
               <div className="text-2xl font-black text-amber-300">{pendingList.length}</div>
-              <div className="text-[11px] text-orange-200 font-bold uppercase mt-0.5">Pending Review</div>
+              <div className="text-[10px] sm:text-[11px] text-orange-200 font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">Pending Review</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 text-center">
+            <div className="flex-1 min-w-[115px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-3.5 py-3 text-center">
               <div className="text-2xl font-black text-emerald-300">{approvedList.length}</div>
-              <div className="text-[11px] text-orange-200 font-bold uppercase mt-0.5">Approved VIPs</div>
+              <div className="text-[10px] sm:text-[11px] text-orange-200 font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">Approved VIPs</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 text-center">
-              <div className="text-2xl font-black text-white">₹{totalApprovedSpend.toLocaleString()}</div>
-              <div className="text-[11px] text-orange-200 font-bold uppercase mt-0.5">VIP Spending</div>
+            <div className="flex-1 min-w-[145px] sm:min-w-[160px] bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 text-center">
+              <div className="text-lg sm:text-xl md:text-2xl font-black text-white whitespace-nowrap">
+                ₹{totalApprovedSpend.toLocaleString()}
+              </div>
+              <div className="text-[10px] sm:text-[11px] text-orange-200 font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">VIP Spending</div>
             </div>
           </div>
         </div>

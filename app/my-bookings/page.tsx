@@ -163,7 +163,7 @@ export default function MyBookingsPage() {
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
         {/* Top Header Banner */}
-        <section className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white py-12 px-4 shadow-md">
+        <section className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white pt-28 pb-14 px-4 shadow-md">
           <div className="max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-semibold text-cyan-300 mb-3">
               <Luggage className="w-3.5 h-3.5" />

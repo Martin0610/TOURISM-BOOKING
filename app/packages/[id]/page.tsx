@@ -253,7 +253,7 @@ export default function PackageDetailPage() {
       <WhatsAppButton />
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto px-4 pt-28 pb-16">
           {/* Breadcrumb / Back Link */}
           <div className="flex items-center justify-between mb-6">
             <Link

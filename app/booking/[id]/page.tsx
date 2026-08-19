@@ -137,7 +137,7 @@ export default function BookingPage() {
       <Navbar />
       <WhatsAppButton />
 
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-10 px-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 pb-16 px-4">
         <div className="max-w-2xl mx-auto">
           {/* Breadcrumb back */}
           <div className="flex items-center justify-between mb-6">
