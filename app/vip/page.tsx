@@ -103,23 +103,21 @@ export default function VipClubPage() {
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-purple-500 selection:text-white transition-colors duration-300">
         
-        {/* Top Hero Banner */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden border-b border-purple-100/80 dark:border-slate-800 bg-gradient-to-b from-purple-100/70 via-purple-50/40 to-slate-50 dark:from-purple-950/30 dark:via-slate-950 dark:to-slate-950">
-          <div className="absolute inset-0 z-0 opacity-30">
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-purple-400 via-indigo-500 to-purple-600 dark:from-purple-900 dark:via-indigo-900 dark:to-purple-950 rounded-full blur-[140px] pointer-events-none" />
-          </div>
+        {/* Top Hero Banner - Matches /packages page background */}
+        <section className="relative bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white pt-32 pb-16 px-4 overflow-hidden shadow-md border-b border-slate-800">
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
 
-          <div className="max-w-5xl mx-auto relative z-10 text-center space-y-5">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-amber-500/15 border border-amber-400/50 px-4 py-1.5 rounded-full text-xs font-black text-amber-600 dark:text-amber-300 uppercase tracking-widest shadow-lg shadow-amber-500/10">
-              <Crown className="w-4 h-4 text-amber-500 fill-amber-500" />
+          <div className="max-w-5xl mx-auto relative z-10 text-center space-y-4">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold text-amber-300 shadow-lg shadow-black/20">
+              <Crown className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span>TripEase Elite VIP Sanctuary</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
               Redefining Luxury Travel Across India
             </h1>
 
-            <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-light">
               Reserved for our most valued patrons. Unlock unlisted flash rates, dedicated 24/7 personal concierge support, companion passes, and curated bespoke itineraries.
             </p>
           </div>
