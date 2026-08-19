@@ -265,8 +265,38 @@ export default function VipClubPage() {
                 </div>
               )}
             </div>
+          ) : user?.role === 'ADMIN' ? (
+            /* Admin Access Mode - No self-submission form, direct management shortcut */
+            <div className="bg-white dark:bg-slate-900 border border-purple-200/80 dark:border-purple-800/60 rounded-3xl p-7 sm:p-9 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 via-purple-700 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 flex-shrink-0">
+                  <Crown className="w-7 h-7 text-amber-300 fill-amber-300" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="bg-purple-100 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-800/60 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      Administrator Privileges
+                    </span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                    VIP Club & Deals Management
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-xl">
+                    As an administrator, you have full control over VIP applications, member authorizations, and broadcast promo campaigns in the Admin Panel.
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/admin/vip"
+                className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg shadow-purple-600/30 transition flex items-center justify-center gap-2 flex-shrink-0"
+              >
+                <Sparkles className="w-4 h-4 fill-white" />
+                <span>Open VIP Admin Hub</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           ) : (
-            /* Logged In but Not VIP yet - Progress & Application Form */
+            /* Logged In Regular User - Progress & Application Form */
             <div className="bg-white dark:bg-slate-900 border border-purple-100 dark:border-slate-800 rounded-3xl p-7 sm:p-9 shadow-xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>

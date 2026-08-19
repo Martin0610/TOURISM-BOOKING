@@ -53,7 +53,7 @@ const packages = [
     inclusions: 'Houseboat stay (1 night) + resort (4 nights)\nBreakfast and dinner daily\nAll transfers\nLocal sightseeing\nKathakali show tickets',
     exclusions: 'Travel to Kerala\nLunch\nPersonal expenses\nAdventure activity charges\nTravel insurance',
     cancellationPolicy: 'Free cancellation up to 10 days before travel. 40% refund for 5–10 days. No refund within 5 days.',
-    imageUrl: 'https://images.unsplash.com/photo-1593693411515-c20261bcad6e?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800',
   },
   {
     name: 'Rajasthan Royal Heritage Tour',
