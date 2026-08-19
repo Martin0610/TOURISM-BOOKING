@@ -16,6 +16,7 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { Package } from '@/lib/types';
 
 const VIBE_OPTIONS = [
   { value: '', label: 'All Experiences', icon: Compass, color: 'text-blue-500' },
@@ -47,8 +48,8 @@ const featuredDestinations = [
     id: 'goa',
     name: 'Goa Beach Paradise',
     state: 'Goa',
-    price: 15500,
-    originalPrice: 19000,
+    price: 17500,
+    originalPrice: 21000,
     duration: '5D / 4N',
     category: 'Beach',
     rating: 4.8,
@@ -142,6 +143,30 @@ export default function Home() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const [dbPackages, setDbPackages] = useState<Package[]>([]);
+
+  useEffect(() => {
+    api.get('/api/packages')
+      .then((res) => {
+        if (res.data?.data && Array.isArray(res.data.data)) {
+          setDbPackages(res.data.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const getPackageUrl = (pkgNameOrId: string) => {
+    const found = dbPackages.find(
+      (p) =>
+        p.id === pkgNameOrId ||
+        p.name.toLowerCase().includes(pkgNameOrId.toLowerCase()) ||
+        pkgNameOrId.toLowerCase().includes(p.name.toLowerCase()) ||
+        p.destination.toLowerCase().includes(pkgNameOrId.toLowerCase())
+    );
+    const targetId = found ? found.id : pkgNameOrId;
+    return user ? `/packages/${targetId}` : `/login?redirect=/packages/${targetId}`;
+  };
 
   useEffect(() => {
     api.get('/api/coupons/available')
@@ -479,7 +504,7 @@ export default function Home() {
                 className="group rounded-3xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col"
               >
                 {/* Image Cover */}
-                <div className="relative h-64 overflow-hidden">
+                <Link href={getPackageUrl(pkg.name)} className="relative h-64 overflow-hidden block">
                   <img
                     src={pkg.image}
                     alt={pkg.name}
@@ -504,14 +529,16 @@ export default function Home() {
                       <Clock className="w-3 h-3 text-cyan-300" /> {pkg.duration}
                     </span>
                   </div>
-                </div>
+                </Link>
 
                 {/* Body Details */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-3 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
-                      {pkg.name}
-                    </h3>
+                    <Link href={getPackageUrl(pkg.name)}>
+                      <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-3 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
+                        {pkg.name}
+                      </h3>
+                    </Link>
 
                     {/* Highlights Checklist */}
                     <div className="space-y-1.5 mb-6">
@@ -541,8 +568,8 @@ export default function Home() {
                     </div>
 
                     <Link
-                      href="/packages"
-                      className="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all"
+                      href={getPackageUrl(pkg.name)}
+                      className="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all cursor-pointer"
                     >
                       <span>Explore</span>
                       <ArrowRight className="w-3.5 h-3.5" />

@@ -15,7 +15,7 @@ const packages = [
     state: 'Goa',
     shortDescription: 'Sun, sand and seafood on the golden beaches of Goa with vibrant nightlife.',
     description: 'Experience the stunning beaches, vibrant nightlife, and Portuguese heritage of Goa. From the buzzing shores of Baga and Calangute to the peaceful Palolem in the south, this 5-day package covers the best of what Goa has to offer. Enjoy water sports, explore historic churches, and savour fresh seafood.',
-    pricePerPerson: 15500,
+    pricePerPerson: 17500,
     durationDays: 5,
     durationNights: 4,
     category: 'Beach',
