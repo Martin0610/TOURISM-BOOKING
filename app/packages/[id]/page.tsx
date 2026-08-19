@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import Footer from '@/components/Footer';
 
 interface Review {
   id: string;
@@ -922,6 +923,7 @@ export default function PackageDetailPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

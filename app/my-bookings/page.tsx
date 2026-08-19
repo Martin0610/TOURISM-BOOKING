@@ -14,6 +14,7 @@ import {
   AlertCircle, ChevronRight, MessageSquare
 } from 'lucide-react';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import Footer from '@/components/Footer';
 
 function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packageId: string; onDone: () => void }) {
   const [show, setShow] = useState(false);
@@ -323,6 +324,7 @@ export default function MyBookingsPage() {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Heart, MapPin, Clock, Trash2, ArrowRight, Sparkles, Globe, ChevronRight } from 'lucide-react';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import Footer from '@/components/Footer';
 
 interface WishlistItem {
   id: string;
@@ -179,6 +180,7 @@ export default function WishlistPage() {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

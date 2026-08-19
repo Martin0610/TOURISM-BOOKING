@@ -15,6 +15,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import Footer from '@/components/Footer';
 
 const SORT_OPTIONS = [
   { value: 'featured', label: 'Featured & Recommended', icon: Sparkles, color: 'text-amber-500' },
@@ -649,6 +650,7 @@ function PackagesContent() {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 }
