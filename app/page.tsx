@@ -196,69 +196,69 @@ export default function Home() {
       <Navbar />
       <WhatsAppButton />
 
-      {/* Hero Section - Luxury Purple & White Theme */}
-      <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 px-4 overflow-hidden bg-gradient-to-b from-[#12072B] via-[#1A0B3B] to-[#0D041A]">
-        {/* Background Visual & Ambient Purple Glows */}
+      {/* Hero Section - Vibrant Watery & Oceanic Aqua Theme */}
+      <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 px-4 overflow-hidden bg-gradient-to-b from-[#021B2B] via-[#06334F] to-[#02131F]">
+        {/* Background Visual & Ambient Watery Glows */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1920&q=90"
-            alt="Incredible India Tourism - Iconic Heritage"
+            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=90"
+            alt="Incredible India - Tropical Ocean & Azure Waters"
             className="w-full h-full object-cover object-center brightness-[0.75] scale-105 transition-transform duration-1000"
           />
-          {/* Deep Royal Purple & Obsidian Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#12072B]/85 via-[#1A0B3B]/70 to-[#0D041A]/95 backdrop-blur-[0.5px]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-950/70 via-transparent to-indigo-950/70" />
+          {/* Deep Crystal Ocean & Azure Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#021B2B]/85 via-[#06334F]/70 to-[#02131F]/95 backdrop-blur-[0.5px]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-950/70 via-transparent to-teal-950/70" />
           
-          {/* Glowing Purple, Fuchsia & Pure Light Spotlights */}
-          <div className="absolute -top-32 left-1/4 w-[32rem] h-[32rem] bg-purple-500/25 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute top-1/3 right-10 w-[30rem] h-[30rem] bg-fuchsia-500/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-10 left-10 w-[28rem] h-[28rem] bg-violet-400/20 rounded-full blur-[120px] pointer-events-none" />
+          {/* Glowing Aqua, Cyan & Tropical Sea Light Spotlights */}
+          <div className="absolute -top-32 left-1/4 w-[32rem] h-[32rem] bg-cyan-400/25 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-1/3 right-10 w-[30rem] h-[30rem] bg-teal-400/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-10 left-10 w-[28rem] h-[28rem] bg-sky-400/25 rounded-full blur-[120px] pointer-events-none" />
         </div>
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center text-white pt-4">
           {/* Top Pill Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 dark:bg-purple-950/60 backdrop-blur-xl border border-purple-300/30 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium mb-6 shadow-lg shadow-purple-950/40 animate-float">
-            <span className="flex h-2 w-2 rounded-full bg-fuchsia-400 animate-ping" />
-            <Sparkles className="w-4 h-4 text-purple-300" />
-            <span className="text-purple-100 font-semibold">10 Handpicked Indian Destinations</span>
+          <div className="inline-flex items-center gap-2 bg-white/10 dark:bg-cyan-950/60 backdrop-blur-xl border border-cyan-300/35 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium mb-6 shadow-lg shadow-cyan-950/40 animate-float">
+            <span className="flex h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+            <Waves className="w-4 h-4 text-cyan-300" />
+            <span className="text-cyan-100 font-semibold">10 Handpicked Indian Destinations</span>
             <span className="text-white/40">·</span>
-            <span className="text-fuchsia-200 font-medium hidden sm:inline">Special 4+1 Free Offer</span>
+            <span className="text-emerald-300 font-medium hidden sm:inline">Special 4+1 Free Offer</span>
           </div>
 
-          {/* Main Headline - Purple & White Luxury */}
+          {/* Main Headline - Vibrant Oceanic Aqua */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.12] mb-6 text-white">
             Discover The Soul Of India,<br />
-            <span className="bg-gradient-to-r from-white via-purple-200 to-fuchsia-300 bg-clip-text text-transparent drop-shadow-sm">
+            <span className="bg-gradient-to-r from-cyan-300 via-teal-200 to-sky-300 bg-clip-text text-transparent drop-shadow-sm">
               One Journey At A Time
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl text-purple-100/90 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+          <p className="text-base sm:text-lg md:text-xl text-cyan-100/90 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
             Premium curated tour packages with handpicked accommodations, flexible departures from any city, and transparent pricing.
           </p>
 
-          {/* Dynamic Interactive Trip Planner Search Widget - Purple & White Glass */}
-          <div className="relative z-30 max-w-3xl mx-auto bg-white/95 dark:bg-purple-950/90 backdrop-blur-2xl p-3.5 sm:p-4 rounded-3xl shadow-2xl shadow-purple-950/60 border border-white/50 dark:border-purple-700/50 text-slate-900 dark:text-white mb-10">
+          {/* Dynamic Interactive Trip Planner Search Widget - Aqua Glass */}
+          <div className="relative z-30 max-w-3xl mx-auto bg-white/95 dark:bg-slate-950/90 backdrop-blur-2xl p-3.5 sm:p-4 rounded-3xl shadow-2xl shadow-cyan-950/60 border border-white/60 dark:border-cyan-700/50 text-slate-900 dark:text-white mb-10">
             <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
               {/* Destination Input */}
-              <div className="sm:col-span-5 text-left bg-purple-50/60 dark:bg-purple-900/40 p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 focus-within:ring-2 focus-within:ring-purple-500 transition">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300 mb-1 flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Where to?
+              <div className="sm:col-span-5 text-left bg-cyan-50/70 dark:bg-cyan-950/40 p-3 rounded-2xl border border-cyan-100 dark:border-cyan-800/60 focus-within:ring-2 focus-within:ring-cyan-500 transition">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-cyan-700 dark:text-cyan-300 mb-1 flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" /> Where to?
                 </label>
                 <input
                   type="text"
                   value={searchDestination}
                   onChange={(e) => setSearchDestination(e.target.value)}
                   placeholder="Goa, Kashmir, Manali, Kerala..."
-                  className="w-full bg-transparent text-sm font-semibold text-slate-800 dark:text-white placeholder-purple-400/70 focus:outline-none"
+                  className="w-full bg-transparent text-sm font-semibold text-slate-800 dark:text-white placeholder-cyan-500/70 focus:outline-none"
                 />
               </div>
 
               {/* Category Picker with Custom Icon Dropdown */}
-              <div ref={vibeRef} className="sm:col-span-4 text-left bg-purple-50/60 dark:bg-purple-900/40 p-3 rounded-2xl border border-purple-100 dark:border-purple-800/60 transition relative z-40">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-700 dark:text-purple-300 mb-1 flex items-center gap-1.5">
-                  <Compass className="w-3.5 h-3.5 text-fuchsia-600 dark:text-fuchsia-400" /> Experience Vibe
+              <div ref={vibeRef} className="sm:col-span-4 text-left bg-cyan-50/70 dark:bg-cyan-950/40 p-3 rounded-2xl border border-cyan-100 dark:border-cyan-800/60 transition relative z-40">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-cyan-700 dark:text-cyan-300 mb-1 flex items-center gap-1.5">
+                  <Compass className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" /> Experience Vibe
                 </label>
                 <button
                   type="button"
@@ -277,12 +277,12 @@ export default function Home() {
                       );
                     })()}
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${vibeDropdownOpen ? 'rotate-180 text-purple-500' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${vibeDropdownOpen ? 'rotate-180 text-cyan-500' : ''}`} />
                 </button>
 
                 {/* Dropdown Menu */}
                 {vibeDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-purple-950 rounded-2xl shadow-2xl border border-purple-200 dark:border-purple-700 py-1.5 z-50 max-h-60 overflow-y-auto no-scrollbar animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-cyan-200 dark:border-cyan-700 py-1.5 z-50 max-h-60 overflow-y-auto no-scrollbar animate-in fade-in slide-in-from-top-2 duration-150">
                     {VIBE_OPTIONS.map((opt) => {
                       const Icon = opt.icon;
                       const isSelected = selectedCategory === opt.value;
@@ -296,15 +296,15 @@ export default function Home() {
                           }}
                           className={`w-full px-3.5 py-2 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
                             isSelected
-                              ? 'bg-purple-50 dark:bg-purple-900/60 text-purple-700 dark:text-fuchsia-300 font-bold'
-                              : 'text-slate-700 dark:text-slate-200 hover:bg-purple-50/50 dark:hover:bg-purple-900/30'
+                              ? 'bg-cyan-50 dark:bg-cyan-900/60 text-cyan-700 dark:text-cyan-300 font-bold'
+                              : 'text-slate-700 dark:text-slate-200 hover:bg-cyan-50/50 dark:hover:bg-cyan-900/30'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
                             <Icon className={`w-4 h-4 ${opt.color}`} />
                             <span>{opt.label}</span>
                           </div>
-                          {isSelected && <Check className="w-4 h-4 text-purple-600 dark:text-fuchsia-400" />}
+                          {isSelected && <Check className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />}
                         </button>
                       );
                     })}
@@ -312,11 +312,11 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Search Button - Purple & Fuchsia Gradient */}
+              {/* Search Button - Vibrant Watery Gradient */}
               <div className="sm:col-span-3">
                 <button
                   type="submit"
-                  className="w-full h-full min-h-[52px] bg-gradient-to-r from-purple-600 via-indigo-600 to-fuchsia-600 hover:from-purple-500 hover:via-indigo-500 hover:to-fuchsia-500 text-white font-bold rounded-2xl shadow-lg shadow-purple-600/35 flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                  className="w-full h-full min-h-[52px] bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-600 hover:from-cyan-400 hover:via-teal-400 hover:to-blue-500 text-white font-extrabold rounded-2xl shadow-lg shadow-cyan-500/35 flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   <Search className="w-4 h-4" />
                   <span>Find Escapes</span>
@@ -325,47 +325,47 @@ export default function Home() {
             </form>
           </div>
 
-          {/* Quick Floating Trust Stats - Purple & White Glass */}
+          {/* Quick Floating Trust Stats - Watery Aqua Glass */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto relative z-10">
-            <div className="bg-white/10 dark:bg-purple-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-purple-300/25 text-center">
-              <div className="text-2xl font-black text-white">4.9 ★</div>
-              <div className="text-xs text-purple-200 mt-0.5 font-medium">2,500+ Happy Explorers</div>
+            <div className="bg-white/10 dark:bg-slate-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-cyan-300/25 text-center">
+              <div className="text-2xl font-black text-cyan-300">4.9 ★</div>
+              <div className="text-xs text-cyan-100 mt-0.5 font-medium">2,500+ Happy Explorers</div>
             </div>
-            <div className="bg-white/10 dark:bg-purple-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-purple-300/25 text-center">
-              <div className="text-2xl font-black text-fuchsia-300">4+1 FREE</div>
-              <div className="text-xs text-purple-200 mt-0.5 font-medium">Group Ticket Offer</div>
+            <div className="bg-white/10 dark:bg-slate-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-cyan-300/25 text-center">
+              <div className="text-2xl font-black text-teal-300">4+1 FREE</div>
+              <div className="text-xs text-cyan-100 mt-0.5 font-medium">Group Ticket Offer</div>
             </div>
-            <div className="bg-white/10 dark:bg-purple-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-purple-300/25 text-center">
-              <div className="text-2xl font-black text-purple-200">20% OFF</div>
-              <div className="text-xs text-purple-200 mt-0.5 font-medium">Groups of 3+ Pax</div>
+            <div className="bg-white/10 dark:bg-slate-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-cyan-300/25 text-center">
+              <div className="text-2xl font-black text-sky-200">20% OFF</div>
+              <div className="text-xs text-cyan-100 mt-0.5 font-medium">Groups of 3+ Pax</div>
             </div>
-            <div className="bg-white/10 dark:bg-purple-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-purple-300/25 text-center">
+            <div className="bg-white/10 dark:bg-slate-950/60 backdrop-blur-md rounded-2xl p-3.5 border border-cyan-300/25 text-center">
               <div className="text-2xl font-black text-white">₹0 Fee</div>
-              <div className="text-xs text-purple-200 mt-0.5 font-medium">Instant E-Confirmation</div>
+              <div className="text-xs text-cyan-100 mt-0.5 font-medium">Instant E-Confirmation</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Promotional Offers & Live Coupon Display - Purple & Violet Gradient */}
-      <section className="py-3.5 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 text-white shadow-inner border-y border-purple-800/40">
+      {/* Promotional Offers & Live Coupon Display - Ocean Gradient */}
+      <section className="py-3.5 bg-gradient-to-r from-cyan-900 via-teal-900 to-blue-950 text-white shadow-inner border-y border-cyan-800/40">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-center md:text-left">
-            <span className="p-1.5 bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 shadow-sm">
+            <span className="p-1.5 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-lg font-bold text-xs inline-flex items-center gap-1.5 shadow-sm">
               <Gift className="w-3.5 h-3.5" /> COUPONS
             </span>
-            <span className="text-sm font-semibold text-purple-100">Check out these amazing coupons while booking:</span>
+            <span className="text-sm font-semibold text-cyan-100">Check out these amazing coupons while booking:</span>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {coupons.map((coupon) => (
               <div
                 key={coupon.code}
-                className="flex items-center gap-2 bg-white/10 border border-purple-300/30 rounded-xl px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm"
+                className="flex items-center gap-2 bg-white/10 border border-cyan-300/30 rounded-xl px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm"
               >
-                <Tag className="w-3.5 h-3.5 text-fuchsia-300" />
+                <Tag className="w-3.5 h-3.5 text-cyan-300" />
                 <span className="tracking-wide text-white font-black">{coupon.code}</span>
-                <span className="text-purple-200 text-[11px] font-sans font-semibold">({coupon.discount})</span>
+                <span className="text-cyan-200 text-[11px] font-sans font-semibold">({coupon.discount})</span>
               </div>
             ))}
           </div>
