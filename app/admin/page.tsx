@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import AdminLayout from '@/components/AdminLayout';
 import {
-  Package, Users, ShoppingBag, DollarSign,
+  Package, Users, ShoppingBag, IndianRupee,
   TrendingUp, CheckCircle, Clock, XCircle, MapPin
 } from 'lucide-react';
 import {
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
     { label: 'Total Packages', value: stats.totalPackages, icon: Package, color: 'bg-purple-600', change: 'Active listings' },
     { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'bg-emerald-500', change: 'Registered' },
     { label: 'Total Bookings', value: stats.totalBookings, icon: ShoppingBag, color: 'bg-indigo-600', change: `${stats.confirmedBookings} confirmed` },
-    { label: 'Total Revenue', value: `₹${stats.totalRevenue.toLocaleString('en-IN')}`, icon: DollarSign, color: 'bg-orange-500', change: 'From payments' },
+    { label: 'Total Revenue', value: `₹${stats.totalRevenue.toLocaleString('en-IN')}`, icon: IndianRupee, color: 'bg-orange-500', change: 'From payments' },
   ];
 
   return (

@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { 
   Sparkles, Users, Mail, Send, Trash2, Tag, Calendar, 
   Copy, Check, Megaphone, ShieldCheck, Search, BellRing, 
-  CheckCircle2, XCircle, Clock, DollarSign, Plane, AlertTriangle, 
+  CheckCircle2, XCircle, Clock, IndianRupee, Plane, AlertTriangle, 
   ChevronRight, Phone, RefreshCw, UserCheck, ShieldAlert
 } from 'lucide-react';
 

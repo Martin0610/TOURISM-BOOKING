@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import AdminLayout from '@/components/AdminLayout';
-import { Search, CheckCircle, Clock, XCircle, DollarSign } from 'lucide-react';
+import { Search, CheckCircle, Clock, XCircle, IndianRupee } from 'lucide-react';
 
 interface AdminPayment {
   id: string;
@@ -70,16 +70,16 @@ export default function AdminPaymentsPage() {
         {/* Summary */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Total Revenue', value: `₹${totalRevenue.toLocaleString('en-IN')}`, color: 'text-blue-600', icon: DollarSign },
+            { label: 'Total Revenue', value: `₹${totalRevenue.toLocaleString('en-IN')}`, color: 'text-purple-600 dark:text-purple-400', icon: IndianRupee },
             { label: 'Successful', value: successCount, color: 'text-green-600', icon: CheckCircle },
             { label: 'Pending', value: pendingCount, color: 'text-yellow-600', icon: Clock },
-            { label: 'Total Transactions', value: payments.length, color: 'text-gray-800', icon: DollarSign },
+            { label: 'Total Transactions', value: payments.length, color: 'text-gray-800 dark:text-white', icon: IndianRupee },
           ].map(({ label, value, color, icon: Icon }) => (
-            <div key={label} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center gap-3">
-              <Icon className={`w-8 h-8 ${color} opacity-70`} />
+            <div key={label} className="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3">
+              <Icon className={`w-8 h-8 ${color} opacity-80`} />
               <div>
                 <p className={`text-xl font-bold ${color}`}>{value}</p>
-                <p className="text-xs text-gray-500">{label}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
               </div>
             </div>
           ))}
@@ -182,8 +182,8 @@ export default function AdminPaymentsPage() {
                 </div>
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-gray-400 py-16">
-                <DollarSign className="w-10 h-10 mb-3 opacity-30" />
+              <div className="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 py-16">
+                <IndianRupee className="w-10 h-10 mb-3 opacity-30 text-purple-600 dark:text-purple-400" />
                 <p className="text-sm">Select a payment to view details</p>
               </div>
             )}
