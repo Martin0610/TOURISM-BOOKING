@@ -102,7 +102,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <span className="bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 text-xs font-semibold px-2.5 py-1 rounded-full">ADMIN</span>
-            <span className="text-sm text-orange-700 dark:text-orange-300 hidden sm:block font-medium">{user?.name}</span>
           </div>
         </header>
 
