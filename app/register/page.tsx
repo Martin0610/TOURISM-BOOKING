@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Compass, Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import PolicyModal, { PolicyType } from '@/components/PolicyModal';
 
 const getPasswordStrength = (password: string) => {
   let score = 0;
@@ -31,9 +32,11 @@ export default function RegisterPage() {
   const [emailSuggestion, setEmailSuggestion] = useState('');
   const [emailWarning, setEmailWarning] = useState('');
   const [validatingEmail, setValidatingEmail] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [policyModal, setPolicyModal] = useState<PolicyType>(null);
 
   const strength = getPasswordStrength(form.password);
-  const canSubmit = form.name && form.email && form.password && strength.score >= 3;
+  const canSubmit = form.name && form.email && form.password && strength.score >= 3 && agreeTerms;
 
   // Email validation with debounce
   const validateEmail = async (email: string) => {
@@ -89,6 +92,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (strength.score < 3) { setError('Please choose a stronger password before signing up.'); return; }
+    if (!agreeTerms) { setError('Please read and tick the box to agree to the Terms of Service & Privacy Policy.'); return; }
     setError('');
     setLoading(true);
     try {
@@ -170,7 +174,7 @@ export default function RegisterPage() {
                   <button
                     type="button"
                     onClick={applySuggestion}
-                    className="text-xs text-yellow-300 hover:text-yellow-100 font-semibold underline ml-2"
+                    className="text-xs text-yellow-300 hover:text-yellow-100 font-semibold underline ml-2 cursor-pointer"
                   >
                     Use this
                   </button>
@@ -195,7 +199,7 @@ export default function RegisterPage() {
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   placeholder="••••••••" className={`${inputCls} pr-10`} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-white/60 hover:text-white transition">
+                  className="absolute right-3 top-3 text-white/60 hover:text-white transition cursor-pointer">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -213,14 +217,49 @@ export default function RegisterPage() {
               )}
             </div>
 
+            {/* Terms & Conditions Agreement Checkbox */}
+            <div className="flex items-start gap-2.5 pt-1">
+              <input
+                type="checkbox"
+                id="agreeTerms"
+                checked={agreeTerms}
+                onChange={(e) => {
+                  setAgreeTerms(e.target.checked);
+                  if (e.target.checked && error.includes('Terms')) setError('');
+                }}
+                className="mt-0.5 w-4 h-4 rounded border-white/40 bg-white/20 text-purple-600 focus:ring-purple-400 focus:ring-offset-0 cursor-pointer accent-purple-500"
+              />
+              <label htmlFor="agreeTerms" className="text-xs text-white/90 leading-relaxed cursor-pointer select-none">
+                I have read and agree to the{' '}
+                <button
+                  type="button"
+                  onClick={() => setPolicyModal('terms')}
+                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer"
+                >
+                  Terms of Service
+                </button>{' '}
+                and{' '}
+                <button
+                  type="button"
+                  onClick={() => setPolicyModal('privacy')}
+                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer"
+                >
+                  Privacy Policy
+                </button>.
+              </label>
+            </div>
+
             {error && <div className="bg-red-500/25 border border-red-400/50 rounded-xl px-4 py-3 text-sm text-white font-medium">{error}</div>}
 
             <button type="submit" disabled={loading || !canSubmit}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-purple-500/25">
               {loading ? 'Creating account...' : (<>Create Account <ArrowRight className="w-4 h-4" /></>)}
             </button>
             {!canSubmit && form.password.length > 0 && strength.score < 3 && (
               <p className="text-xs text-center text-orange-300 font-medium">Improve password strength to enable signup</p>
+            )}
+            {!canSubmit && form.password.length > 0 && strength.score >= 3 && !agreeTerms && (
+              <p className="text-xs text-center text-amber-200 font-medium">Please tick the box above to accept the Terms & Conditions</p>
             )}
           </form>
 
@@ -230,6 +269,9 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
+
+      {/* Interactive Read & Exit Policy Modal */}
+      <PolicyModal type={policyModal} onClose={() => setPolicyModal(null)} />
     </div>
   );
 }

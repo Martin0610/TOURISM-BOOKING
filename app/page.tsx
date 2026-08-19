@@ -17,6 +17,7 @@ import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { Package } from '@/lib/types';
+import PolicyModal, { PolicyType } from '@/components/PolicyModal';
 
 const VIBE_OPTIONS = [
   { value: '', label: 'All Experiences', icon: Compass, color: 'text-blue-500' },
@@ -125,6 +126,7 @@ export default function Home() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [policyModal, setPolicyModal] = useState<PolicyType>(null);
   
   // Promo Coupons
   const [coupons, setCoupons] = useState([
@@ -990,16 +992,37 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div className="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 sm:pr-40 pr-0">
             <p>© 2026 TripEase Holidays Pvt. Ltd. All rights reserved.</p>
-            <div className="flex gap-6">
-              <Link href="/packages" className="hover:text-slate-400 transition">Terms of Service</Link>
-              <Link href="/packages" className="hover:text-slate-400 transition">Privacy Policy</Link>
-              <Link href="/packages" className="hover:text-slate-400 transition">Cancellation Guarantee</Link>
+            <div className="flex flex-wrap items-center gap-6">
+              <button 
+                type="button" 
+                onClick={() => setPolicyModal('terms')} 
+                className="hover:text-slate-300 transition cursor-pointer underline-offset-4 hover:underline"
+              >
+                Terms of Service
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setPolicyModal('privacy')} 
+                className="hover:text-slate-300 transition cursor-pointer underline-offset-4 hover:underline"
+              >
+                Privacy Policy
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setPolicyModal('cancellation')} 
+                className="hover:text-slate-300 transition cursor-pointer underline-offset-4 hover:underline"
+              >
+                Cancellation Guarantee
+              </button>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Interactive Read & Exit Policy Modal Overlay */}
+      <PolicyModal type={policyModal} onClose={() => setPolicyModal(null)} />
     </>
   );
 }
