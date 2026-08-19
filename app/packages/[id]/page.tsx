@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
@@ -9,9 +9,9 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { 
   MapPin, Clock, Users, Calendar, ArrowLeft, Hotel, Utensils, 
-  CheckCircle2, XCircle, Star, Heart, Tag, Plane, Train, Bus, 
+  CheckCircle2, XCircle, Star, Heart, Tag, Plane, Train, Bus, Car, 
   Globe, PartyPopper, Phone, Copy, Sparkles, ShieldCheck, 
-  ChevronRight, MessageCircle, AlertCircle, Check, Gift
+  ChevronRight, ChevronDown, MessageCircle, AlertCircle, Check, Gift
 } from 'lucide-react';
 import Link from 'next/link';
 import WhatsAppButton from '@/components/WhatsAppButton';
@@ -54,6 +54,26 @@ export default function PackageDetailPage() {
   });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [formError, setFormError] = useState('');
+
+  // Custom Dropdowns State & Refs (Project-handled custom select)
+  const [departureDropdownOpen, setDepartureDropdownOpen] = useState(false);
+  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
+  const departureRef = useRef<HTMLDivElement>(null);
+  const countryRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (departureRef.current && !departureRef.current.contains(event.target as Node)) {
+        setDepartureDropdownOpen(false);
+      }
+      if (countryRef.current && !countryRef.current.contains(event.target as Node)) {
+        setCountryDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   // Auto-fill phone & country code from logged-in user profile
   useEffect(() => {
@@ -202,6 +222,13 @@ export default function PackageDetailPage() {
     if (mode === 'FLIGHT') return 'Flight';
     if (mode === 'TRAIN') return 'Train';
     return 'AC Bus';
+  };
+
+  const getTransportIcon = (mode?: string) => {
+    if (mode === 'FLIGHT') return <Plane className="w-4 h-4 text-sky-500 flex-shrink-0" />;
+    if (mode === 'TRAIN') return <Train className="w-4 h-4 text-emerald-500 flex-shrink-0" />;
+    if (mode === 'BUS') return <Bus className="w-4 h-4 text-amber-500 flex-shrink-0" />;
+    return <Car className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />;
   };
 
   const handleBook = async (e: React.FormEvent) => {
@@ -747,11 +774,11 @@ export default function PackageDetailPage() {
                       )}
                     </div>
 
-                    {/* Phone Number with Country Code Dropdown */}
+                    {/* Phone Number with Custom Project-Handled Country Code Dropdown */}
                     <div>
                       <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
                         <span className="flex items-center gap-1.5">
-                          <Phone className="w-3.5 h-3.5 text-rose-500" /> Mobile Number
+                          <Phone className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Mobile Number
                         </span>
                         {user?.phone && (
                           <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1">
@@ -760,18 +787,64 @@ export default function PackageDetailPage() {
                         )}
                       </label>
                       <div className="flex gap-2">
-                        <select
-                          value={form.countryCode}
-                          onChange={(e) => setForm({ ...form, countryCode: e.target.value })}
-                          aria-label="Country Code"
-                          className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-2.5 text-xs text-slate-800 dark:text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[105px] cursor-pointer"
-                        >
-                          {COUNTRY_CODES.map((c) => (
-                            <option key={c.code} value={c.code} className="bg-slate-900 text-white">
-                              {c.flag} {c.code}
-                            </option>
-                          ))}
-                        </select>
+                        {/* Custom Country Code Dropdown */}
+                        <div className="relative" ref={countryRef}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCountryDropdownOpen(!countryDropdownOpen);
+                              setDepartureDropdownOpen(false);
+                            }}
+                            className={`h-[42px] bg-slate-50 dark:bg-slate-800/80 border rounded-xl px-2.5 text-xs text-slate-800 dark:text-white font-bold flex items-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm min-w-[95px] justify-between ${
+                              countryDropdownOpen
+                                ? 'border-purple-500 ring-2 ring-purple-500/20 bg-white dark:bg-slate-800'
+                                : 'border-slate-200 dark:border-slate-700/80 hover:border-purple-300 dark:hover:border-purple-700'
+                            }`}
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-base leading-none">
+                                {(COUNTRY_CODES.find((c) => c.code === form.countryCode) || COUNTRY_CODES[0]).flag}
+                              </span>
+                              <span className="font-mono text-xs">
+                                {(COUNTRY_CODES.find((c) => c.code === form.countryCode) || COUNTRY_CODES[0]).code}
+                              </span>
+                            </div>
+                            <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${countryDropdownOpen ? 'rotate-180 text-purple-600' : ''}`} />
+                          </button>
+
+                          {countryDropdownOpen && (
+                            <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-purple-200/80 dark:border-slate-700 py-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-slate-100 dark:divide-slate-800">
+                              {COUNTRY_CODES.map((c) => {
+                                const isSelected = form.countryCode === c.code;
+                                return (
+                                  <button
+                                    key={c.code}
+                                    type="button"
+                                    onClick={() => {
+                                      setForm({ ...form, countryCode: c.code });
+                                      setCountryDropdownOpen(false);
+                                    }}
+                                    className={`w-full px-3 py-2 text-xs font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                                      isSelected
+                                        ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold'
+                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-base">{c.flag}</span>
+                                      <div>
+                                        <span className="font-bold">{c.name}</span>
+                                        <span className="text-[10px] text-slate-400 block font-mono">{c.code}</span>
+                                      </div>
+                                    </div>
+                                    {isSelected && <Check className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 font-bold" />}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
                         <input
                           type="tel"
                           value={form.phone}
@@ -781,28 +854,140 @@ export default function PackageDetailPage() {
                             setFormError('');
                           }}
                           placeholder="e.g. 9876543210"
-                          className="flex-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono tracking-wide"
+                          className="flex-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono tracking-wide"
                         />
                       </div>
                     </div>
 
-                    {/* Departure Location / Transit Selector */}
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                        Departure City Transit (Optional)
+                    {/* Custom Project-Handled Departure Location / Transit Dropdown */}
+                    <div className="relative" ref={departureRef}>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <Plane className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                          <span>Departure City Transit (Optional)</span>
+                        </span>
+                        {form.departureLocationId && (
+                          <span className="text-[10px] text-purple-600 dark:text-purple-400 font-bold">
+                            +₹{(departures.find((d) => d.id === form.departureLocationId)?.transportPrice || 0).toLocaleString()}/person
+                          </span>
+                        )}
                       </label>
-                      <select
-                        value={form.departureLocationId}
-                        onChange={(e) => setForm({ ...form, departureLocationId: e.target.value })}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+
+                      {/* Dropdown Trigger Button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDepartureDropdownOpen(!departureDropdownOpen);
+                          setCountryDropdownOpen(false);
+                        }}
+                        className={`w-full bg-slate-50 dark:bg-slate-800/90 border rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm text-left flex items-center justify-between transition-all duration-200 cursor-pointer shadow-sm ${
+                          departureDropdownOpen
+                            ? 'border-purple-500 ring-2 ring-purple-500/20 bg-white dark:bg-slate-800'
+                            : 'border-slate-200 dark:border-slate-700/80 hover:border-purple-300 dark:hover:border-purple-700'
+                        }`}
                       >
-                        <option value="">-- Self Arrangement (No Transport) --</option>
-                        {departures.map((d) => (
-                          <option key={d.id} value={d.id}>
-                            {transportLabel(d.transportMode)}: {d.departureCity} (+₹{d.transportPrice.toLocaleString()}/person)
-                          </option>
-                        ))}
-                      </select>
+                        {(() => {
+                          const selected = departures.find((d) => d.id === form.departureLocationId);
+                          return (
+                            <>
+                              <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                <div className="w-7 h-7 rounded-xl bg-purple-100 dark:bg-purple-950/60 flex items-center justify-center flex-shrink-0">
+                                  {selected ? getTransportIcon(selected.transportMode) : <Car className="w-4 h-4 text-purple-600 dark:text-purple-400" />}
+                                </div>
+                                <div className="truncate">
+                                  {selected ? (
+                                    <span className="font-bold text-slate-900 dark:text-white">
+                                      {transportLabel(selected.transportMode)}: {selected.departureCity}
+                                    </span>
+                                  ) : (
+                                    <span className="font-medium text-slate-700 dark:text-slate-300">
+                                      Self Arrangement (No Transport)
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                {selected ? (
+                                  <span className="text-xs font-black text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50 px-2 py-0.5 rounded-lg border border-purple-200/60 dark:border-purple-800/60">
+                                    +₹{selected.transportPrice.toLocaleString()}
+                                  </span>
+                                ) : (
+                                  <span className="text-[11px] text-slate-400 font-medium">Included</span>
+                                )}
+                                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${departureDropdownOpen ? 'rotate-180 text-purple-600' : ''}`} />
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </button>
+
+                      {/* Dropdown Floating Options Menu */}
+                      {departureDropdownOpen && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-purple-200/80 dark:border-slate-700 py-1.5 z-50 max-h-64 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-slate-100 dark:divide-slate-800">
+                          {/* Option: Self Arrangement */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setForm({ ...form, departureLocationId: '' });
+                              setDepartureDropdownOpen(false);
+                            }}
+                            className={`w-full px-3.5 py-2.5 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                              form.departureLocationId === ''
+                                ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold'
+                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-6 h-6 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                                <Car className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                              </div>
+                              <div>
+                                <span className="block font-bold">Self Arrangement (No Transport)</span>
+                                <span className="text-[10px] text-slate-400 font-normal">Meet directly at tour destination</span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">Included (₹0)</span>
+                              {form.departureLocationId === '' && <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 font-bold" />}
+                            </div>
+                          </button>
+
+                          {/* Options: Departure city routes with transport icons */}
+                          {departures.map((d) => {
+                            const isSelected = form.departureLocationId === d.id;
+                            return (
+                              <button
+                                key={d.id}
+                                type="button"
+                                onClick={() => {
+                                  setForm({ ...form, departureLocationId: d.id });
+                                  setDepartureDropdownOpen(false);
+                                }}
+                                className={`w-full px-3.5 py-2.5 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold'
+                                    : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-950/50 flex items-center justify-center">
+                                    {getTransportIcon(d.transportMode)}
+                                  </div>
+                                  <div>
+                                    <span className="block font-bold">{transportLabel(d.transportMode)}: {d.departureCity}</span>
+                                    <span className="text-[10px] text-slate-400 font-normal">Direct Transit Route</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400">+₹{d.transportPrice.toLocaleString()}/person</span>
+                                  {isSelected && <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 font-bold" />}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
 
                     {/* Promo Coupon Input & Modal Trigger */}

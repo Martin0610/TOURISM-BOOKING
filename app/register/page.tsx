@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Compass, Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Compass, Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff, ChevronDown, Check } from 'lucide-react';
 import PolicyModal, { PolicyType } from '@/components/PolicyModal';
 import { COUNTRY_CODES, formatPhoneNumber } from '@/lib/countryCodes';
 
@@ -29,6 +29,8 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [countryCode, setCountryCode] = useState('+91');
   const [phone, setPhone] = useState('');
+  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
+  const countryRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -39,6 +41,16 @@ export default function RegisterPage() {
   const [hasReadTerms, setHasReadTerms] = useState(false);
   const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
   const [policyModal, setPolicyModal] = useState<PolicyType>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (countryRef.current && !countryRef.current.contains(event.target as Node)) {
+        setCountryDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   const strength = getPasswordStrength(form.password);
   const canSubmit = form.name && form.email && form.password && strength.score >= 3 && agreeTerms;
@@ -212,22 +224,65 @@ export default function RegisterPage() {
               )}
             </div>
 
-            {/* Mobile Number with Country Code Dropdown */}
+            {/* Mobile Number with Custom Project-Handled Country Code Dropdown */}
             <div>
               <label className="block text-sm font-semibold text-white mb-1.5">Mobile Number (Optional)</label>
               <div className="flex gap-2">
-                <select
-                  value={countryCode}
-                  onChange={(e) => setCountryCode(e.target.value)}
-                  aria-label="Country Code"
-                  className="bg-white/15 border border-white/30 text-white rounded-xl px-2.5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 max-w-[105px] font-semibold cursor-pointer"
-                >
-                  {COUNTRY_CODES.map((c) => (
-                    <option key={c.code} value={c.code} className="bg-slate-900 text-white">
-                      {c.flag} {c.code}
-                    </option>
-                  ))}
-                </select>
+                {/* Custom Country Code Dropdown */}
+                <div className="relative" ref={countryRef}>
+                  <button
+                    type="button"
+                    onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
+                    className={`h-[46px] bg-white/15 border rounded-xl px-2.5 text-xs text-white font-bold flex items-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm min-w-[95px] justify-between ${
+                      countryDropdownOpen
+                        ? 'border-purple-300 ring-2 ring-purple-400/40 bg-white/25'
+                        : 'border-white/30 hover:border-white/50 hover:bg-white/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-base leading-none">
+                        {(COUNTRY_CODES.find((c) => c.code === countryCode) || COUNTRY_CODES[0]).flag}
+                      </span>
+                      <span className="font-mono text-xs">
+                        {(COUNTRY_CODES.find((c) => c.code === countryCode) || COUNTRY_CODES[0]).code}
+                      </span>
+                    </div>
+                    <ChevronDown className={`w-3.5 h-3.5 text-white/70 transition-transform duration-200 ${countryDropdownOpen ? 'rotate-180 text-white' : ''}`} />
+                  </button>
+
+                  {countryDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-purple-500/30 py-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-white/10 text-white">
+                      {COUNTRY_CODES.map((c) => {
+                        const isSelected = countryCode === c.code;
+                        return (
+                          <button
+                            key={c.code}
+                            type="button"
+                            onClick={() => {
+                              setCountryCode(c.code);
+                              setCountryDropdownOpen(false);
+                            }}
+                            className={`w-full px-3.5 py-2 text-xs font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                              isSelected
+                                ? 'bg-purple-600/50 text-white font-bold'
+                                : 'text-slate-200 hover:bg-white/10'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-base">{c.flag}</span>
+                              <div>
+                                <span className="font-bold">{c.name}</span>
+                                <span className="text-[10px] text-white/60 block font-mono">{c.code}</span>
+                              </div>
+                            </div>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-purple-300 font-bold" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
                 <div className="relative flex-1">
                   <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
                   <input
