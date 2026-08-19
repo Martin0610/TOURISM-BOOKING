@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { X, ShieldCheck, FileText, RotateCcw, CheckCircle2, Lock, Sparkles, Phone, Mail } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { X, ShieldCheck, FileText, RotateCcw, CheckCircle2, Lock, Phone, ChevronDown, Check } from 'lucide-react';
 
 export type PolicyType = 'terms' | 'privacy' | 'cancellation' | null;
 
@@ -11,12 +11,32 @@ interface PolicyModalProps {
 }
 
 export default function PolicyModal({ type, onClose }: PolicyModalProps) {
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Reset scroll state when modal opens or policy type changes
+  useEffect(() => {
+    setHasScrolledToBottom(false);
+    if (type) {
+      document.body.style.overflow = 'hidden';
+      // Check if content fits in viewport without needing scrolling
+      const timer = setTimeout(() => {
+        if (contentRef.current) {
+          const { scrollHeight, clientHeight } = contentRef.current;
+          if (scrollHeight <= clientHeight + 20) {
+            setHasScrolledToBottom(true);
+          }
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [type]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     if (type) {
-      document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     }
     return () => {
@@ -24,6 +44,26 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [type, onClose]);
+
+  const handleScroll = () => {
+    if (contentRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+      // Trigger when within 30px of bottom
+      if (scrollTop + clientHeight >= scrollHeight - 30) {
+        setHasScrolledToBottom(true);
+      }
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (contentRef.current) {
+      contentRef.current.scrollTo({
+        top: contentRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+      setHasScrolledToBottom(true);
+    }
+  };
 
   if (!type) return null;
 
@@ -66,8 +106,12 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
           </button>
         </div>
 
-        {/* Scrollable Content Body */}
-        <div className="p-6 overflow-y-auto space-y-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        {/* Scrollable Content Body with scroll listener */}
+        <div 
+          ref={contentRef}
+          onScroll={handleScroll}
+          className="p-6 overflow-y-auto space-y-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-h-[55vh]"
+        >
           {type === 'terms' && (
             <>
               <div className="p-3.5 bg-blue-50 dark:bg-blue-950/40 rounded-2xl border border-blue-100 dark:border-blue-900/60 text-xs text-blue-800 dark:text-blue-200 font-medium">
@@ -109,6 +153,15 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
                   Travelers agree to abide by local cultural, state, and national park regulations. TripEase reserves the right to cancel bookings without refund in instances of misconduct or safety violations.
                 </p>
               </div>
+
+              <div>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 5. Modifications & Amendments
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  TripEase reserves the right to update these terms at any time. Continued usage of the platform constitutes acceptance of the latest revised terms.
+                </p>
+              </div>
             </>
           )}
 
@@ -139,10 +192,19 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
 
               <div>
                 <h4 className="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 3. Account Protection
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 3. Account Protection & Encryption
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   All user passwords are cryptographically hashed using industry-standard bcrypt. Session tokens are encrypted and transmitted exclusively over secure HTTPS protocols.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-1.5 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 4. Data Retention & User Rights
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  You have the right to request deletion of your account history and associated booking metadata at any time by contacting our privacy compliance team.
                 </p>
               </div>
             </>
@@ -198,13 +260,41 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
           </div>
         </div>
 
-        {/* Footer actions */}
-        <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex items-center justify-end">
+        {/* Footer actions with scroll-to-bottom requirement */}
+        <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs">
+            {!hasScrolledToBottom ? (
+              <button
+                type="button"
+                onClick={scrollToBottom}
+                className="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium hover:underline cursor-pointer animate-pulse"
+              >
+                <ChevronDown className="w-4 h-4" /> Please scroll down to the bottom to continue
+              </button>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
+                <CheckCircle2 className="w-4 h-4" /> Policy completely read & reviewed
+              </span>
+            )}
+          </div>
+
           <button
             onClick={onClose}
-            className="px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs hover:bg-slate-800 dark:hover:bg-slate-100 transition shadow-md cursor-pointer"
+            disabled={!hasScrolledToBottom}
+            className={`px-6 py-2.5 rounded-xl font-bold text-xs transition shadow-md flex items-center gap-2 ${
+              hasScrolledToBottom
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 cursor-pointer shadow-black/20'
+                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
+            }`}
           >
-            I Understand & Exit
+            {hasScrolledToBottom ? (
+              <>
+                <Check className="w-4 h-4 text-emerald-500" />
+                <span>I Understand & Exit</span>
+              </>
+            ) : (
+              <span>Scroll to Enable Exit</span>
+            )}
           </button>
         </div>
       </div>
