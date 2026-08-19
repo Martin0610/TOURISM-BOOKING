@@ -282,7 +282,7 @@ function PackagesContent() {
           </div>
 
           {/* Interactive Filters Bar */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-8 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-8 space-y-4 relative z-30">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Search Box */}
               <div>
@@ -344,7 +344,7 @@ function PackagesContent() {
               </div>
 
               {/* Sort By Custom Dropdown with Icons */}
-              <div ref={sortRef} className="relative">
+              <div ref={sortRef} className="relative z-40">
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
                   <ArrowUpDown className="w-3.5 h-3.5 text-amber-500" /> Sort By
                 </label>

@@ -232,7 +232,7 @@ export default function Home() {
           </p>
 
           {/* Dynamic Interactive Trip Planner Search Widget */}
-          <div className="max-w-3xl mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-3.5 sm:p-4 rounded-3xl shadow-2xl shadow-black/40 border border-white/40 dark:border-slate-800 text-slate-900 dark:text-white mb-10">
+          <div className="relative z-30 max-w-3xl mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl p-3.5 sm:p-4 rounded-3xl shadow-2xl shadow-black/40 border border-white/40 dark:border-slate-800 text-slate-900 dark:text-white mb-10">
             <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
               {/* Destination Input */}
               <div className="sm:col-span-5 text-left bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60 focus-within:ring-2 focus-within:ring-blue-500 transition">
@@ -249,7 +249,7 @@ export default function Home() {
               </div>
 
               {/* Category Picker with Custom Icon Dropdown */}
-              <div ref={vibeRef} className="sm:col-span-4 text-left bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60 transition relative">
+              <div ref={vibeRef} className="sm:col-span-4 text-left bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60 transition relative z-40">
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1.5">
                   <Compass className="w-3.5 h-3.5 text-cyan-500" /> Experience Vibe
                 </label>
@@ -319,7 +319,7 @@ export default function Home() {
           </div>
 
           {/* Quick Floating Trust Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto relative z-10">
             <div className="bg-white/10 dark:bg-slate-900/60 backdrop-blur-md rounded-2xl p-3.5 border border-white/20 text-center">
               <div className="text-2xl font-black text-amber-300">4.9 ★</div>
               <div className="text-xs text-slate-200 mt-0.5 font-medium">2,500+ Happy Explorers</div>
