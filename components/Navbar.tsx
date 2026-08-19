@@ -44,7 +44,9 @@ export default function Navbar() {
                 {user.role === 'ADMIN' && (
                   <Link href="/admin" className="text-purple-600 hover:text-purple-800 font-medium transition">Admin</Link>
                 )}
-                <span className="text-gray-500 text-sm">Hi, {user.name}</span>
+                {user.role !== 'ADMIN' && (
+                  <span className="text-gray-500 text-sm">Hi, {user.name}</span>
+                )}
                 <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm">
                   Logout
                 </button>
