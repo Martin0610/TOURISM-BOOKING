@@ -8,9 +8,10 @@ export type PolicyType = 'terms' | 'privacy' | 'cancellation' | null;
 interface PolicyModalProps {
   type: PolicyType;
   onClose: () => void;
+  onAccept?: (type: PolicyType) => void;
 }
 
-export default function PolicyModal({ type, onClose }: PolicyModalProps) {
+export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProps) {
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -279,7 +280,10 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
           </div>
 
           <button
-            onClick={onClose}
+            onClick={() => {
+              if (onAccept) onAccept(type);
+              onClose();
+            }}
             disabled={!hasScrolledToBottom}
             className={`px-6 py-2.5 rounded-xl font-bold text-xs transition shadow-md flex items-center gap-2 ${
               hasScrolledToBottom

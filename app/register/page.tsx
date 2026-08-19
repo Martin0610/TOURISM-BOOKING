@@ -33,10 +33,36 @@ export default function RegisterPage() {
   const [emailWarning, setEmailWarning] = useState('');
   const [validatingEmail, setValidatingEmail] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [hasReadTerms, setHasReadTerms] = useState(false);
+  const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
   const [policyModal, setPolicyModal] = useState<PolicyType>(null);
 
   const strength = getPasswordStrength(form.password);
   const canSubmit = form.name && form.email && form.password && strength.score >= 3 && agreeTerms;
+
+  const handlePolicyAccept = (acceptedType: PolicyType) => {
+    if (acceptedType === 'terms') {
+      setHasReadTerms(true);
+      if (!hasReadPrivacy) {
+        toast.success('Terms of Service reviewed! Now opening Privacy Policy...', { duration: 3000 });
+        setTimeout(() => setPolicyModal('privacy'), 400);
+      } else {
+        setAgreeTerms(true);
+        if (error.includes('Terms')) setError('');
+        toast.success('Agreements confirmed & accepted! ✓', { duration: 3000 });
+      }
+    } else if (acceptedType === 'privacy') {
+      setHasReadPrivacy(true);
+      if (!hasReadTerms) {
+        toast.success('Privacy Policy reviewed! Now opening Terms of Service...', { duration: 3000 });
+        setTimeout(() => setPolicyModal('terms'), 400);
+      } else {
+        setAgreeTerms(true);
+        if (error.includes('Terms')) setError('');
+        toast.success('Agreements confirmed & accepted! ✓', { duration: 3000 });
+      }
+    }
+  };
 
   // Email validation with debounce
   const validateEmail = async (email: string) => {
@@ -217,34 +243,68 @@ export default function RegisterPage() {
               )}
             </div>
 
-            {/* Terms & Conditions Agreement Checkbox */}
+            {/* Terms & Conditions Agreement Checkbox with Mandatory Read Lock */}
             <div className="flex items-start gap-2.5 pt-1">
               <input
                 type="checkbox"
                 id="agreeTerms"
                 checked={agreeTerms}
                 onChange={(e) => {
+                  if (!hasReadTerms || !hasReadPrivacy) {
+                    e.preventDefault();
+                    toast('Please review the agreements till the end before accepting.', { icon: '📜' });
+                    if (!hasReadTerms) setPolicyModal('terms');
+                    else if (!hasReadPrivacy) setPolicyModal('privacy');
+                    return;
+                  }
                   setAgreeTerms(e.target.checked);
                   if (e.target.checked && error.includes('Terms')) setError('');
                 }}
                 className="mt-0.5 w-4 h-4 rounded border-white/40 bg-white/20 text-purple-600 focus:ring-purple-400 focus:ring-offset-0 cursor-pointer accent-purple-500"
               />
-              <label htmlFor="agreeTerms" className="text-xs text-white/90 leading-relaxed cursor-pointer select-none">
+              <label 
+                htmlFor="agreeTerms" 
+                onClick={(e) => {
+                  if (!hasReadTerms || !hasReadPrivacy) {
+                    e.preventDefault();
+                    toast('Please review the agreements till the end before accepting.', { icon: '📜' });
+                    if (!hasReadTerms) setPolicyModal('terms');
+                    else if (!hasReadPrivacy) setPolicyModal('privacy');
+                  }
+                }}
+                className="text-xs text-white/90 leading-relaxed cursor-pointer select-none"
+              >
                 I have read and agree to the{' '}
                 <button
                   type="button"
-                  onClick={() => setPolicyModal('terms')}
-                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPolicyModal('terms');
+                  }}
+                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer inline-flex items-center gap-0.5"
                 >
-                  Terms of Service
+                  <span>Terms of Service</span>
+                  {hasReadTerms ? (
+                    <span className="text-emerald-400 font-black text-[11px] ml-0.5">✓</span>
+                  ) : (
+                    <span className="text-[10px] ml-1 bg-cyan-400/20 border border-cyan-400/40 text-cyan-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
+                  )}
                 </button>{' '}
                 and{' '}
                 <button
                   type="button"
-                  onClick={() => setPolicyModal('privacy')}
-                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPolicyModal('privacy');
+                  }}
+                  className="text-cyan-300 hover:text-cyan-200 underline font-bold cursor-pointer inline-flex items-center gap-0.5"
                 >
-                  Privacy Policy
+                  <span>Privacy Policy</span>
+                  {hasReadPrivacy ? (
+                    <span className="text-emerald-400 font-black text-[11px] ml-0.5">✓</span>
+                  ) : (
+                    <span className="text-[10px] ml-1 bg-cyan-400/20 border border-cyan-400/40 text-cyan-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
+                  )}
                 </button>.
               </label>
             </div>
@@ -259,7 +319,9 @@ export default function RegisterPage() {
               <p className="text-xs text-center text-orange-300 font-medium">Improve password strength to enable signup</p>
             )}
             {!canSubmit && form.password.length > 0 && strength.score >= 3 && !agreeTerms && (
-              <p className="text-xs text-center text-amber-200 font-medium">Please tick the box above to accept the Terms & Conditions</p>
+              <p className="text-xs text-center text-amber-200 font-medium">
+                {!hasReadTerms || !hasReadPrivacy ? 'Please read the Terms & Privacy Policy to enable agreement' : 'Please tick the box above to accept the Terms & Conditions'}
+              </p>
             )}
           </form>
 
@@ -270,8 +332,12 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Interactive Read & Exit Policy Modal */}
-      <PolicyModal type={policyModal} onClose={() => setPolicyModal(null)} />
+      {/* Interactive Read & Exit Policy Modal with onAccept */}
+      <PolicyModal 
+        type={policyModal} 
+        onClose={() => setPolicyModal(null)} 
+        onAccept={handlePolicyAccept}
+      />
     </div>
   );
 }
