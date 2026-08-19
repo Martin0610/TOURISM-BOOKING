@@ -179,7 +179,10 @@ export default function BookingPage() {
                 </div>
               </div>
             ) : booking.status === 'CANCELLED' ? (
-              <div className="bg-red-50 text-red-600 p-4 rounded-xl text-center">Booking has been cancelled.</div>
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center space-y-1">
+                <p className="text-red-600 font-semibold">Booking Cancelled</p>
+                <p className="text-red-400 text-sm">Your refund will be processed within 5–7 business days to your original payment method.</p>
+              </div>
             ) : (
               <button onClick={handlePayment} disabled={payLoading}
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition flex items-center justify-center gap-2 disabled:opacity-60">

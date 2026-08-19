@@ -179,6 +179,11 @@ export default function MyBookingsPage() {
                         <Plane className="w-4 h-4" /> Have a safe and wonderful trip!
                       </div>
                     )}
+                    {booking.status === 'CANCELLED' && (
+                      <div className="text-sm text-red-400">
+                        Booking cancelled · Refund will be processed within 5–7 business days.
+                      </div>
+                    )}
                     {booking.status === 'CONFIRMED' && !booking.review && (
                       <ReviewForm bookingId={booking.id} packageId={booking.packageId} onDone={() => {
                         setBookings(prev => prev.map(b => b.id === booking.id ? { ...b, review: { submitted: true } as unknown as typeof b.review } : b));
