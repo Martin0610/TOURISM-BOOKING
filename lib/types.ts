@@ -53,8 +53,11 @@ export interface Booking {
   numberOfPeople: number;
   packageAmount: number;
   transportAmount: number;
+  discountAmount?: number;
+  couponDiscount?: number;
   totalAmount: number;
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+  phone?: string;
   createdAt: string;
   package?: Package;
   departureLocation?: DepartureLocation;
