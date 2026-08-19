@@ -278,7 +278,7 @@ export default function BookingPage() {
                   </div>
 
                   <div className="text-center p-4 bg-blue-50 dark:bg-blue-950/30 rounded-2xl border border-blue-100 dark:border-blue-900/40 text-xs text-blue-800 dark:text-blue-300">
-                    <span className="font-bold block mb-1">🎉 Wishing you an unforgettable vacation!</span>
+                    <span className="font-bold block mb-1">Wishing you an unforgettable vacation!</span>
                     <span>24/7 Trip Concierge: +91 72003 36447 | mjv3140@gmail.com</span>
                   </div>
                 </div>

@@ -108,7 +108,7 @@ export default function PackageDetailPage() {
       } else {
         await api.post('/api/wishlist', { packageId: id });
         setIsWishlisted(true);
-        toast.success('Saved to wishlist ❤️');
+        toast.success('Saved to wishlist');
       }
     } catch {
       toast.error('Failed to update wishlist');
@@ -632,7 +632,7 @@ export default function PackageDetailPage() {
                     {freeTickets > 0 && (
                       <div className="mt-2 p-2.5 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 rounded-xl border border-amber-200 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1.5">
                         <Gift className="w-4 h-4 text-amber-500 animate-bounce" />
-                        <span>🎟️ {freeTickets} FREE Ticket{freeTickets > 1 ? 's' : ''} included! Pay for {paidPeople} only!</span>
+                        <span>{freeTickets} FREE Ticket{freeTickets > 1 ? 's' : ''} included! Pay for {paidPeople} only!</span>
                       </div>
                     )}
                   </div>
@@ -763,14 +763,14 @@ export default function PackageDetailPage() {
 
                     {freeTickets > 0 && (
                       <div className="flex justify-between text-amber-600 dark:text-amber-400 font-bold">
-                        <span>🎟️ 4+1 Free Ticket ({freeTickets} pax)</span>
+                        <span>4+1 Free Ticket ({freeTickets} pax)</span>
                         <span>-₹{(packageAmount - packageAmountAfterFree).toLocaleString()}</span>
                       </div>
                     )}
 
                     {isGroupDiscount && (
                       <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                        <span>👥 Group Discount (20%)</span>
+                        <span>Group Discount (20%)</span>
                         <span>-₹{discountAmount.toLocaleString()}</span>
                       </div>
                     )}
@@ -784,7 +784,7 @@ export default function PackageDetailPage() {
 
                     {couponDiscount > 0 && (
                       <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                        <span>🏷️ Coupon Discount</span>
+                        <span>Coupon Discount</span>
                         <span>-₹{couponDiscount.toLocaleString()}</span>
                       </div>
                     )}
@@ -798,7 +798,7 @@ export default function PackageDetailPage() {
 
                     {totalSavings > 0 && (
                       <p className="text-emerald-600 dark:text-emerald-400 text-[11px] font-bold text-center pt-1">
-                        🎉 Total Savings: ₹{totalSavings.toLocaleString()}
+                        Total Savings: ₹{totalSavings.toLocaleString()}
                       </p>
                     )}
                   </div>

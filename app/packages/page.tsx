@@ -9,7 +9,8 @@ import Link from 'next/link';
 import { 
   MapPin, Clock, Users, Search, Filter, Heart, Plane, Car, Globe, 
   Sparkles, Star, Hotel, Utensils, Tag, LayoutGrid, List, ArrowUpDown, 
-  X, Check, Flame, ChevronRight, ShieldCheck, Gift
+  X, Check, Flame, ChevronRight, ShieldCheck, Gift, Palmtree, Mountain,
+  Landmark, Trees, Compass, Waves
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
@@ -153,7 +154,7 @@ function PackagesContent() {
       } else {
         await api.post('/api/wishlist', { packageId: pkgId });
         setWishlisted((prev) => new Set([...prev, pkgId]));
-        toast.success('Saved to wishlist ❤️');
+        toast.success('Saved to wishlist');
       }
     } catch {
       toast.error('Failed to update wishlist');
@@ -182,16 +183,16 @@ function PackagesContent() {
     router.replace('/packages', { scroll: false });
   };
 
-  const getCategoryLabel = (cat: string) => {
+  const getCategoryIcon = (cat: string) => {
     switch (cat.toLowerCase()) {
-      case 'beach': return '🏖️ Beach';
-      case 'hill station': return '🏔️ Hill Station';
-      case 'heritage': return '🏰 Heritage';
-      case 'nature': return '🌿 Nature';
-      case 'adventure': return '🧗 Adventure';
-      case 'island': return '🏝️ Island';
-      case 'spiritual': return '🕉️ Spiritual';
-      default: return cat === 'All' ? '🌟 All Packages' : `✨ ${cat}`;
+      case 'beach': return Palmtree;
+      case 'hill station': return Mountain;
+      case 'heritage': return Landmark;
+      case 'nature': return Trees;
+      case 'adventure': return Compass;
+      case 'island': return Waves;
+      case 'spiritual': return Sparkles;
+      default: return Globe;
     }
   };
 
@@ -241,17 +242,19 @@ function PackagesContent() {
             <div className="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1 px-1">
               {categories.map((cat) => {
                 const active = selectedCategory.toLowerCase() === cat.toLowerCase();
+                const Icon = getCategoryIcon(cat);
                 return (
                   <button
                     key={cat}
                     onClick={() => handleCategorySelect(cat)}
-                    className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 flex items-center gap-1.5 ${
+                    className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 flex items-center gap-2 ${
                       active
                         ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-lg shadow-blue-500/30 scale-105 ring-2 ring-blue-400/40'
                         : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500'
                     }`}
                   >
-                    <span>{getCategoryLabel(cat)}</span>
+                    <Icon className="w-4 h-4" />
+                    <span>{cat === 'All' ? 'All Packages' : cat}</span>
                   </button>
                 );
               })}

@@ -236,13 +236,13 @@ export default function Home() {
                   className="w-full bg-transparent text-sm font-semibold text-slate-800 dark:text-white focus:outline-none cursor-pointer"
                 >
                   <option value="">All Experiences</option>
-                  <option value="Beach">🏖️ Beach Paradise</option>
-                  <option value="Hill Station">🏔️ Hill Stations</option>
-                  <option value="Heritage">🏰 Royal Heritage</option>
-                  <option value="Nature">🌿 Nature & Backwaters</option>
-                  <option value="Adventure">🧗 Mountain Adventure</option>
-                  <option value="Island">🏝️ Island Getaway</option>
-                  <option value="Spiritual">🕉️ Spiritual Journeys</option>
+                  <option value="Beach">Beach Paradise</option>
+                  <option value="Hill Station">Hill Stations</option>
+                  <option value="Heritage">Royal Heritage</option>
+                  <option value="Nature">Nature & Backwaters</option>
+                  <option value="Adventure">Mountain Adventure</option>
+                  <option value="Island">Island Getaway</option>
+                  <option value="Spiritual">Spiritual Journeys</option>
                 </select>
               </div>
 
@@ -285,7 +285,9 @@ export default function Home() {
       <section className="py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-inner">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-center md:text-left">
-            <span className="p-1.5 bg-amber-400 text-slate-950 rounded-lg font-bold text-xs">🎁 COUPONS</span>
+            <span className="p-1.5 bg-amber-400 text-slate-950 rounded-lg font-bold text-xs inline-flex items-center gap-1.5 shadow-sm">
+              <Gift className="w-3.5 h-3.5" /> COUPONS
+            </span>
             <span className="text-sm font-semibold">Check out these amazing coupons while booking:</span>
           </div>
 
