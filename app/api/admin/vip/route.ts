@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import prisma from '@/lib/db';
 import { successResponse, errorResponse } from '@/lib/apiResponse';
 import { getAuthUser, requireAdmin } from '@/lib/auth';
+import { sendVipAnnouncementEmail } from '@/lib/email.service';
 
 export async function GET(request: NextRequest) {
   try {
@@ -138,7 +139,36 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return successResponse(announcement, 'VIP Announcement published successfully', 201);
+    // Fetch all active APPROVED VIP members to dispatch personalized emails
+    const approvedVips = await prisma.newsletterSubscriber.findMany({
+      where: {
+        status: 'APPROVED',
+        active: true,
+      },
+    });
+
+    // Send emails in background
+    if (approvedVips.length > 0) {
+      Promise.allSettled(
+        approvedVips.map((vip) =>
+          sendVipAnnouncementEmail(vip.email, {
+            title,
+            message,
+            couponCode: couponCode ? couponCode.toUpperCase().trim() : null,
+            discount: discount ? discount.trim() : null,
+          })
+        )
+      ).catch((err) => console.error('Failed to send some VIP emails:', err));
+    }
+
+    const memberMsg =
+      approvedVips.length === 1 ? '1 VIP member' : `${approvedVips.length} VIP members`;
+
+    return successResponse(
+      announcement,
+      `VIP Announcement published & emailed to ${memberMsg}! 🚀`,
+      201
+    );
   } catch (err) {
     if (err instanceof Error && err.message === 'UNAUTHORIZED') {
       return errorResponse('Authentication required', 401);
