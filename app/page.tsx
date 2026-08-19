@@ -862,10 +862,10 @@ export default function Home() {
               Explore All Packages
             </Link>
             <Link
-              href={user ? "/my-bookings" : "/register"}
+              href={user?.role === 'ADMIN' ? "/admin" : user ? "/my-bookings" : "/register"}
               className="w-full sm:w-auto bg-white/15 backdrop-blur-md border border-white/40 text-white font-bold px-8 py-4 rounded-full hover:bg-white/25 transition-all text-base"
             >
-              {user ? "View My Bookings" : "Create Free Account"}
+              {user?.role === 'ADMIN' ? "Go to Admin Dashboard" : user ? "View My Bookings" : "Create Free Account"}
             </Link>
           </div>
         </div>
@@ -900,8 +900,17 @@ export default function Home() {
               <ul className="space-y-2.5 text-sm">
                 <li><Link href="/" className="hover:text-white transition">Home</Link></li>
                 <li><Link href="/packages" className="hover:text-white transition">Tourism Packages</Link></li>
-                <li><Link href="/wishlist" className="hover:text-white transition">Saved Wishlist</Link></li>
-                <li><Link href="/my-bookings" className="hover:text-white transition">My Bookings</Link></li>
+                {user?.role === 'ADMIN' ? (
+                  <>
+                    <li><Link href="/admin/packages" className="hover:text-white transition">Manage Packages</Link></li>
+                    <li><Link href="/admin/bookings" className="hover:text-white transition">Manage Bookings</Link></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link href="/wishlist" className="hover:text-white transition">Saved Wishlist</Link></li>
+                    <li><Link href="/my-bookings" className="hover:text-white transition">My Bookings</Link></li>
+                  </>
+                )}
               </ul>
             </div>
 

@@ -283,17 +283,19 @@ export default function PackageDetailPage() {
                 {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
               </button>
 
-              <button
-                onClick={handleWishlist}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border shadow-sm transition ${
-                  isWishlisted
-                    ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400'
-                    : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:text-rose-600'
-                }`}
-              >
-                <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
-                <span>{isWishlisted ? 'Saved' : 'Wishlist'}</span>
-              </button>
+              {user?.role !== 'ADMIN' && (
+                <button
+                  onClick={handleWishlist}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border shadow-sm transition cursor-pointer ${
+                    isWishlisted
+                      ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400'
+                      : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:text-rose-600'
+                  }`}
+                >
+                  <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
+                  <span>{isWishlisted ? 'Saved' : 'Wishlist'}</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -597,249 +599,324 @@ export default function PackageDetailPage() {
                   </span>
                 </div>
 
-                <form onSubmit={handleBook} className="space-y-4" noValidate>
-                  {/* Travel Date Input */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-blue-500" /> Travel Date
-                    </label>
-                    <input
-                      type="date"
-                      min={new Date().toISOString().split('T')[0]}
-                      value={form.travelDate}
-                      onChange={(e) => {
-                        setForm({ ...form, travelDate: e.target.value });
-                        setFormError('');
-                      }}
-                      className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  {/* Number of Travelers Stepper */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-cyan-500" /> Travelers Count
-                    </label>
-                    <input
-                      type="number"
-                      min={1}
-                      max={pkg.availableSeats}
-                      value={form.numberOfPeople}
-                      onChange={(e) => {
-                        setForm({ ...form, numberOfPeople: parseInt(e.target.value) || 1 });
-                        setFormError('');
-                      }}
-                      className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-
-                    {/* Dynamic Celebration Discount Banners */}
-                    {form.numberOfPeople === 3 && (
-                      <div className="mt-2 p-2.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1.5">
-                        <PartyPopper className="w-4 h-4 text-emerald-500 animate-bounce" />
-                        <span>20% Group Discount unlocked! Add 1 more for 4+1 FREE!</span>
+                {user?.role === 'ADMIN' ? (
+                  /* Admin Preview & Management Hub */
+                  <div className="space-y-4 pt-1">
+                    <div className="p-3.5 bg-blue-50 dark:bg-blue-950/40 rounded-2xl border border-blue-200/80 dark:border-blue-900/60">
+                      <div className="flex items-center gap-2 text-xs font-bold text-blue-700 dark:text-cyan-300 mb-1">
+                        <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                        <span>Administrator Preview Mode</span>
                       </div>
-                    )}
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                        You are viewing this package with administrator privileges. User checkout is disabled for admin accounts.
+                      </p>
+                    </div>
 
-                    {freeTickets > 0 && (
-                      <div className="mt-2 p-2.5 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 rounded-xl border border-amber-200 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1.5">
-                        <Gift className="w-4 h-4 text-amber-500 animate-bounce" />
-                        <span>{freeTickets} FREE Ticket{freeTickets > 1 ? 's' : ''} included! Pay for {paidPeople} only!</span>
+                    {/* Live Package Stats Grid */}
+                    <div className="bg-slate-50 dark:bg-slate-800/70 p-4 rounded-2xl border border-slate-200/70 dark:border-slate-700/70 space-y-2.5 text-xs">
+                      <div className="flex justify-between items-center text-slate-600 dark:text-slate-300">
+                        <span className="font-medium">Inventory Capacity</span>
+                        <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1">
+                          <Users className="w-3.5 h-3.5 text-emerald-500" /> {pkg.availableSeats} Seats Left
+                        </span>
                       </div>
-                    )}
-                  </div>
 
-                  {/* Phone Number */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-rose-500" /> Phone Number (10 Digits)
-                    </label>
-                    <input
-                      type="tel"
-                      maxLength={10}
-                      value={form.phone}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                        setForm({ ...form, phone: val });
-                        setFormError('');
-                      }}
-                      placeholder="e.g. 9876543210"
-                      className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                      <div className="flex justify-between items-center text-slate-600 dark:text-slate-300">
+                        <span className="font-medium">Hotel Tier</span>
+                        <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1">
+                          <Hotel className="w-3.5 h-3.5 text-amber-500" /> {pkg.hotelCategory}
+                        </span>
+                      </div>
 
-                  {/* Departure City Selector */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Departure City Transit (Optional)
-                    </label>
-                    <select
-                      value={form.departureLocationId}
-                      onChange={(e) => setForm({ ...form, departureLocationId: e.target.value })}
-                      className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                    >
-                      <option value="">-- Self Arrangement (No Transport) --</option>
-                      {departures.map((d) => (
-                        <option key={d.id} value={d.id}>
-                          {transportLabel(d.transportMode)}: {d.departureCity} (+₹{d.transportPrice.toLocaleString()}/person)
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                      <div className="flex justify-between items-center text-slate-600 dark:text-slate-300">
+                        <span className="font-medium">Departure Transit</span>
+                        <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1">
+                          <Plane className="w-3.5 h-3.5 text-cyan-500" /> {departures.length} Routes Configured
+                        </span>
+                      </div>
 
-                  {/* Interactive Coupon Code Drawer */}
-                  <div className="pt-2">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                        <Tag className="w-3.5 h-3.5 text-amber-500" /> Apply Coupon
+                      <div className="flex justify-between items-center text-slate-600 dark:text-slate-300">
+                        <span className="font-medium">Customer Rating</span>
+                        <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1">
+                          <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> {avgRating > 0 ? `${avgRating} (${reviews.length} reviews)` : 'No reviews yet'}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-center text-slate-600 dark:text-slate-300">
+                        <span className="font-medium">Experience Vibe</span>
+                        <span className="font-bold text-blue-600 dark:text-cyan-400">
+                          {pkg.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Admin Actions */}
+                    <div className="space-y-2 pt-1">
+                      <Link
+                        href="/admin/packages"
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] cursor-pointer"
+                      >
+                        <ShieldCheck className="w-4 h-4" /> Manage Packages in Admin
+                      </Link>
+
+                      <Link
+                        href="/admin/bookings"
+                        className="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+                      >
+                        <span>View All Bookings</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+
+                    <p className="text-[11px] text-center text-slate-400">
+                      Sign in with a customer account to test passenger checkout.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleBook} className="space-y-4" noValidate>
+                    {/* Travel Date Input */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-blue-500" /> Travel Date
                       </label>
-                      {availableCoupons.length > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => setShowCoupons(!showCoupons)}
-                          className="text-[11px] font-bold text-blue-600 dark:text-cyan-400 hover:underline"
-                        >
-                          {showCoupons ? 'Hide Coupons' : `View ${availableCoupons.length} Coupons`}
-                        </button>
+                      <input
+                        type="date"
+                        min={new Date().toISOString().split('T')[0]}
+                        value={form.travelDate}
+                        onChange={(e) => {
+                          setForm({ ...form, travelDate: e.target.value });
+                          setFormError('');
+                        }}
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {/* Number of Travelers Stepper */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+                        <Users className="w-3.5 h-3.5 text-cyan-500" /> Travelers Count
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={pkg.availableSeats}
+                        value={form.numberOfPeople}
+                        onChange={(e) => {
+                          setForm({ ...form, numberOfPeople: parseInt(e.target.value) || 1 });
+                          setFormError('');
+                        }}
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+
+                      {/* Dynamic Celebration Discount Banners */}
+                      {form.numberOfPeople === 3 && (
+                        <div className="mt-2 p-2.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1.5">
+                          <PartyPopper className="w-4 h-4 text-emerald-500 animate-bounce" />
+                          <span>20% Group Discount unlocked! Add 1 more for 4+1 FREE!</span>
+                        </div>
+                      )}
+
+                      {freeTickets > 0 && (
+                        <div className="mt-2 p-2.5 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 rounded-xl border border-amber-200 dark:border-amber-800/60 text-xs text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1.5">
+                          <Gift className="w-4 h-4 text-amber-500 animate-bounce" />
+                          <span>{freeTickets} FREE Ticket{freeTickets > 1 ? 's' : ''} included! Pay for {paidPeople} only!</span>
+                        </div>
                       )}
                     </div>
 
-                    {showCoupons && (
-                      <div className="mb-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 max-h-48 overflow-y-auto">
-                        {availableCoupons.map((c) => {
-                          const eligible = subtotalBeforeCoupon >= c.minBookingAmount;
-                          return (
-                            <div
-                              key={c.id}
-                              onClick={() => {
-                                if (eligible) {
-                                  setCouponCode(c.code);
-                                  setCouponResult(null);
-                                  setShowCoupons(false);
-                                }
-                              }}
-                              className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition ${
-                                eligible
-                                  ? 'bg-white dark:bg-slate-700/80 border-blue-200 dark:border-slate-600 cursor-pointer hover:border-blue-500'
-                                  : 'opacity-50 cursor-not-allowed bg-slate-100 dark:bg-slate-800'
-                              }`}
-                            >
-                              <div>
-                                <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">{c.code}</span>
-                                <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                                  {c.discountType === 'PERCENTAGE' ? `${c.discountValue}% OFF` : `₹${c.discountValue} OFF`}
-                                  {c.minBookingAmount > 0 && ` (Min ₹${c.minBookingAmount.toLocaleString()})`}
-                                </p>
-                              </div>
-                              <span className="text-[10px] text-slate-400">Tap to use</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-
-                    <div className="flex gap-2">
+                    {/* Phone Number Input */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5 text-rose-500" /> Phone Number (10 Digits)
+                      </label>
                       <input
-                        type="text"
-                        value={couponCode}
+                        type="tel"
+                        maxLength={10}
+                        value={form.phone}
                         onChange={(e) => {
-                          setCouponCode(e.target.value.toUpperCase());
-                          setCouponResult(null);
+                          const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                          setForm({ ...form, phone: val });
+                          setFormError('');
                         }}
-                        placeholder="ENTER CODE"
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-slate-800 dark:text-white uppercase placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="e.g. 9876543210"
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono tracking-wide"
                       />
-                      <button
-                        type="button"
-                        onClick={handleApplyCoupon}
-                        disabled={couponLoading || !couponCode.trim()}
-                        className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold disabled:opacity-50 transition"
+                    </div>
+
+                    {/* Departure Location / Transit Selector */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Departure City Transit (Optional)
+                      </label>
+                      <select
+                        value={form.departureLocationId}
+                        onChange={(e) => setForm({ ...form, departureLocationId: e.target.value })}
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                       >
-                        {couponLoading ? '...' : 'Apply'}
-                      </button>
+                        <option value="">-- Self Arrangement (No Transport) --</option>
+                        {departures.map((d) => (
+                          <option key={d.id} value={d.id}>
+                            {transportLabel(d.transportMode)}: {d.departureCity} (+₹{d.transportPrice.toLocaleString()}/person)
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
-                    {couponResult && (
-                      <p className="text-emerald-600 text-xs mt-1.5 font-bold flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Coupon {couponResult.code} applied: -₹{couponResult.discountAmount.toLocaleString()}
-                      </p>
-                    )}
-                  </div>
+                    {/* Promo Coupon Input & Modal Trigger */}
+                    <div className="pt-2">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                          <Tag className="w-3.5 h-3.5 text-amber-500" /> Apply Coupon
+                        </label>
+                        {availableCoupons.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setShowCoupons(!showCoupons)}
+                            className="text-[11px] font-bold text-blue-600 dark:text-cyan-400 hover:underline cursor-pointer"
+                          >
+                            {showCoupons ? 'Hide Coupons' : `View ${availableCoupons.length} Coupons`}
+                          </button>
+                        )}
+                      </div>
 
-                  {/* Real-time Summary Table */}
-                  <div className="p-4 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
-                    <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                      <span>Package (₹{pkg.pricePerPerson.toLocaleString()} × {form.numberOfPeople})</span>
-                      <span>₹{packageAmount.toLocaleString()}</span>
+                      {showCoupons && (
+                        <div className="mb-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 max-h-48 overflow-y-auto">
+                          {availableCoupons.map((c) => {
+                            const eligible = subtotalBeforeCoupon >= c.minBookingAmount;
+                            return (
+                              <div
+                                key={c.id}
+                                onClick={() => {
+                                  if (eligible) {
+                                    setCouponCode(c.code);
+                                    setCouponResult(null);
+                                    setShowCoupons(false);
+                                  }
+                                }}
+                                className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition ${
+                                  eligible
+                                    ? 'bg-white dark:bg-slate-700/80 border-blue-200 dark:border-slate-600 cursor-pointer hover:border-blue-500'
+                                    : 'opacity-50 cursor-not-allowed bg-slate-100 dark:bg-slate-800'
+                                }`}
+                              >
+                                <div>
+                                  <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">{c.code}</span>
+                                  <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                                    {c.discountType === 'PERCENTAGE' ? `${c.discountValue}% OFF` : `₹${c.discountValue} OFF`}
+                                    {c.minBookingAmount > 0 && ` (Min ₹${c.minBookingAmount.toLocaleString()})`}
+                                  </p>
+                                </div>
+                                <span className="text-[10px] text-slate-400">Tap to use</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={couponCode}
+                          onChange={(e) => {
+                            setCouponCode(e.target.value.toUpperCase());
+                            setCouponResult(null);
+                          }}
+                          placeholder="ENTER CODE"
+                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-slate-800 dark:text-white uppercase placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleApplyCoupon}
+                          disabled={couponLoading || !couponCode.trim()}
+                          className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold disabled:opacity-50 transition cursor-pointer"
+                        >
+                          {couponLoading ? '...' : 'Apply'}
+                        </button>
+                      </div>
+
+                      {couponResult && (
+                        <p className="text-emerald-600 text-xs mt-1.5 font-bold flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" /> Coupon {couponResult.code} applied: -₹{couponResult.discountAmount.toLocaleString()}
+                        </p>
+                      )}
                     </div>
 
-                    {freeTickets > 0 && (
-                      <div className="flex justify-between text-amber-600 dark:text-amber-400 font-bold">
-                        <span>4+1 Free Ticket ({freeTickets} pax)</span>
-                        <span>-₹{(packageAmount - packageAmountAfterFree).toLocaleString()}</span>
-                      </div>
-                    )}
-
-                    {isGroupDiscount && (
-                      <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                        <span>Group Discount (20%)</span>
-                        <span>-₹{discountAmount.toLocaleString()}</span>
-                      </div>
-                    )}
-
-                    {selectedDeparture && (
+                    {/* Dynamic Cost Breakdown */}
+                    <div className="p-4 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
                       <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                        <span>Transit ({selectedDeparture.departureCity} × {form.numberOfPeople})</span>
-                        <span>+₹{transportAmount.toLocaleString()}</span>
+                        <span>Package (₹{pkg.pricePerPerson.toLocaleString()} × {form.numberOfPeople})</span>
+                        <span>₹{packageAmount.toLocaleString()}</span>
                       </div>
-                    )}
 
-                    {couponDiscount > 0 && (
-                      <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                        <span>Coupon Discount</span>
-                        <span>-₹{couponDiscount.toLocaleString()}</span>
+                      {freeTickets > 0 && (
+                        <div className="flex justify-between text-amber-600 dark:text-amber-400 font-bold">
+                          <span>4+1 Free Ticket ({freeTickets} pax)</span>
+                          <span>-₹{(packageAmount - packageAmountAfterFree).toLocaleString()}</span>
+                        </div>
+                      )}
+
+                      {isGroupDiscount && (
+                        <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+                          <span>Group Discount (20%)</span>
+                          <span>-₹{discountAmount.toLocaleString()}</span>
+                        </div>
+                      )}
+
+                      {selectedDeparture && (
+                        <div className="flex justify-between text-slate-600 dark:text-slate-300">
+                          <span>Transit ({selectedDeparture.departureCity} × {form.numberOfPeople})</span>
+                          <span>+₹{transportAmount.toLocaleString()}</span>
+                        </div>
+                      )}
+
+                      {couponDiscount > 0 && (
+                        <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+                          <span>Coupon Discount</span>
+                          <span>-₹{couponDiscount.toLocaleString()}</span>
+                        </div>
+                      )}
+
+                      <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between items-baseline font-bold text-sm text-slate-900 dark:text-white">
+                        <span>Final Total:</span>
+                        <span className="text-xl font-black text-blue-600 dark:text-cyan-400">
+                          ₹{totalAmount.toLocaleString()}
+                        </span>
                       </div>
-                    )}
 
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between items-baseline font-bold text-sm text-slate-900 dark:text-white">
-                      <span>Final Total:</span>
-                      <span className="text-xl font-black text-blue-600 dark:text-cyan-400">
-                        ₹{totalAmount.toLocaleString()}
-                      </span>
+                      {totalSavings > 0 && (
+                        <p className="text-emerald-600 dark:text-emerald-400 text-[11px] font-bold text-center pt-1">
+                          Total Savings: ₹{totalSavings.toLocaleString()}
+                        </p>
+                      )}
                     </div>
 
-                    {totalSavings > 0 && (
-                      <p className="text-emerald-600 dark:text-emerald-400 text-[11px] font-bold text-center pt-1">
-                        Total Savings: ₹{totalSavings.toLocaleString()}
+                    {formError && (
+                      <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-xl text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                        <span>{formError}</span>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={bookingLoading || pkg.availableSeats === 0}
+                      className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      {pkg.availableSeats === 0
+                        ? 'Sold Out'
+                        : bookingLoading
+                        ? 'Confirming Booking...'
+                        : 'Proceed to Checkout'}
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+
+                    {!user && (
+                      <p className="text-[11px] text-center text-slate-400">
+                        You will be redirected to sign in before finalizing.
                       </p>
                     )}
-                  </div>
-
-                  {formError && (
-                    <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 rounded-xl text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                      <span>{formError}</span>
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={bookingLoading || pkg.availableSeats === 0}
-                    className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2"
-                  >
-                    {pkg.availableSeats === 0
-                      ? 'Sold Out'
-                      : bookingLoading
-                      ? 'Confirming Booking...'
-                      : 'Proceed to Checkout'}
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-
-                  {!user && (
-                    <p className="text-[11px] text-center text-slate-400">
-                      You will be redirected to sign in before finalizing.
-                    </p>
-                  )}
-                </form>
+                  </form>
+                )}
               </div>
             </div>
           </div>

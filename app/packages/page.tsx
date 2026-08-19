@@ -497,18 +497,20 @@ function PackagesContent() {
                       {pkg.category}
                     </span>
 
-                    {/* Wishlist Button */}
-                    <button
-                      onClick={(e) => toggleWishlist(e, pkg.id)}
-                      className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-transform"
-                      title={wishlisted.has(pkg.id) ? 'Remove from wishlist' : 'Save to wishlist'}
-                    >
-                      <Heart
-                        className={`w-4 h-4 transition ${
-                          wishlisted.has(pkg.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-500 dark:text-slate-400'
-                        }`}
-                      />
-                    </button>
+                    {/* Wishlist Button (Users Only) */}
+                    {user?.role !== 'ADMIN' && (
+                      <button
+                        onClick={(e) => toggleWishlist(e, pkg.id)}
+                        className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-transform"
+                        title={wishlisted.has(pkg.id) ? 'Remove from wishlist' : 'Save to wishlist'}
+                      >
+                        <Heart
+                          className={`w-4 h-4 transition ${
+                            wishlisted.has(pkg.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-500 dark:text-slate-400'
+                          }`}
+                        />
+                      </button>
+                    )}
 
                     {/* Scarcity / Seats Pill */}
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
@@ -601,12 +603,14 @@ function PackagesContent() {
                           </p>
                         </div>
 
-                        <button
-                          onClick={(e) => toggleWishlist(e, pkg.id)}
-                          className="p-2 text-slate-400 hover:text-rose-500 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
-                        >
-                          <Heart className={`w-5 h-5 ${wishlisted.has(pkg.id) ? 'fill-rose-500 text-rose-500' : ''}`} />
-                        </button>
+                        {user?.role !== 'ADMIN' && (
+                          <button
+                            onClick={(e) => toggleWishlist(e, pkg.id)}
+                            className="p-2 text-slate-400 hover:text-rose-500 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                          >
+                            <Heart className={`w-5 h-5 ${wishlisted.has(pkg.id) ? 'fill-rose-500 text-rose-500' : ''}`} />
+                          </button>
+                        )}
                       </div>
 
                       <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4 line-clamp-2">

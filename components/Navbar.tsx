@@ -90,7 +90,7 @@ export default function Navbar() {
               Packages
             </Link>
 
-            {user && (
+            {user && user.role !== 'ADMIN' && (
               <>
                 <Link
                   href="/my-bookings"
@@ -119,21 +119,21 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-
-                {user.role === 'ADMIN' && (
-                  <Link
-                    href="/admin"
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                      pathname.startsWith('/admin')
-                        ? 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                        : 'text-cyan-600 dark:text-cyan-400 hover:text-blue-600 font-semibold'
-                    }`}
-                  >
-                    <ShieldCheck className="w-4 h-4" />
-                    Admin Panel
-                  </Link>
-                )}
               </>
+            )}
+
+            {user && user.role === 'ADMIN' && (
+              <Link
+                href="/admin"
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                  pathname.startsWith('/admin')
+                    ? 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
+                    : 'text-cyan-600 dark:text-cyan-400 hover:text-blue-600 font-semibold'
+                }`}
+              >
+                <ShieldCheck className="w-4 h-4" />
+                Admin Panel
+              </Link>
             )}
           </nav>
 
