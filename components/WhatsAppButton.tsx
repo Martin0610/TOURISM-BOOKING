@@ -8,7 +8,7 @@ export default function WhatsAppButton() {
   };
 
   return (
-    <aside aria-label="WhatsApp Support" className="fixed bottom-12 right-6 sm:bottom-14 sm:right-8 z-40 flex items-center gap-2.5">
+    <aside aria-label="WhatsApp Support" className="fixed bottom-20 right-6 sm:bottom-24 sm:right-8 z-40 flex items-center gap-2.5">
       {/* Live Support Text Pill */}
       <button
         onClick={openWhatsApp}

@@ -28,11 +28,11 @@ export default function PolicyModal({ type, onClose }: PolicyModalProps) {
   if (!type) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop overlay */}
       <div 
         onClick={onClose} 
-        className="absolute inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity animate-fade-in" 
+        className="absolute inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity animate-fade-in cursor-pointer" 
       />
 
       {/* Modal Container */}
