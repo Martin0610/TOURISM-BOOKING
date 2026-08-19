@@ -8,18 +8,24 @@ import {
   LayoutDashboard, Package, ShoppingBag, Users, CreditCard,
   Globe, LogOut, ChevronRight, Menu, X, Star, Tag, Sparkles, Compass
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import api from '@/lib/api';
 import ThemeToggle from './ThemeToggle';
 
-const navItems = [
+const navItems: {
+  href: string;
+  label: string;
+  icon: any;
+  badgeKey?: 'bookings' | 'reviews' | 'vip';
+}[] = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/packages', label: 'Packages', icon: Package },
-  { href: '/admin/bookings', label: 'Bookings', icon: ShoppingBag },
+  { href: '/admin/bookings', label: 'Bookings', icon: ShoppingBag, badgeKey: 'bookings' },
   { href: '/admin/users', label: 'Users', icon: Users },
   { href: '/admin/payments', label: 'Payments', icon: CreditCard },
-  { href: '/admin/reviews', label: 'Reviews', icon: Star },
+  { href: '/admin/reviews', label: 'Reviews', icon: Star, badgeKey: 'reviews' },
   { href: '/admin/coupons', label: 'Coupons', icon: Tag },
-  { href: '/admin/vip', label: 'VIP Club & Deals', icon: Sparkles },
+  { href: '/admin/vip', label: 'VIP Club & Deals', icon: Sparkles, badgeKey: 'vip' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +33,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { user, logout } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [badges, setBadges] = useState<{ bookings?: number; reviews?: number; vip?: number }>({});
+
+  useEffect(() => {
+    if (user?.role === 'ADMIN') {
+      const fetchNotifications = () => {
+        api.get('/api/admin/notifications')
+          .then((res) => setBadges(res.data.data || {}))
+          .catch(() => {});
+      };
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 15000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   const handleLogout = () => { logout(); router.push('/login'); };
 
@@ -50,8 +70,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav Items */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          {navItems.map(({ href, label, icon: Icon }) => {
+          {navItems.map(({ href, label, icon: Icon, badgeKey }) => {
             const active = pathname === href;
+            const count = badgeKey ? badges[badgeKey] : 0;
+
             return (
               <Link
                 key={href}
@@ -63,9 +85,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     : 'text-slate-400 hover:bg-slate-800/70 hover:text-white'
                 }`}
               >
-                <Icon className={`w-4.5 h-4.5 ${active ? 'text-white' : 'text-slate-400 group-hover:text-purple-400 transition-colors'}`} />
-                <span>{label}</span>
-                {active && <ChevronRight className="w-4 h-4 ml-auto text-white/80" />}
+                <Icon className={`w-4.5 h-4.5 flex-shrink-0 ${active ? 'text-white' : 'text-slate-400 group-hover:text-purple-400 transition-colors'}`} />
+                <span className="truncate">{label}</span>
+
+                {/* Live Notification Badge */}
+                {count && count > 0 ? (
+                  <span className={`ml-auto text-[11px] font-black px-2 py-0.5 rounded-full shadow-sm flex items-center justify-center min-w-[20px] ${
+                    active
+                      ? 'bg-white text-purple-700 font-extrabold'
+                      : badgeKey === 'vip'
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+                      : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white border border-purple-400/30'
+                  }`}>
+                    {count}
+                  </span>
+                ) : active ? (
+                  <ChevronRight className="w-4 h-4 ml-auto text-white/80 flex-shrink-0" />
+                ) : null}
               </Link>
             );
           })}

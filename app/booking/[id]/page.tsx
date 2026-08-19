@@ -96,9 +96,149 @@ export default function BookingPage() {
     }
   };
 
-  const printVoucher = () => {
-    if (typeof window !== 'undefined') {
-      window.print();
+  const printAndDownloadVoucher = () => {
+    if (typeof window === 'undefined' || !booking) return;
+
+    // 1. Open browser printer / Save as PDF dialog
+    window.print();
+
+    // 2. Automatically generate and download a clean, high-fidelity standalone copy
+    try {
+      const voucherNumber = booking.id.slice(-8).toUpperCase();
+      const travelDateFormatted = new Date(booking.travelDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      const issueDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      const voucherHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripEase E-Ticket Voucher - #${voucherNumber}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; padding: 32px 16px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ticket-container { max-width: 680px; margin: 0 auto; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid #e2e8f0; }
+    .header { background: linear-gradient(135deg, #3b0764 0%, #1e1b4b 50%, #0f172a 100%); color: #ffffff; padding: 32px 28px; }
+    .voucher-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; text-transform: uppercase; background: rgba(168, 85, 247, 0.25); border: 1px solid rgba(192, 132, 252, 0.4); color: #e9d5ff; padding: 4px 12px; border-radius: 9999px; letter-spacing: 0.05em; margin-bottom: 12px; }
+    .title { font-size: 24px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+    .destination { font-size: 13px; color: #cbd5e1; display: flex; align-items: center; gap: 6px; }
+    .status-badge { display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; background: #059669; color: #ffffff; padding: 6px 14px; border-radius: 12px; letter-spacing: 0.05em; }
+    .perforation { position: relative; display: flex; align-items: center; background: #ffffff; height: 24px; }
+    .notch-left { width: 24px; height: 24px; background: #f8fafc; border-radius: 50%; margin-left: -12px; border-right: 1px solid #e2e8f0; }
+    .perforated-line { flex: 1; border-bottom: 2px dashed #cbd5e1; margin: 0 8px; }
+    .notch-right { width: 24px; height: 24px; background: #f8fafc; border-radius: 50%; margin-right: -12px; border-left: 1px solid #e2e8f0; }
+    .content { padding: 28px; }
+    .specs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .spec-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px; }
+    .spec-label { font-size: 11px; font-weight: 600; color: #64748b; margin-bottom: 4px; display: block; }
+    .spec-value { font-size: 13px; font-weight: 800; color: #0f172a; white-space: nowrap; }
+    .spec-phone { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    .fare-card { background: #fbfbfe; border: 1px solid #ede9fe; border-radius: 16px; padding: 18px; margin-bottom: 24px; }
+    .fare-row { display: flex; justify-content: space-between; font-size: 13px; color: #334155; margin-bottom: 8px; }
+    .fare-row.total { font-size: 16px; font-weight: 800; color: #0f172a; border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 10px; margin-bottom: 0; }
+    .discount-val { color: #059669; font-weight: 700; }
+    .info-footer { font-size: 11px; color: #64748b; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 16px; }
+    .brand-footer { text-align: center; margin-top: 24px; font-size: 12px; color: #94a3b8; font-weight: 600; }
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .ticket-container { box-shadow: none; border: 1px solid #000000; }
+      .notch-left, .notch-right { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket-container">
+    <div class="header">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div class="voucher-tag">CONFIRMATION VOUCHER #${voucherNumber}</div>
+          <div class="title">${booking.package?.name}</div>
+          <div class="destination">📍 ${booking.package?.destination}, ${booking.package?.state}</div>
+        </div>
+        <div>
+          <span class="status-badge">BOOKING CONFIRMED</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="perforation">
+      <div class="notch-left"></div>
+      <div class="perforated-line"></div>
+      <div class="notch-right"></div>
+    </div>
+
+    <div class="content">
+      <div class="specs-grid">
+        <div class="spec-card">
+          <span class="spec-label">Travel Date</span>
+          <span class="spec-value">📅 ${travelDateFormatted}</span>
+        </div>
+        <div class="spec-card">
+          <span class="spec-label">Passengers</span>
+          <span class="spec-value">👥 ${booking.numberOfPeople} Traveler${booking.numberOfPeople > 1 ? 's' : ''}</span>
+        </div>
+        <div class="spec-card">
+          <span class="spec-label">Contact Phone</span>
+          <span class="spec-value spec-phone">📞 ${booking.phone || 'On file'}</span>
+        </div>
+        <div class="spec-card">
+          <span class="spec-label">Transit Departure</span>
+          <span class="spec-value">✈️ ${booking.departureLocation ? booking.departureLocation.departureCity : 'Self Arranged'}</span>
+        </div>
+      </div>
+
+      <div class="fare-card">
+        <div class="fare-row">
+          <span>Package Base Fare (${booking.numberOfPeople} traveler${booking.numberOfPeople > 1 ? 's' : ''})</span>
+          <span style="font-weight: 700;">₹${booking.packageAmount.toLocaleString('en-IN')}</span>
+        </div>
+        ${(booking.transportAmount || 0) > 0 ? `
+        <div class="fare-row">
+          <span>Transit & Departure City Surcharge</span>
+          <span style="font-weight: 700;">+₹${booking.transportAmount.toLocaleString('en-IN')}</span>
+        </div>` : ''}
+        ${(booking.discountAmount || 0) > 0 ? `
+        <div class="fare-row">
+          <span>Promotional Group / Group Offer</span>
+          <span class="discount-val">-₹${(booking.discountAmount || 0).toLocaleString('en-IN')}</span>
+        </div>` : ''}
+        ${(booking.couponDiscount || 0) > 0 ? `
+        <div class="fare-row">
+          <span>VIP & Promo Coupon Savings</span>
+          <span class="discount-val">-₹${(booking.couponDiscount || 0).toLocaleString('en-IN')}</span>
+        </div>` : ''}
+        <div class="fare-row total">
+          <span>Total Paid</span>
+          <span style="color: #7c3aed;">₹${booking.totalAmount.toLocaleString('en-IN')}</span>
+        </div>
+      </div>
+
+      <div class="info-footer">
+        <p><strong>Important Travel Guidelines:</strong></p>
+        <p>• Please present this official confirmation voucher (digital or print) at hotel check-in and during boarding.</p>
+        <p>• All travelers must carry government-approved photo ID proofs (Aadhaar / Passport / Voter ID).</p>
+        <p>• 24/7 TripEase Holiday Support: support@tripease.com | Helpline: +91 98765 43210</p>
+        <p style="margin-top: 6px; font-size: 10px; color: #94a3b8;">Issued on: ${issueDate} • Reference: ${booking.id}</p>
+      </div>
+    </div>
+  </div>
+  <div class="brand-footer">TripEase Holidays — Explore India with Ease</div>
+</body>
+</html>`;
+
+      const blob = new Blob([voucherHtml], { type: 'text/html;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `TripEase-ETicket-${voucherNumber}.html`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success('E-Ticket downloaded & printer opened!');
+    } catch {
+      // Fallback
     }
   };
 
@@ -152,10 +292,10 @@ export default function BookingPage() {
 
             {booking.status === 'CONFIRMED' && (
               <button
-                onClick={printVoucher}
+                onClick={printAndDownloadVoucher}
                 className="inline-flex items-center gap-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-md shadow-purple-600/20 transition cursor-pointer"
               >
-                <Printer className="w-4 h-4" /> Print / Save E-Ticket PDF
+                <Printer className="w-4 h-4" /> Print & Download E-Ticket
               </button>
             )}
           </div>

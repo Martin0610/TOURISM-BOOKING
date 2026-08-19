@@ -356,13 +356,15 @@ export default function AdminVipPage() {
                               {sub.isRegistered ? 'Registered User' : 'Guest'}
                             </span>
                           </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
-                            <span className="flex items-center gap-1">
-                              <Mail className="w-3 h-3 text-cyan-500" /> {sub.email}
+                          <div className="text-xs text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-1">
+                            <span className="flex items-center gap-1.5 min-w-0">
+                              <Mail className="w-3.5 h-3.5 text-cyan-500 flex-shrink-0" />
+                              <span className="truncate">{sub.email}</span>
                             </span>
                             {sub.userPhone && (
-                              <span className="flex items-center gap-1">
-                                <Phone className="w-3 h-3 text-emerald-500" /> {sub.userPhone}
+                              <span className="flex items-center gap-1.5 whitespace-nowrap flex-shrink-0 font-mono text-[11px] bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-200/80 dark:border-slate-700/60 text-slate-700 dark:text-slate-300">
+                                <Phone className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                                <span className="whitespace-nowrap">{sub.userPhone}</span>
                               </span>
                             )}
                           </div>
