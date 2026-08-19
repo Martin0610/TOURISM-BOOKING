@@ -174,7 +174,7 @@ export default function Footer() {
                     </Link>
                   </div>
                 </div>
-              ) : vipInfo?.isVip ? (
+              ) : vipInfo?.isVip || vipInfo?.status === 'APPROVED' || user?.isVip || user?.vipStatus === 'APPROVED' ? (
                 /* Already Approved VIP Member - Do not show email form */
                 <div className="space-y-3 bg-gradient-to-br from-amber-500/15 via-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl p-4 shadow-lg shadow-amber-500/5">
                   <div className="flex items-center justify-between">
@@ -196,8 +196,28 @@ export default function Footer() {
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
+              ) : vipInfo?.status === 'PENDING' || user?.vipStatus === 'PENDING' ? (
+                /* Application Already Submitted & Under Review - No email input */
+                <div className="space-y-3 bg-gradient-to-br from-amber-500/10 via-slate-900 to-slate-950 border border-amber-400/30 rounded-2xl p-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/40 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-amber-400" /> VIP Under Review
+                    </span>
+                    <span className="text-[10px] text-amber-400 font-semibold">Pending</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Your VIP membership application is currently under review by our luxury travel concierge.
+                  </p>
+                  <Link
+                    href="/vip"
+                    className="inline-flex items-center justify-between w-full px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 border border-amber-400/30 text-amber-300 hover:bg-amber-400/10 transition"
+                  >
+                    <span>Track Status in VIP Hub</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               ) : (
-                /* Non-VIP / Guest Applicant */
+                /* Non-VIP / Guest Applicant - Form only shown if not applied yet */
                 <>
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="text-white font-bold text-sm flex items-center gap-1.5">
@@ -210,33 +230,23 @@ export default function Footer() {
                   <p className="text-xs text-slate-400 mb-3 leading-relaxed">
                     Spend <span className="text-amber-300 font-semibold">₹60,000+</span> across bookings to qualify for VIP Elite status, secret flash sales & tier discounts. Approved by admin based on travel history.
                   </p>
-                  
-                  {vipInfo?.status === 'PENDING' ? (
-                    <div className="bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 text-center space-y-1">
-                      <span className="text-xs font-bold text-amber-300 block">Application Under Review</span>
-                      <p className="text-[11px] text-slate-400">Our concierge is reviewing your travel profile.</p>
-                      <Link href="/vip" className="text-[11px] text-cyan-400 hover:underline font-semibold inline-block pt-1">
-                        Track VIP Status →
-                      </Link>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleNewsletter} className="flex gap-1.5">
-                      <input
-                        type="email"
-                        value={newsletterEmail}
-                        onChange={(e) => setNewsletterEmail(e.target.value)}
-                        placeholder="Your account email..."
-                        className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                      />
-                      <button
-                        type="submit"
-                        disabled={subscribing || !newsletterEmail}
-                        className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer whitespace-nowrap shadow-sm shadow-amber-500/20"
-                      >
-                        {subscribing ? 'Applying...' : 'Apply VIP'}
-                      </button>
-                    </form>
-                  )}
+
+                  <form onSubmit={handleNewsletter} className="flex gap-1.5">
+                    <input
+                      type="email"
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      placeholder="Your account email..."
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    />
+                    <button
+                      type="submit"
+                      disabled={subscribing || !newsletterEmail}
+                      className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer whitespace-nowrap shadow-sm shadow-amber-500/20"
+                    >
+                      {subscribing ? 'Applying...' : 'Apply VIP'}
+                    </button>
+                  </form>
                 </>
               )}
 

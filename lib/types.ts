@@ -5,6 +5,11 @@ export interface User {
   phone?: string;
   role: 'USER' | 'ADMIN';
   createdAt: string;
+  totalBookings?: number;
+  confirmedBookings?: number;
+  totalSpent?: number;
+  vipStatus?: 'APPROVED' | 'PENDING' | 'REJECTED' | 'NOT_APPLIED';
+  isVip?: boolean;
 }
 
 export interface Package {

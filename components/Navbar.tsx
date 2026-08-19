@@ -3,8 +3,11 @@
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { Menu, X, Compass, Heart, Sparkles, User as UserIcon, LogOut, ShieldCheck, MapPin } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { 
+  Menu, X, Compass, Heart, Sparkles, User as UserIcon, LogOut, 
+  ShieldCheck, MapPin, ChevronDown, Mail, Phone, Crown, ShoppingBag 
+} from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import api from '@/lib/api';
 
@@ -15,6 +18,18 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [wishlistCount, setWishlistCount] = useState<number>(0);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target as Node)) {
+        setUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -173,23 +188,167 @@ export default function Navbar() {
             <ThemeToggle />
 
             {user ? (
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 text-white text-xs font-bold flex items-center justify-center">
+              <div className="relative pl-2 border-l border-slate-200 dark:border-slate-800" ref={userDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className={`flex items-center gap-2 px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${
+                    userDropdownOpen
+                      ? 'bg-purple-50 dark:bg-purple-950/60 border-purple-400 dark:border-purple-600 ring-2 ring-purple-400/30'
+                      : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500'
+                  }`}
+                >
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-700 text-white text-xs font-bold flex items-center justify-center shadow-sm">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 max-w-[100px] truncate">
-                    {user.name.split(' ')[0]}
-                  </span>
-                </div>
-
-                <button
-                  onClick={handleLogout}
-                  title="Sign out"
-                  className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-full transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-4 h-4" />
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200 max-w-[90px] truncate">
+                      {user.name.split(' ')[0]}
+                    </span>
+                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180 text-purple-600' : ''}`} />
+                  </div>
                 </button>
+
+                {/* User Details Dropdown Modal */}
+                {userDropdownOpen && (
+                  <div className="absolute right-0 mt-2.5 w-80 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-purple-200/80 dark:border-slate-800 p-5 z-50 animate-in fade-in slide-in-from-top-2 duration-200 space-y-4">
+                    {/* User Profile Header */}
+                    <div className="flex items-start gap-3.5 pb-3.5 border-b border-slate-100 dark:border-slate-800">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-700 text-white text-base font-extrabold flex items-center justify-center shadow-md shadow-purple-600/30 flex-shrink-0">
+                        {user.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <h4 className="font-extrabold text-sm text-slate-900 dark:text-white truncate">
+                            {user.name}
+                          </h4>
+                          <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                            user.role === 'ADMIN'
+                              ? 'bg-purple-100 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-800'
+                              : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-blue-900'
+                          }`}>
+                            {user.role === 'ADMIN' ? 'Admin' : 'Traveler'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate flex items-center gap-1">
+                          <Mail className="w-3 h-3 text-cyan-500 flex-shrink-0" />
+                          <span className="truncate">{user.email}</span>
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1 font-mono">
+                          <Phone className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                          <span className="whitespace-nowrap">{user.phone || 'No phone registered'}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* VIP Status Pill Card */}
+                    <div className={`p-3 rounded-2xl border ${
+                      user.role === 'ADMIN'
+                        ? 'bg-purple-50/60 dark:bg-purple-950/40 border-purple-200 dark:border-purple-900/60'
+                        : user.isVip || user.vipStatus === 'APPROVED'
+                        ? 'bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-indigo-500/15 border-amber-300 dark:border-amber-500/40'
+                        : user.vipStatus === 'PENDING'
+                        ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900'
+                        : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <Crown className={`w-4 h-4 ${
+                            user.role === 'ADMIN' || user.isVip || user.vipStatus === 'APPROVED'
+                              ? 'text-amber-500 fill-amber-500'
+                              : 'text-slate-400'
+                          }`} />
+                          <span className="text-xs font-black text-slate-900 dark:text-white">
+                            {user.role === 'ADMIN'
+                              ? 'Administrator Access'
+                              : user.isVip || user.vipStatus === 'APPROVED'
+                              ? '👑 VIP Elite Member'
+                              : user.vipStatus === 'PENDING'
+                              ? '⏳ VIP Under Review'
+                              : 'Standard Member'}
+                          </span>
+                        </div>
+                        <Link
+                          href={user.role === 'ADMIN' ? '/admin/vip' : '/vip'}
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="text-[11px] font-bold text-purple-600 dark:text-purple-400 hover:underline"
+                        >
+                          {user.role === 'ADMIN' ? 'Manage' : 'VIP Hub →'}
+                        </Link>
+                      </div>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                        {user.role === 'ADMIN'
+                          ? 'Full administrative control over trips, VIP members, and coupons.'
+                          : user.isVip || user.vipStatus === 'APPROVED'
+                          ? 'Enjoy exclusive VIP discounts, private flash sales & 24/7 concierge.'
+                          : user.vipStatus === 'PENDING'
+                          ? 'Your VIP application is currently under review by our concierge.'
+                          : 'Spend ₹60,000+ across vacations to unlock VIP Elite benefits.'}
+                      </p>
+                    </div>
+
+                    {/* Travel Activity Stats */}
+                    <div className="grid grid-cols-2 gap-2 text-center">
+                      <div className="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 uppercase font-bold block">Trips Booked</span>
+                        <span className="text-xs font-black text-slate-800 dark:text-white mt-0.5 block">
+                          {user.totalBookings ?? 0} Trips
+                        </span>
+                      </div>
+                      <div className="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 uppercase font-bold block">Total Spend</span>
+                        <span className="text-xs font-black text-purple-600 dark:text-purple-400 mt-0.5 block">
+                          ₹{(user.totalSpent ?? 0).toLocaleString('en-IN')}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action Links */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                      {user.role === 'ADMIN' ? (
+                        <Link
+                          href="/admin"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-purple-50 dark:hover:bg-purple-950/50 hover:text-purple-600 dark:hover:text-purple-300 transition"
+                        >
+                          <ShieldCheck className="w-4 h-4 text-purple-600" />
+                          <span>Admin Dashboard</span>
+                        </Link>
+                      ) : (
+                        <>
+                          <Link
+                            href="/my-bookings"
+                            onClick={() => setUserDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-purple-50 dark:hover:bg-purple-950/50 hover:text-purple-600 dark:hover:text-purple-300 transition"
+                          >
+                            <ShoppingBag className="w-4 h-4 text-purple-600" />
+                            <span>My Bookings</span>
+                          </Link>
+                          <Link
+                            href="/wishlist"
+                            onClick={() => setUserDropdownOpen(false)}
+                            className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/50 hover:text-rose-600 dark:hover:text-rose-300 transition"
+                          >
+                            <Heart className="w-4 h-4 text-rose-500" />
+                            <span>My Wishlist ({wishlistCount})</span>
+                          </Link>
+                        </>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUserDropdownOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition cursor-pointer text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-2">

@@ -11,6 +11,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, phone?: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -20,32 +21,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const refreshUser = async () => {
+    try {
+      if (localStorage.getItem('token')) {
+        const res = await api.get('/api/auth/me');
+        if (res.data?.data) {
+          setUser(res.data.data);
+          localStorage.setItem('user', JSON.stringify(res.data.data));
+        }
+      }
+    } catch {
+      // Token expired or invalid
+    }
+  };
+
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
+      refreshUser();
     }
     setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
     const res = await api.post('/api/auth/login', { email, password });
-    const { user, token } = res.data.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setToken(token);
-    setUser(user);
+    const { user: loggedInUser, token: authToken } = res.data.data;
+    localStorage.setItem('token', authToken);
+    localStorage.setItem('user', JSON.stringify(loggedInUser));
+    setToken(authToken);
+    setUser(loggedInUser);
+    refreshUser();
   };
 
   const register = async (name: string, email: string, password: string, phone?: string) => {
     const res = await api.post('/api/auth/register', { name, email, password, phone });
-    const { user, token } = res.data.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setToken(token);
-    setUser(user);
+    const { user: registeredUser, token: authToken } = res.data.data;
+    localStorage.setItem('token', authToken);
+    localStorage.setItem('user', JSON.stringify(registeredUser));
+    setToken(authToken);
+    setUser(registeredUser);
+    refreshUser();
   };
 
   const logout = () => {
@@ -56,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, loading, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
