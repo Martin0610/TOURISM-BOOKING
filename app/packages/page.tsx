@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, Suspense } from 'react';
+import { useEffect, useState, useMemo, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
@@ -10,11 +10,18 @@ import {
   MapPin, Clock, Users, Search, Filter, Heart, Plane, Car, Globe, 
   Sparkles, Star, Hotel, Utensils, Tag, LayoutGrid, List, ArrowUpDown, 
   X, Check, Flame, ChevronRight, ShieldCheck, Gift, Palmtree, Mountain,
-  Landmark, Trees, Compass, Waves
+  Landmark, Trees, Compass, Waves, TrendingDown, TrendingUp, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import WhatsAppButton from '@/components/WhatsAppButton';
+
+const SORT_OPTIONS = [
+  { value: 'featured', label: 'Featured & Recommended', icon: Sparkles, color: 'text-amber-500' },
+  { value: 'price-low', label: 'Price: Low to High', icon: TrendingDown, color: 'text-emerald-500' },
+  { value: 'price-high', label: 'Price: High to Low', icon: TrendingUp, color: 'text-blue-500' },
+  { value: 'duration', label: 'Duration: Longest First', icon: Clock, color: 'text-cyan-500' },
+];
 
 function PackagesContent() {
   const { user } = useAuth();
@@ -32,8 +39,21 @@ function PackagesContent() {
   const [maxPrice, setMaxPrice] = useState<number>(45000);
   const [transportOnly, setTransportOnly] = useState(false);
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'duration'>('featured');
+  const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [wishlisted, setWishlisted] = useState<Set<string>>(new Set());
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setSortDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Synchronize URL query params with state
   useEffect(() => {
@@ -323,21 +343,61 @@ function PackagesContent() {
                 />
               </div>
 
-              {/* Sort By Dropdown */}
-              <div>
+              {/* Sort By Custom Dropdown with Icons */}
+              <div ref={sortRef} className="relative">
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
                   <ArrowUpDown className="w-3.5 h-3.5 text-amber-500" /> Sort By
                 </label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
+                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer flex items-center justify-between text-left"
                 >
-                  <option value="featured">✨ Featured & Recommended</option>
-                  <option value="price-low">💰 Price: Low to High</option>
-                  <option value="price-high">💎 Price: High to Low</option>
-                  <option value="duration">⏱️ Duration: Longest First</option>
-                </select>
+                  <div className="flex items-center gap-2 truncate">
+                    {(() => {
+                      const selected = SORT_OPTIONS.find((s) => s.value === sortBy) || SORT_OPTIONS[0];
+                      const Icon = selected.icon;
+                      return (
+                        <>
+                          <Icon className={`w-4 h-4 ${selected.color} flex-shrink-0`} />
+                          <span className="truncate font-semibold text-xs sm:text-sm">{selected.label}</span>
+                        </>
+                      );
+                    })()}
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${sortDropdownOpen ? 'rotate-180 text-blue-500' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {sortDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700 py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                    {SORT_OPTIONS.map((opt) => {
+                      const Icon = opt.icon;
+                      const isSelected = sortBy === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(opt.value as typeof sortBy);
+                            setSortDropdownOpen(false);
+                          }}
+                          className={`w-full px-3.5 py-2 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                            isSelected
+                              ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-300 font-bold'
+                              : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <Icon className={`w-4 h-4 ${opt.color}`} />
+                            <span>{opt.label}</span>
+                          </div>
+                          {isSelected && <Check className="w-4 h-4 text-blue-600 dark:text-cyan-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
 

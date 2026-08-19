@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
@@ -9,13 +9,24 @@ import {
   Compass, Shield, CreditCard, Star, MapPin, Users, Clock, Phone, 
   Gift, Percent, Tag, Sparkles, ArrowRight, CheckCircle2, ChevronDown, 
   Plane, Heart, Flame, MessageCircle, Check, Calendar, Search, 
-  Palmtree, Mountain, Landmark, Waves, Sun, Luggage
+  Palmtree, Mountain, Landmark, Waves, Sun, Luggage, Trees
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+
+const VIBE_OPTIONS = [
+  { value: '', label: 'All Experiences', icon: Compass, color: 'text-blue-500' },
+  { value: 'Beach', label: 'Beach Paradise', icon: Palmtree, color: 'text-amber-500' },
+  { value: 'Hill Station', label: 'Hill Stations', icon: Mountain, color: 'text-cyan-500' },
+  { value: 'Heritage', label: 'Royal Heritage', icon: Landmark, color: 'text-rose-500' },
+  { value: 'Nature', label: 'Nature & Backwaters', icon: Trees, color: 'text-emerald-500' },
+  { value: 'Adventure', label: 'Mountain Adventure', icon: Compass, color: 'text-indigo-500' },
+  { value: 'Island', label: 'Island Getaway', icon: Waves, color: 'text-teal-500' },
+  { value: 'Spiritual', label: 'Spiritual Journeys', icon: Sparkles, color: 'text-purple-500' },
+];
 
 const featuredDestinations = [
   {
@@ -88,7 +99,7 @@ const faqs = [
   },
   {
     q: 'Can I choose my departure city and transport mode?',
-    a: 'Yes! We support multi-city departures across India via Flights ✈️, Trains 🚆, and AC Buses 🚌. You can pick your preferred city at checkout or opt for self-arrangement if you already have tickets.',
+    a: 'Yes! We support multi-city departures across India via Flights, Trains, and AC Buses. You can pick your preferred city at checkout or opt for self-arrangement if you already have tickets.',
   },
   {
     q: 'Can I customize an itinerary?',
@@ -107,18 +118,30 @@ export default function Home() {
   // Search planner state
   const [searchDestination, setSearchDestination] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [vibeDropdownOpen, setVibeDropdownOpen] = useState(false);
+  const vibeRef = useRef<HTMLDivElement>(null);
   const [travelersCount, setTravelersCount] = useState('1');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   
   // Promo Coupons
-  const [coupons, setCoupons] = useState<Array<{ code: string; discount: string; desc?: string }>>([
-    { code: 'SAVE33', discount: '33% OFF', desc: 'Special 33% discount on bookings' },
-    { code: 'TRIP1000', discount: '₹1,000 OFF', desc: 'On bookings over ₹20,000' },
+  const [coupons, setCoupons] = useState([
+    { code: 'TRIP2026', discount: '20% OFF', desc: 'Auto applied on 3+ travelers' },
     { code: 'EXPLORE500', discount: '₹500 OFF', desc: 'Flat discount on any package' },
     { code: 'FAMILY2026', discount: '10% OFF', desc: 'Exclusive for group bookings' },
   ]);
+
+  // Close vibe dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (vibeRef.current && !vibeRef.current.contains(event.target as Node)) {
+        setVibeDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     api.get('/api/coupons/available')
@@ -225,25 +248,61 @@ export default function Home() {
                 />
               </div>
 
-              {/* Category Picker */}
-              <div className="sm:col-span-4 text-left bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60 focus-within:ring-2 focus-within:ring-blue-500 transition">
+              {/* Category Picker with Custom Icon Dropdown */}
+              <div ref={vibeRef} className="sm:col-span-4 text-left bg-slate-50 dark:bg-slate-800/80 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60 transition relative">
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1.5">
                   <Compass className="w-3.5 h-3.5 text-cyan-500" /> Experience Vibe
                 </label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-transparent text-sm font-semibold text-slate-800 dark:text-white focus:outline-none cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() => setVibeDropdownOpen(!vibeDropdownOpen)}
+                  className="w-full flex items-center justify-between text-sm font-semibold text-slate-800 dark:text-white focus:outline-none cursor-pointer text-left"
                 >
-                  <option value="">All Experiences</option>
-                  <option value="Beach">Beach Paradise</option>
-                  <option value="Hill Station">Hill Stations</option>
-                  <option value="Heritage">Royal Heritage</option>
-                  <option value="Nature">Nature & Backwaters</option>
-                  <option value="Adventure">Mountain Adventure</option>
-                  <option value="Island">Island Getaway</option>
-                  <option value="Spiritual">Spiritual Journeys</option>
-                </select>
+                  <div className="flex items-center gap-2 truncate">
+                    {(() => {
+                      const selected = VIBE_OPTIONS.find((o) => o.value === selectedCategory) || VIBE_OPTIONS[0];
+                      const Icon = selected.icon;
+                      return (
+                        <>
+                          <Icon className={`w-4 h-4 ${selected.color} flex-shrink-0`} />
+                          <span className="truncate">{selected.label}</span>
+                        </>
+                      );
+                    })()}
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${vibeDropdownOpen ? 'rotate-180 text-blue-500' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {vibeDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700 py-1.5 z-50 max-h-60 overflow-y-auto no-scrollbar animate-in fade-in slide-in-from-top-2 duration-150">
+                    {VIBE_OPTIONS.map((opt) => {
+                      const Icon = opt.icon;
+                      const isSelected = selectedCategory === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCategory(opt.value);
+                            setVibeDropdownOpen(false);
+                          }}
+                          className={`w-full px-3.5 py-2 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                            isSelected
+                              ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-cyan-300 font-bold'
+                              : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <Icon className={`w-4 h-4 ${opt.color}`} />
+                            <span>{opt.label}</span>
+                          </div>
+                          {isSelected && <Check className="w-4 h-4 text-blue-600 dark:text-cyan-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Search Button */}
