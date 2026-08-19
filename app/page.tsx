@@ -143,18 +143,24 @@ export default function Home() {
     router.push(`/packages?${params.toString()}`);
   };
 
-  const copyCoupon = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCode(code);
-    toast.success(`Coupon ${code} copied! Paste it during booking.`);
-    setTimeout(() => setCopiedCode(null), 2500);
-  };
+  const [subscribing, setSubscribing] = useState(false);
 
-  const handleNewsletter = (e: React.FormEvent) => {
+  const handleNewsletter = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newsletterEmail) return;
-    toast.success('Thank you! You are subscribed to VIP travel drops.');
-    setNewsletterEmail('');
+    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    try {
+      setSubscribing(true);
+      const res = await api.post('/api/newsletter', { email: newsletterEmail });
+      toast.success(res.data.message || 'Subscribed to VIP Club! 🎉');
+      setNewsletterEmail('');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Subscription failed');
+    } finally {
+      setSubscribing(false);
+    }
   };
 
   return (
@@ -836,9 +842,10 @@ export default function Home() {
                 />
                 <button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-xl text-xs font-bold transition"
+                  disabled={subscribing || !newsletterEmail}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                 >
-                  Join
+                  {subscribing ? 'Joining...' : 'Join'}
                 </button>
               </form>
 

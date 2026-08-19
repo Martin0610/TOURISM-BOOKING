@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard, Package, ShoppingBag, Users, CreditCard,
-  Globe, LogOut, ChevronRight, Menu, X, Star, Tag
+  Globe, LogOut, ChevronRight, Menu, X, Star, Tag, Sparkles
 } from 'lucide-react';
 import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
@@ -19,6 +19,7 @@ const navItems = [
   { href: '/admin/payments', label: 'Payments', icon: CreditCard },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/coupons', label: 'Coupons', icon: Tag },
+  { href: '/admin/vip', label: 'VIP Club & Deals', icon: Sparkles },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

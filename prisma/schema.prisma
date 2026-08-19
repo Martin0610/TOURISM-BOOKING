@@ -176,3 +176,21 @@ model Coupon {
 
   bookings Booking[]
 }
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model VipAnnouncement {
+  id         String   @id @default(cuid())
+  title      String
+  message    String
+  couponCode String?
+  discount   String?
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
