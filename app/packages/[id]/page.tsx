@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import api from '@/lib/api';
 import { Package, DepartureLocation } from '@/lib/types';
@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { 
   MapPin, Clock, Users, Calendar, ArrowLeft, Hotel, Utensils, 
-  CheckCircle2, XCircle, Star, Heart, Tag, Plane, Train, Bus, Car, 
+  CheckCircle2, XCircle, Star, Heart, Tag, Plane, Train, Bus, Car, Crown,
   Globe, PartyPopper, Phone, Copy, Sparkles, ShieldCheck, 
   ChevronRight, ChevronDown, MessageCircle, AlertCircle, Check, Gift
 } from 'lucide-react';
@@ -29,12 +29,15 @@ interface Review {
 export default function PackageDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlCoupon = searchParams.get('coupon');
   const { user, loading: authLoading } = useAuth();
   
   const [pkg, setPkg] = useState<Package | null>(null);
   const [departures, setDepartures] = useState<DepartureLocation[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [isUserVip, setIsUserVip] = useState(false);
 
   // Redirect unsigned users to login with redirect back to this package
   useEffect(() => {
@@ -88,12 +91,12 @@ export default function PackageDetailPage() {
   }, [user]);
   
   // Coupon State
-  const [couponCode, setCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState(urlCoupon ? urlCoupon.toUpperCase().trim() : '');
   const [couponResult, setCouponResult] = useState<{ discountAmount: number; code: string } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [availableCoupons, setAvailableCoupons] = useState<{
     id: string; code: string; discountType: string; discountValue: number;
-    minBookingAmount: number; expiresAt: string;
+    minBookingAmount: number; expiresAt: string; isVip?: boolean;
   }[]>([]);
   const [showCoupons, setShowCoupons] = useState(false);
 
@@ -121,12 +124,16 @@ export default function PackageDetailPage() {
         setAvgRating(reviewRes.data.data?.avgRating || 0);
         setAvailableCoupons(couponRes.data.data || []);
 
-        // Check wishlist
+        // Check wishlist & VIP status if logged in
         if (localStorage.getItem('token')) {
           try {
-            const wRes = await api.get('/api/wishlist');
-            const inList = wRes.data.data.some((w: { packageId: string }) => w.packageId === id);
+            const [wRes, vipRes] = await Promise.all([
+              api.get('/api/wishlist').catch(() => ({ data: { data: [] } })),
+              api.get('/api/vip/status').catch(() => ({ data: { data: { isVip: false } } })),
+            ]);
+            const inList = wRes.data.data?.some((w: { packageId: string }) => w.packageId === id);
             setIsWishlisted(inList);
+            setIsUserVip(Boolean(vipRes.data.data?.isVip));
           } catch { /* not logged in */ }
         }
       } catch {
@@ -993,48 +1000,85 @@ export default function PackageDetailPage() {
                     {/* Promo Coupon Input & Modal Trigger */}
                     <div className="pt-2">
                       <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                          <Tag className="w-3.5 h-3.5 text-amber-500" /> Apply Coupon
-                        </label>
+                        <div className="flex items-center gap-1.5">
+                          <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                            <Tag className="w-3.5 h-3.5 text-amber-500" /> Apply Coupon
+                          </label>
+                          {isUserVip && (
+                            <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 border border-amber-300/60">
+                              <Crown className="w-3 h-3 text-amber-500 fill-amber-500" /> VIP Member
+                            </span>
+                          )}
+                        </div>
                         {availableCoupons.length > 0 && (
                           <button
                             type="button"
                             onClick={() => setShowCoupons(!showCoupons)}
-                            className="text-[11px] font-bold text-blue-600 dark:text-cyan-400 hover:underline cursor-pointer"
+                            className="text-[11px] font-bold text-purple-600 dark:text-purple-400 hover:underline cursor-pointer"
                           >
-                            {showCoupons ? 'Hide Coupons' : `View ${availableCoupons.length} Coupons`}
+                            {showCoupons ? 'Hide Coupons' : `View ${availableCoupons.length} Offers`}
                           </button>
                         )}
                       </div>
 
                       {showCoupons && (
-                        <div className="mb-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 max-h-48 overflow-y-auto">
+                        <div className="mb-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-purple-100 dark:border-slate-700 space-y-2 max-h-56 overflow-y-auto">
                           {availableCoupons.map((c) => {
                             const eligible = subtotalBeforeCoupon >= c.minBookingAmount;
+                            const isVipCoupon = c.isVip;
+
                             return (
                               <div
                                 key={c.id}
-                                onClick={() => {
+                                onClick={async () => {
                                   if (eligible) {
                                     setCouponCode(c.code);
                                     setCouponResult(null);
                                     setShowCoupons(false);
+                                    setCouponLoading(true);
+                                    try {
+                                      const res = await api.post('/api/coupons/validate', {
+                                        code: c.code,
+                                        bookingAmount: subtotalBeforeCoupon,
+                                      });
+                                      setCouponResult(res.data.data);
+                                      toast.success(`Coupon ${res.data.data.code} applied!`);
+                                    } catch (err: unknown) {
+                                      const error = err as { response?: { data?: { message?: string } } };
+                                      toast.error(error.response?.data?.message || 'Failed to apply coupon');
+                                      setCouponResult(null);
+                                    } finally {
+                                      setCouponLoading(false);
+                                    }
                                   }
                                 }}
-                                className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition ${
-                                  eligible
-                                    ? 'bg-white dark:bg-slate-700/80 border-blue-200 dark:border-slate-600 cursor-pointer hover:border-blue-500'
+                                className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition cursor-pointer ${
+                                  isVipCoupon
+                                    ? 'bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-indigo-500/10 border-amber-300 dark:border-amber-500/40 hover:border-amber-400 shadow-sm'
+                                    : eligible
+                                    ? 'bg-white dark:bg-slate-700/80 border-purple-100 dark:border-slate-600 hover:border-purple-400'
                                     : 'opacity-50 cursor-not-allowed bg-slate-100 dark:bg-slate-800'
                                 }`}
                               >
-                                <div>
-                                  <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">{c.code}</span>
+                                <div className="space-y-0.5">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className={`font-mono font-black ${isVipCoupon ? 'text-amber-600 dark:text-amber-400' : 'text-purple-600 dark:text-purple-400'}`}>
+                                      {c.code}
+                                    </span>
+                                    {isVipCoupon && (
+                                      <span className="bg-amber-400/20 text-amber-700 dark:text-amber-300 text-[9px] font-black px-1.5 py-0.2 rounded border border-amber-400/40 flex items-center gap-0.5">
+                                        <Crown className="w-2.5 h-2.5 text-amber-500 fill-amber-500" /> VIP ONLY
+                                      </span>
+                                    )}
+                                  </div>
                                   <p className="text-[10px] text-slate-500 dark:text-slate-400">
                                     {c.discountType === 'PERCENTAGE' ? `${c.discountValue}% OFF` : `₹${c.discountValue} OFF`}
                                     {c.minBookingAmount > 0 && ` (Min ₹${c.minBookingAmount.toLocaleString()})`}
                                   </p>
                                 </div>
-                                <span className="text-[10px] text-slate-400">Tap to use</span>
+                                <span className={`text-[10px] font-bold ${isVipCoupon ? 'text-amber-600 dark:text-amber-400' : 'text-purple-600 dark:text-purple-400'}`}>
+                                  Tap to apply
+                                </span>
                               </div>
                             );
                           })}
@@ -1050,13 +1094,13 @@ export default function PackageDetailPage() {
                             setCouponResult(null);
                           }}
                           placeholder="ENTER CODE"
-                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-slate-800 dark:text-white uppercase placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-slate-800 dark:text-white uppercase placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         />
                         <button
                           type="button"
                           onClick={handleApplyCoupon}
                           disabled={couponLoading || !couponCode.trim()}
-                          className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold disabled:opacity-50 transition cursor-pointer"
+                          className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold disabled:opacity-50 transition cursor-pointer shadow-sm"
                         >
                           {couponLoading ? '...' : 'Apply'}
                         </button>

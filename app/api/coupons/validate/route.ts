@@ -5,15 +5,14 @@ import { getAuthUser, requireAuth } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const authUser = await getAuthUser(request);
-    requireAuth(authUser);
+    const authUser = requireAuth(await getAuthUser(request));
 
     const { code, bookingAmount } = await request.json();
     if (!code || !bookingAmount) {
       return errorResponse('code and bookingAmount are required', 400);
     }
 
-    const coupon = await prisma.coupon.findUnique({ where: { code: code.toUpperCase() } });
+    const coupon = await prisma.coupon.findUnique({ where: { code: code.toUpperCase().trim() } });
 
     if (!coupon) {
       return errorResponse('Invalid coupon code', 404);
@@ -29,6 +28,32 @@ export async function POST(request: NextRequest) {
     }
     if (bookingAmount < coupon.minBookingAmount) {
       return errorResponse(`Minimum booking amount is ₹${coupon.minBookingAmount.toLocaleString('en-IN')}`, 400);
+    }
+
+    // VIP Exclusivity Check
+    const isVipCode = coupon.code.toUpperCase().startsWith('VIP');
+    const isVipAnnouncement = await prisma.vipAnnouncement.findFirst({
+      where: { couponCode: coupon.code, active: true },
+    });
+
+    if (isVipCode || isVipAnnouncement) {
+      const userRecord = await prisma.user.findUnique({ where: { id: authUser.id } });
+      const userEmail = userRecord?.email?.toLowerCase() || '';
+
+      const isApprovedVip = await prisma.newsletterSubscriber.findFirst({
+        where: {
+          email: userEmail,
+          status: 'APPROVED',
+          active: true,
+        },
+      });
+
+      if (!isApprovedVip && authUser.role !== 'ADMIN') {
+        return errorResponse(
+          'This exclusive promo code is reserved for TripEase VIP Elite Members. Apply or check your membership status at /vip.',
+          403
+        );
+      }
     }
 
     const discountAmount = coupon.discountType === 'PERCENTAGE'

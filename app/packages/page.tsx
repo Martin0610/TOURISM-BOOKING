@@ -10,7 +10,7 @@ import {
   MapPin, Clock, Users, Search, Filter, Heart, Plane, Car, Globe, 
   Sparkles, Star, Hotel, Utensils, Tag, LayoutGrid, List, ArrowUpDown, 
   X, Check, Flame, ChevronRight, ShieldCheck, Gift, Palmtree, Mountain,
-  Landmark, Trees, Compass, Waves, TrendingDown, TrendingUp, ChevronDown
+  Landmark, Trees, Compass, Waves, TrendingDown, TrendingUp, ChevronDown, Crown
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
@@ -44,6 +44,12 @@ function PackagesContent() {
   const sortRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [wishlisted, setWishlisted] = useState<Set<string>>(new Set());
+
+  const couponParam = searchParams.get('coupon');
+  const getPkgUrl = (pkgId: string) => {
+    const q = couponParam ? `?coupon=${encodeURIComponent(couponParam)}` : '';
+    return user ? `/packages/${pkgId}${q}` : `/login?redirect=/packages/${pkgId}${q ? encodeURIComponent(q) : ''}`;
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -267,6 +273,28 @@ function PackagesContent() {
 
         {/* Main Content Area */}
         <div className="max-w-7xl mx-auto px-4 pt-8">
+          {/* VIP Promo Banner if arrived via email / VIP link */}
+          {searchParams.get('coupon') && (
+            <div className="bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-indigo-500/15 border border-amber-300 dark:border-amber-500/40 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm animate-in fade-in duration-300">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center flex-shrink-0">
+                  <Crown className="w-5 h-5 text-amber-500 fill-amber-500" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black text-amber-700 dark:text-amber-300 uppercase tracking-wider">VIP Exclusive Promo Active</span>
+                    <span className="bg-amber-400/30 text-amber-900 dark:text-amber-200 text-xs font-mono font-black px-2 py-0.5 rounded border border-amber-400/50">
+                      {searchParams.get('coupon')}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                    Click any tour below to automatically apply your VIP discount at checkout!
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Category Tabs Carousel */}
           <div className="bg-white dark:bg-slate-900 p-3 rounded-3xl shadow-sm border border-slate-200/90 dark:border-slate-800 mb-6">
             <div className="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1 px-1">
@@ -483,7 +511,7 @@ function PackagesContent() {
               {filteredPackages.map((pkg) => (
                 <Link
                   key={pkg.id}
-                  href={user ? `/packages/${pkg.id}` : `/login?redirect=/packages/${pkg.id}`}
+                  href={getPkgUrl(pkg.id)}
                   className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                 >
                   {/* Card Media Header */}
@@ -587,7 +615,7 @@ function PackagesContent() {
               {filteredPackages.map((pkg) => (
                 <Link
                   key={pkg.id}
-                  href={user ? `/packages/${pkg.id}` : `/login?redirect=/packages/${pkg.id}`}
+                  href={getPkgUrl(pkg.id)}
                   className="group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row"
                 >
                   <div className="md:w-72 h-52 md:h-auto relative overflow-hidden bg-slate-200 dark:bg-slate-800 flex-shrink-0">

@@ -419,7 +419,7 @@ export const sendVipAnnouncementEmail = async (
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:28px;">
                   <tr>
                     <td align="center">
-                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:#f59e0b;color:#000000;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;padding:15px 34px;border-radius:10px;letter-spacing:0.5px;text-align:center;">
+                      <a href="${appUrl}/packages${details.couponCode ? `?coupon=${encodeURIComponent(details.couponCode)}` : ''}" target="_blank" style="display:inline-block;background:#f59e0b;color:#000000;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;padding:15px 34px;border-radius:10px;letter-spacing:0.5px;text-align:center;">
                         Explore Packages and Claim Deal
                       </a>
                     </td>

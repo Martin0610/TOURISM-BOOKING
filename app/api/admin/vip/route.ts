@@ -129,11 +129,67 @@ export async function POST(request: NextRequest) {
       return errorResponse('Title and message are required', 400);
     }
 
+    const cleanCode = couponCode ? couponCode.toUpperCase().trim() : null;
+
+    // Auto-create or sync Coupon record in database so VIP members can instantly use it
+    if (cleanCode) {
+      let discountType = 'PERCENTAGE';
+      let discountValue = 15; // default 15%
+
+      if (discount) {
+        const raw = discount.trim();
+        if (raw.includes('%')) {
+          discountType = 'PERCENTAGE';
+          const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+          if (!isNaN(num) && num > 0) discountValue = num;
+        } else {
+          const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+          if (!isNaN(num) && num > 0) {
+            if (num <= 100 && !raw.includes('₹') && !raw.toLowerCase().includes('rs')) {
+              discountType = 'PERCENTAGE';
+              discountValue = num;
+            } else {
+              discountType = 'FIXED';
+              discountValue = num;
+            }
+          }
+        }
+      }
+
+      const existingCoupon = await prisma.coupon.findUnique({ where: { code: cleanCode } });
+      const sixtyDaysLater = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000);
+
+      if (existingCoupon) {
+        await prisma.coupon.update({
+          where: { id: existingCoupon.id },
+          data: {
+            discountType,
+            discountValue,
+            active: true,
+            expiresAt: sixtyDaysLater,
+          },
+        });
+      } else {
+        await prisma.coupon.create({
+          data: {
+            code: cleanCode,
+            discountType,
+            discountValue,
+            minBookingAmount: 0,
+            maxUses: 1000,
+            usedCount: 0,
+            expiresAt: sixtyDaysLater,
+            active: true,
+          },
+        });
+      }
+    }
+
     const announcement = await prisma.vipAnnouncement.create({
       data: {
         title,
         message,
-        couponCode: couponCode ? couponCode.toUpperCase().trim() : null,
+        couponCode: cleanCode,
         discount: discount ? discount.trim() : null,
         active: true,
       },

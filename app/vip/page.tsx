@@ -234,20 +234,29 @@ export default function VipClubPage() {
                         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{deal.message}</p>
 
                         {deal.couponCode && (
-                          <div className="pt-2 flex items-center justify-between border-t border-purple-100 dark:border-slate-800">
+                          <div className="pt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-purple-100 dark:border-slate-800">
                             <div className="flex items-center gap-2">
                               <span className="text-[10px] font-mono uppercase text-slate-400">Code:</span>
-                              <span className="font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-slate-800 border border-purple-200 dark:border-purple-800/60 px-2 py-0.5 rounded text-xs">
+                              <span className="font-mono font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/60 px-2 py-0.5 rounded text-xs">
                                 {deal.couponCode}
                               </span>
                             </div>
-                            <button
-                              onClick={() => copyCoupon(deal.couponCode!)}
-                              className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center gap-1 cursor-pointer"
-                            >
-                              {copiedCode === deal.couponCode ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                              <span>{copiedCode === deal.couponCode ? 'Copied' : 'Copy'}</span>
-                            </button>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => copyCoupon(deal.couponCode!)}
+                                className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center gap-1 cursor-pointer"
+                              >
+                                {copiedCode === deal.couponCode ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                                <span>{copiedCode === deal.couponCode ? 'Copied' : 'Copy'}</span>
+                              </button>
+                              <Link
+                                href={`/packages?coupon=${encodeURIComponent(deal.couponCode)}`}
+                                className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-[11px] font-black px-3 py-1 rounded-lg shadow-sm flex items-center gap-1 transition"
+                              >
+                                <span>Book Now</span>
+                                <ArrowRight className="w-3 h-3" />
+                              </Link>
+                            </div>
                           </div>
                         )}
                       </div>
