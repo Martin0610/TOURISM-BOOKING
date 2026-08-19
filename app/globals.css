@@ -117,3 +117,25 @@ body {
 .dark .border-gray-300 { border-color: rgba(255, 255, 255, 0.18) !important; }
 .dark select option { background-color: #131b2e; color: #f1f5f9; }
 .dark .bg-blue-50 { background-color: #1e293b !important; }
+
+/* Print optimization for E-Tickets and Invoices */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+  
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  header, nav, footer, .print-hidden, .no-print, [data-print-hidden] {
+    display: none !important;
+  }
+}
