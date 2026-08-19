@@ -112,7 +112,7 @@ export default function Navbar() {
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${isActive('/wishlist') ? 'fill-white' : ''}`} />
-                  <span>Wishlist</span>
+                  <span>My Wishlist</span>
                   {wishlistCount > 0 && (
                     <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold bg-rose-500 text-white rounded-full">
                       {wishlistCount}
@@ -220,32 +220,36 @@ export default function Navbar() {
 
             {user ? (
               <>
-                <Link
-                  href="/my-bookings"
-                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
-                    isActive('/my-bookings') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
-                  }`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <UserIcon className="w-4 h-4" /> My Bookings
-                </Link>
+                {user.role !== 'ADMIN' && (
+                  <>
+                    <Link
+                      href="/my-bookings"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
+                        isActive('/my-bookings') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                      }`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <UserIcon className="w-4 h-4" /> My Bookings
+                    </Link>
 
-                <Link
-                  href="/wishlist"
-                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium ${
-                    isActive('/wishlist') ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
-                  }`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-rose-500" /> Wishlist
-                  </span>
-                  {wishlistCount > 0 && (
-                    <span className="px-2 py-0.5 text-xs bg-rose-500 text-white rounded-full">
-                      {wishlistCount}
-                    </span>
-                  )}
-                </Link>
+                    <Link
+                      href="/wishlist"
+                      className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium ${
+                        isActive('/wishlist') ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                      }`}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className="flex items-center gap-2">
+                        <Heart className="w-4 h-4 text-rose-500" /> My Wishlist
+                      </span>
+                      {wishlistCount > 0 && (
+                        <span className="px-2 py-0.5 text-xs bg-rose-500 text-white rounded-full">
+                          {wishlistCount}
+                        </span>
+                      )}
+                    </Link>
+                  </>
+                )}
 
                 {user.role === 'ADMIN' && (
                   <Link
