@@ -110,10 +110,10 @@ export default function ForgotPasswordPage() {
                 <Compass className="w-6 h-6 text-white" />
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-extrabold text-2xl tracking-tight text-white group-hover:opacity-95">
+                <span className="font-extrabold text-2xl tracking-tight text-white group-hover:opacity-95 leading-none">
                   TripEase
                 </span>
-                <span className="text-[11px] font-bold text-amber-400 tracking-wider uppercase -mt-1">
+                <span className="text-[10px] font-bold text-amber-400 tracking-wider uppercase mt-1 pl-1">
                   Explore India
                 </span>
               </div>

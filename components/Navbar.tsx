@@ -56,11 +56,11 @@ export default function Navbar() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-500/25 group-hover:scale-105 group-hover:rotate-6 transition-transform duration-300">
               <Compass className="w-5 h-5 text-white animate-pulse-glow" />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col text-left">
               <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-300 bg-clip-text text-transparent group-hover:opacity-95">
                 TripEase
               </span>
-              <span className="text-[10px] font-semibold text-amber-500 tracking-wider uppercase -mt-1">
+              <span className="text-[10px] font-bold text-amber-500 tracking-wider uppercase -mt-0.5 pl-1">
                 Explore India
               </span>
             </div>
