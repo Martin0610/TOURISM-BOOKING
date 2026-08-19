@@ -355,10 +355,9 @@ export const sendVipAnnouncementEmail = async (
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                   <tr>
                     <td align="center">
-                      <!-- Single Line Pill with only star emoji -->
                       <div style="display:inline-block;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.4);border-radius:50px;padding:7px 22px;margin-bottom:16px;white-space:nowrap;">
                         <span style="color:#fbbf24;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;display:inline-block;line-height:1;">
-                          ⭐ VIP CLUB EXCLUSIVE DROP ⭐
+                          VIP CLUB EXCLUSIVE DISPATCH
                         </span>
                       </div>
                       <h1 style="color:#ffffff;margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:24px;font-weight:700;letter-spacing:-0.3px;line-height:1.3;">
@@ -481,7 +480,7 @@ export const sendVipAnnouncementEmail = async (
   await transporter.sendMail({
     from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: `👑 TripEase VIP: ${details.title}`,
+    subject: `TripEase VIP: ${details.title}`,
     html,
   });
 };
@@ -506,14 +505,14 @@ export const sendVipWelcomeEmail = async (email: string, userName: string): Prom
         <td align="center">
           <table role="presentation" width="100%" style="max-width:600px;background:#0b132b;border-radius:20px;overflow:hidden;border:1px solid #1e293b;box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);" cellspacing="0" cellpadding="0">
             
-            <!-- Royal Gold Header -->
+            <!-- Header -->
             <tr>
               <td style="background:linear-gradient(135deg, #1e1b4b 0%, #311042 50%, #0f172a 100%);padding:36px 30px;text-align:center;border-bottom:2px solid #f59e0b;">
                 <div style="display:inline-block;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);padding:6px 16px;border-radius:30px;margin-bottom:14px;">
                   <span style="color:#fbbf24;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Official VIP Membership</span>
                 </div>
                 <h1 style="color:#ffffff;margin:0;font-size:28px;font-weight:800;letter-spacing:-0.5px;">TripEase VIP Travel Club</h1>
-                <p style="color:#cbd5e1;margin:8px 0 0;font-size:14px;font-weight:500;">Membership Status: <span style="color:#4ade80;font-weight:700;">APPROVED & ACTIVE ⭐</span></p>
+                <p style="color:#cbd5e1;margin:8px 0 0;font-size:14px;font-weight:500;">Membership Status: <span style="color:#4ade80;font-weight:700;">APPROVED & ACTIVE</span></p>
               </td>
             </tr>
 
@@ -535,7 +534,7 @@ export const sendVipWelcomeEmail = async (email: string, userName: string): Prom
                   <tr>
                     <td style="padding:22px 24px;">
                       <h3 style="color:#fbbf24;font-size:15px;font-weight:700;margin:0 0 10px;text-transform:uppercase;letter-spacing:1px;">
-                        👑 What This Means For You:
+                        Key Membership Benefits:
                       </h3>
                       <p style="color:#e2e8f0;font-size:14px;line-height:1.6;margin:0 0 10px;">
                         • <strong>Private VIP Dispatches:</strong> You will now receive confidential flash sales & unlisted discounts sent straight to your inbox.
@@ -554,8 +553,8 @@ export const sendVipWelcomeEmail = async (email: string, userName: string): Prom
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:30px;">
                   <tr>
                     <td align="center">
-                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#f59e0b 0%,#ea580c 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;letter-spacing:0.5px;box-shadow:0 10px 25px -5px rgba(245,158,11,0.4);">
-                        Explore VIP Escapes & Packages →
+                      <a href="${appUrl}/vip" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#f59e0b 0%,#ea580c 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;letter-spacing:0.5px;box-shadow:0 10px 25px -5px rgba(245,158,11,0.4);">
+                        Access Your VIP Travel Hub
                       </a>
                     </td>
                   </tr>
@@ -601,7 +600,7 @@ export const sendVipWelcomeEmail = async (email: string, userName: string): Prom
   await transporter.sendMail({
     from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: '👑 Welcome to TripEase VIP Club! Your Membership is Approved',
+    subject: 'Welcome to TripEase VIP Club - Membership Approved',
     html,
   });
 };
@@ -646,8 +645,8 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
 
                 <!-- Perk 1 -->
                 <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
-                  <h3 style="color:#fbbf24;font-size:15px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;">
-                    💎 1. Secret Flash Sales & Member-Only Pricing
+                  <h3 style="color:#fbbf24;font-size:15px;font-weight:700;margin:0 0 6px;">
+                    1. Secret Flash Sales & Member-Only Pricing
                   </h3>
                   <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
                     Receive private broadcast deals and exclusive coupon codes emailed directly to you before packages are published to the public.
@@ -657,7 +656,7 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
                 <!-- Perk 2 -->
                 <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
                   <h3 style="color:#38bdf8;font-size:15px;font-weight:700;margin:0 0 6px;">
-                    🛎️ 2. Dedicated 24/7 VIP Concierge Desk
+                    2. Dedicated 24/7 VIP Concierge Desk
                   </h3>
                   <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
                     Enjoy zero-wait priority on WhatsApp (+91 72003 36447) and phone support. Our travel specialists handle your customized itineraries, hotel upgrades, and flight timings personally.
@@ -667,7 +666,7 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
                 <!-- Perk 3 -->
                 <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
                   <h3 style="color:#4ade80;font-size:15px;font-weight:700;margin:0 0 6px;">
-                    🎟️ 3. 4+1 Free Ticket & Group Discount Priority
+                    3. 4+1 Free Ticket & Group Discount Priority
                   </h3>
                   <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
                     Bring family & friends along! Every 4th ticket is completely free on eligible packages, plus automatic 20% group discounts for 3+ passengers with stackable coupon savings.
@@ -677,7 +676,7 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
                 <!-- Perk 4 -->
                 <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:16px;">
                   <h3 style="color:#f472b6;font-size:15px;font-weight:700;margin:0 0 6px;">
-                    🛡️ 4. 100% Free Cancellation Window Guarantee
+                    4. 100% Free Cancellation Window Guarantee
                   </h3>
                   <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
                     Full refund protection up to 7–10 days before scheduled departure dates, with expedited refunds processed directly to your bank or UPI in 3–5 business days.
@@ -687,7 +686,7 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
                 <!-- Perk 5 -->
                 <div style="background:#111c3a;border:1px solid #1e293b;border-radius:14px;padding:18px 20px;margin-bottom:28px;">
                   <h3 style="color:#a78bfa;font-size:15px;font-weight:700;margin:0 0 6px;">
-                    🎫 5. Instant VIP Digital E-Pass & Vouchers
+                    5. Instant VIP Digital E-Pass & Vouchers
                   </h3>
                   <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0;">
                     Instant digital trip confirmation, QR boarding passes, and hotel vouchers accessible 24/7 directly from your TripEase dashboard.
@@ -698,8 +697,8 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:28px;">
                   <tr>
                     <td align="center">
-                      <a href="${appUrl}/packages" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;letter-spacing:0.5px;box-shadow:0 10px 25px -5px rgba(37,99,235,0.4);">
-                        Book Your Next VIP Escape Now →
+                      <a href="${appUrl}/vip" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);color:#ffffff;text-decoration:none;font-size:15px;font-weight:800;padding:16px 36px;border-radius:14px;letter-spacing:0.5px;box-shadow:0 10px 25px -5px rgba(37,99,235,0.4);">
+                        Explore VIP Member Hub
                       </a>
                     </td>
                   </tr>
@@ -735,7 +734,7 @@ export const sendVipPerksEmail = async (email: string, userName: string): Promis
   await transporter.sendMail({
     from: `TripEase VIP Club <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: '🌟 Your TripEase VIP Elite Privileges & Travel Perks Guide',
+    subject: 'Your TripEase VIP Elite Privileges & Travel Perks Guide',
     html,
   });
 };
