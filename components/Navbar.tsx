@@ -108,6 +108,18 @@ export default function Navbar() {
               Packages
             </Link>
 
+            <Link
+              href="/vip"
+              className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                isActive('/vip')
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm shadow-amber-500/30 font-bold'
+                  : 'text-amber-600 dark:text-amber-400 hover:text-amber-500 font-semibold'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>VIP Club</span>
+            </Link>
+
             {user && user.role !== 'ADMIN' && (
               <>
                 <Link
@@ -234,6 +246,16 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
             >
               <MapPin className="w-4 h-4" /> Packages
+            </Link>
+
+            <Link
+              href="/vip"
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
+                isActive('/vip') ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 font-bold' : 'text-amber-600 dark:text-amber-400 font-semibold'
+              }`}
+              onClick={() => setMenuOpen(false)}
+            >
+              <Sparkles className="w-4 h-4 text-amber-500" /> VIP Club & Perks
             </Link>
 
             {user ? (
