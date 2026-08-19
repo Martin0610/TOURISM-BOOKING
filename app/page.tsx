@@ -32,18 +32,6 @@ const VIBE_OPTIONS = [
 
 const HERO_THEMES = [
   {
-    id: 'heritage',
-    name: 'Royal Heritage',
-    tag: 'Taj & Grand Palaces',
-    icon: Landmark,
-    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1920&q=90',
-    titleAccent: 'from-amber-200 via-rose-200 to-amber-300',
-    glowColor: 'bg-amber-500/20',
-    buttonGrad: 'from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:to-rose-600',
-    bgGrad: 'from-[#140c06] via-[#24130c] to-[#0d0704]',
-    badgeColor: 'border-amber-300/40 text-amber-200',
-  },
-  {
     id: 'beach',
     name: 'Goa Coastal',
     tag: 'Azure Waters & Sun',
@@ -79,13 +67,25 @@ const HERO_THEMES = [
     bgGrad: 'from-[#041f17] via-[#093529] to-[#02120e]',
     badgeColor: 'border-emerald-300/40 text-emerald-200',
   },
+  {
+    id: 'heritage',
+    name: 'Royal Heritage',
+    tag: 'Taj & Grand Palaces',
+    icon: Landmark,
+    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1920&q=90',
+    titleAccent: 'from-amber-200 via-rose-200 to-amber-300',
+    glowColor: 'bg-amber-500/20',
+    buttonGrad: 'from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:to-rose-600',
+    bgGrad: 'from-[#140c06] via-[#24130c] to-[#0d0704]',
+    badgeColor: 'border-amber-300/40 text-amber-200',
+  },
 ];
 
 const QUICK_DESTINATIONS = [
-  { label: 'Goa', price: '₹17,500', icon: Palmtree, query: 'Goa', themeIdx: 1 },
-  { label: 'Kashmir Gulmarg', price: '₹22,000', icon: Mountain, query: 'Kashmir', themeIdx: 2 },
-  { label: 'Rajasthan Royal', price: '₹18,500', icon: Landmark, query: 'Rajasthan', themeIdx: 0 },
-  { label: 'Kerala Backwaters', price: '₹16,000', icon: Waves, query: 'Kerala', themeIdx: 3 },
+  { label: 'Goa', price: '₹17,500', icon: Palmtree, query: 'Goa', themeIdx: 0 },
+  { label: 'Kashmir Gulmarg', price: '₹22,000', icon: Mountain, query: 'Kashmir', themeIdx: 1 },
+  { label: 'Kerala Backwaters', price: '₹16,000', icon: Waves, query: 'Kerala', themeIdx: 2 },
+  { label: 'Rajasthan Royal', price: '₹18,500', icon: Landmark, query: 'Rajasthan', themeIdx: 3 },
 ];
 
 const featuredDestinations = [
