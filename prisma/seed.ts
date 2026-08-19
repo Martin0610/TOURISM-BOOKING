@@ -191,7 +191,7 @@ const packages = [
     inclusions: 'Hotel and camp accommodation (7 nights)\nBreakfast and dinner\nAll transfers by SUV\nInner Line Permits\nMonastery sightseeing\nProfessional guide',
     exclusions: 'Flights to Leh\nLunch\nPersonal expenses\nAdventure activities\nTravel insurance',
     cancellationPolicy: 'Free cancellation up to 14 days before travel. 30% refund for 7–14 days. No refund within 7 days.',
-    imageUrl: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?w=800',
   },
   {
     name: 'Golden Triangle – Delhi Agra Jaipur',
