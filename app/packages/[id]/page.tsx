@@ -1194,7 +1194,7 @@ export default function PackageDetailPage() {
 
                       <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between items-baseline font-bold text-sm text-slate-900 dark:text-white">
                         <span>Final Total:</span>
-                        <span className="text-xl font-black text-blue-600 dark:text-cyan-400">
+                        <span className="text-xl font-bold text-purple-600 dark:text-purple-400">
                           ₹{totalAmount.toLocaleString()}
                         </span>
                       </div>
@@ -1216,7 +1216,7 @@ export default function PackageDetailPage() {
                     <button
                       type="submit"
                       disabled={bookingLoading || pkg.availableSeats === 0}
-                      className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-extrabold py-3.5 rounded-2xl shadow-lg shadow-orange-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3.5 rounded-2xl shadow-md shadow-purple-600/20 transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer text-sm"
                     >
                       {pkg.availableSeats === 0
                         ? 'Sold Out'

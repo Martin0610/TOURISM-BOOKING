@@ -352,7 +352,7 @@ export default function VipClubPage() {
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-md shadow-purple-600/25 transition cursor-pointer flex items-center justify-center gap-1.5"
+                      className="bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       <Sparkles className="w-4 h-4 fill-white" />
                       <span>{submitting ? 'Submitting...' : 'Submit VIP Application'}</span>

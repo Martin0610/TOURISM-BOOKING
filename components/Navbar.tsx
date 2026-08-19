@@ -80,33 +80,33 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full pt-3 pb-2 px-3 sm:px-6 transition-all duration-300">
       <div className={`max-w-7xl mx-auto rounded-2xl transition-all duration-300 ${
         scrolled 
-          ? 'glass-panel shadow-xl shadow-cyan-500/5 dark:shadow-indigo-500/5 border border-white/60 dark:border-slate-800/80 backdrop-blur-xl' 
-          : 'bg-white/85 dark:bg-slate-900/85 backdrop-blur-md shadow-md border border-slate-200/60 dark:border-slate-800/60'
+          ? 'bg-white/90 dark:bg-slate-900/90 shadow-lg shadow-slate-900/5 dark:shadow-black/20 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl' 
+          : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm border border-slate-200/60 dark:border-slate-800/60'
       }`}>
         <div className="flex justify-between items-center h-16 px-4 sm:px-6">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-500/25 group-hover:scale-105 group-hover:rotate-6 transition-transform duration-300">
-              <Compass className="w-5 h-5 text-white animate-pulse-glow" />
+            <div className="w-10 h-10 rounded-xl bg-purple-600 dark:bg-purple-600 text-white flex items-center justify-center shadow-md shadow-purple-600/20 group-hover:scale-105 transition-transform duration-200">
+              <Compass className="w-5 h-5" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 dark:from-cyan-400 dark:via-blue-400 dark:to-indigo-300 bg-clip-text text-transparent group-hover:opacity-95">
+              <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                 TripEase
               </span>
-              <span className="text-[10px] font-bold text-amber-500 tracking-wider uppercase -mt-0.5 pl-1">
+              <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 tracking-wider uppercase -mt-0.5 pl-0.5">
                 Explore India
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 bg-slate-100/70 dark:bg-slate-800/60 p-1.5 rounded-full border border-slate-200/50 dark:border-slate-700/50">
+          <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 dark:bg-slate-800/60 p-1.5 rounded-full border border-slate-200/60 dark:border-slate-700/60">
             <Link
               href="/"
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                 isActive('/')
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400'
+                  ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-300 shadow-sm font-semibold'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400'
               }`}
             >
               Home
@@ -116,8 +116,8 @@ export default function Navbar() {
               href="/packages"
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                 isActive('/packages')
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400'
+                  ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-300 shadow-sm font-semibold'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400'
               }`}
             >
               Packages
@@ -129,8 +129,8 @@ export default function Navbar() {
                   href="/my-bookings"
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                     isActive('/my-bookings')
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400'
+                      ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-300 shadow-sm font-semibold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-purple-400'
                   }`}
                 >
                   My Bookings
@@ -140,14 +140,14 @@ export default function Navbar() {
                   href="/wishlist"
                   className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 relative ${
                     isActive('/wishlist')
-                      ? 'bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-sm shadow-pink-500/30 font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-rose-500 dark:hover:text-rose-400'
+                      ? 'bg-white dark:bg-slate-700 text-rose-600 dark:text-rose-400 shadow-sm font-semibold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400'
                   }`}
                 >
-                  <Heart className={`w-4 h-4 ${isActive('/wishlist') ? 'fill-white' : ''}`} />
-                  <span>My Wishlist</span>
+                  <Heart className={`w-4 h-4 ${isActive('/wishlist') ? 'fill-rose-600 dark:fill-rose-400 text-rose-600 dark:text-rose-400' : ''}`} />
+                  <span>Wishlist</span>
                   {wishlistCount > 0 && (
-                    <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold bg-rose-500 text-white rounded-full">
+                    <span className="inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-bold bg-rose-500 text-white rounded-full">
                       {wishlistCount}
                     </span>
                   )}
@@ -160,8 +160,8 @@ export default function Navbar() {
                 href="/admin"
                 className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
                   pathname.startsWith('/admin')
-                    ? 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                    : 'text-cyan-600 dark:text-cyan-400 hover:text-blue-600 font-semibold'
+                    ? 'bg-purple-600 text-white shadow-sm font-semibold'
+                    : 'text-purple-600 dark:text-purple-400 hover:text-purple-700 font-semibold'
                 }`}
               >
                 <ShieldCheck className="w-4 h-4" />
@@ -174,7 +174,7 @@ export default function Navbar() {
               href="/vip"
               className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
                 isActive('/vip')
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm shadow-amber-500/30 font-bold'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-sm font-bold'
                   : 'text-amber-600 dark:text-amber-400 hover:text-amber-500 font-semibold'
               }`}
             >
@@ -192,17 +192,17 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className={`flex items-center gap-2 px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                     userDropdownOpen
-                      ? 'bg-purple-50 dark:bg-purple-950/60 border-purple-400 dark:border-purple-600 ring-2 ring-purple-400/30'
-                      : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-purple-400 dark:hover:border-purple-500'
+                      ? 'bg-purple-50 dark:bg-purple-950/60 border-purple-400 dark:border-purple-600 ring-2 ring-purple-400/20'
+                      : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700/80 hover:border-purple-300 dark:hover:border-purple-600'
                   }`}
                 >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-600 via-indigo-600 to-purple-700 text-white text-xs font-bold flex items-center justify-center shadow-sm">
+                  <div className="w-6 h-6 rounded-full bg-purple-600 text-white text-xs font-bold flex items-center justify-center">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200 max-w-[90px] truncate">
+                    <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 max-w-[90px] truncate">
                       {user.name.split(' ')[0]}
                     </span>
                     <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180 text-purple-600' : ''}`} />
@@ -354,19 +354,16 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 px-3 py-2 rounded-xl transition-colors"
+                  className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 px-3.5 py-1.5 rounded-full transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="relative group overflow-hidden rounded-full p-[1px] focus:outline-none"
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold shadow-sm transition-all"
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 rounded-full group-hover:opacity-90 transition-opacity" />
-                  <span className="relative flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-md shadow-blue-500/20 group-hover:scale-[0.98] transition-transform">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    Sign Up
-                  </span>
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Sign Up
                 </Link>
               </div>
             )}
@@ -391,7 +388,7 @@ export default function Navbar() {
             <Link
               href="/"
               className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
-                isActive('/') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                isActive('/') ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
               }`}
               onClick={() => setMenuOpen(false)}
             >
@@ -401,7 +398,7 @@ export default function Navbar() {
             <Link
               href="/packages"
               className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
-                isActive('/packages') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                isActive('/packages') ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
               }`}
               onClick={() => setMenuOpen(false)}
             >
@@ -415,7 +412,7 @@ export default function Navbar() {
                     <Link
                       href="/my-bookings"
                       className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
-                        isActive('/my-bookings') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                        isActive('/my-bookings') ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
                       }`}
                       onClick={() => setMenuOpen(false)}
                     >
@@ -425,7 +422,7 @@ export default function Navbar() {
                     <Link
                       href="/wishlist"
                       className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium ${
-                        isActive('/wishlist') ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                        isActive('/wishlist') ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
                       }`}
                       onClick={() => setMenuOpen(false)}
                     >
@@ -444,7 +441,7 @@ export default function Navbar() {
                 {user.role === 'ADMIN' && (
                   <Link
                     href="/admin"
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/40"
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/40"
                     onClick={() => setMenuOpen(false)}
                   >
                     <ShieldCheck className="w-4 h-4" /> Admin Panel
@@ -457,7 +454,7 @@ export default function Navbar() {
             <Link
               href="/vip"
               className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
-                isActive('/vip') ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 font-bold' : 'text-amber-600 dark:text-amber-400 font-semibold'
+                isActive('/vip') ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-bold' : 'text-amber-600 dark:text-amber-400 font-semibold'
               }`}
               onClick={() => setMenuOpen(false)}
             >
@@ -485,7 +482,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="text-center py-2 text-sm font-semibold rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30"
+                  className="text-center py-2 text-sm font-semibold rounded-xl bg-purple-600 text-white shadow-sm"
                   onClick={() => setMenuOpen(false)}
                 >
                   Register

@@ -648,7 +648,7 @@ export default function Home() {
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
                     <div>
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-2xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+                        <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                           ₹{pkg.price.toLocaleString()}
                         </span>
                         <span className="text-xs text-slate-400 line-through">
@@ -662,7 +662,7 @@ export default function Home() {
 
                     <Link
                       href={getPackageUrl(pkg.name)}
-                      className="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all cursor-pointer"
                     >
                       <span>Explore</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -679,7 +679,7 @@ export default function Home() {
       <section className="py-24 px-4 bg-white dark:bg-slate-950">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400">
               The TripEase Advantage
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
@@ -692,7 +692,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Bento Card 1 - Main Feature */}
-            <div className="md:col-span-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
+            <div className="md:col-span-2 bg-gradient-to-br from-purple-800 via-indigo-900 to-slate-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
               <div className="relative z-10">
                 <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center mb-6">
                   <Gift className="w-7 h-7 text-amber-300" />
@@ -701,7 +701,7 @@ export default function Home() {
                 <h3 className="text-2xl sm:text-3xl font-extrabold mt-1 mb-3">
                   Book 4 Tickets, Get 1 FREE + 20% Group Savings
                 </h3>
-                <p className="text-blue-100 text-sm max-w-lg leading-relaxed">
+                <p className="text-purple-100 text-sm max-w-lg leading-relaxed">
                   Travel is best enjoyed together. Our automatic discount engine calculates instant savings: 20% off for 3+ people and every 4th ticket is completely free!
                 </p>
               </div>
