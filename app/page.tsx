@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import { Globe, Shield, CreditCard, Star, MapPin, Users, Clock, Phone, Gift, Percent, Tag } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import { ContainerScroll } from '@/components/ui/container-scroll-animation';
+import Image from 'next/image';
 
 const featuredDestinations = [
   { name: 'Goa Beach Paradise', state: 'Goa', price: 15500, duration: '5D/4N', category: 'Beach', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600' },
@@ -76,6 +78,32 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Scroll Animation Showcase */}
+      <section className="bg-white dark:bg-gray-950 overflow-hidden">
+        <ContainerScroll
+          titleComponent={
+            <div className="mb-4">
+              <p className="text-purple-600 font-semibold text-lg mb-2">Discover India Like Never Before</p>
+              <h2 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+                Your Next Adventure<br />
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Awaits You
+                </span>
+              </h2>
+            </div>
+          }
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1400&q=80"
+            alt="India Travel"
+            height={720}
+            width={1400}
+            className="mx-auto rounded-2xl object-cover h-full w-full object-center"
+            draggable={false}
+          />
+        </ContainerScroll>
       </section>
 
       {/* Features */}
