@@ -90,8 +90,19 @@ export default function Navbar() {
               Packages
             </Link>
 
-            {user && user.role !== 'ADMIN' && (
+            {user && (
               <>
+                <Link
+                  href="/my-bookings"
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                    isActive('/my-bookings')
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400'
+                  }`}
+                >
+                  My Bookings
+                </Link>
+
                 <Link
                   href="/wishlist"
                   className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 relative ${
@@ -109,31 +120,20 @@ export default function Navbar() {
                   )}
                 </Link>
 
-                <Link
-                  href="/my-bookings"
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                    isActive('/my-bookings')
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-cyan-400'
-                  }`}
-                >
-                  My Bookings
-                </Link>
+                {user.role === 'ADMIN' && (
+                  <Link
+                    href="/admin"
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                      pathname.startsWith('/admin')
+                        ? 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/30 font-semibold'
+                        : 'text-cyan-600 dark:text-cyan-400 hover:text-blue-600 font-semibold'
+                    }`}
+                  >
+                    <ShieldCheck className="w-4 h-4" />
+                    Admin Panel
+                  </Link>
+                )}
               </>
-            )}
-
-            {user && user.role === 'ADMIN' && (
-              <Link
-                href="/admin"
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                  pathname.startsWith('/admin')
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-sm shadow-orange-500/30 font-semibold'
-                    : 'text-orange-600 dark:text-orange-400 hover:text-orange-700'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Admin Panel
-              </Link>
             )}
           </nav>
 
@@ -155,7 +155,7 @@ export default function Navbar() {
                 <button
                   onClick={handleLogout}
                   title="Sign out"
-                  className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-full transition-colors"
+                  className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-full transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -220,44 +220,40 @@ export default function Navbar() {
 
             {user ? (
               <>
-                {user.role !== 'ADMIN' && (
-                  <>
-                    <Link
-                      href="/wishlist"
-                      className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium ${
-                        isActive('/wishlist') ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
-                      }`}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <span className="flex items-center gap-2">
-                        <Heart className="w-4 h-4 text-rose-500" /> Wishlist
-                      </span>
-                      {wishlistCount > 0 && (
-                        <span className="px-2 py-0.5 text-xs bg-rose-500 text-white rounded-full">
-                          {wishlistCount}
-                        </span>
-                      )}
-                    </Link>
+                <Link
+                  href="/my-bookings"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
+                    isActive('/my-bookings') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                  }`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <UserIcon className="w-4 h-4" /> My Bookings
+                </Link>
 
-                    <Link
-                      href="/my-bookings"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${
-                        isActive('/my-bookings') ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-cyan-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
-                      }`}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <UserIcon className="w-4 h-4" /> My Bookings
-                    </Link>
-                  </>
-                )}
+                <Link
+                  href="/wishlist"
+                  className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium ${
+                    isActive('/wishlist') ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                  }`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-rose-500" /> Wishlist
+                  </span>
+                  {wishlistCount > 0 && (
+                    <span className="px-2 py-0.5 text-xs bg-rose-500 text-white rounded-full">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
 
                 {user.role === 'ADMIN' && (
                   <Link
                     href="/admin"
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40"
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/40"
                     onClick={() => setMenuOpen(false)}
                   >
-                    <ShieldCheck className="w-4 h-4" /> Admin Dashboard
+                    <ShieldCheck className="w-4 h-4" /> Admin Panel
                   </Link>
                 )}
 
