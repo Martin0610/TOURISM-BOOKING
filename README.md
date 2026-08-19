@@ -76,10 +76,6 @@ tourism-booking/
 └── public/              # Static assets
 ```
 
-## Admin Credentials
-
-- Email: mjv3140@gmail.com
-- Password: Admin@123
 
 ## License
 
