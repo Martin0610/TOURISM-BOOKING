@@ -26,7 +26,7 @@ export default function PackageDetailPage() {
   const [pkg, setPkg] = useState<Package | null>(null);
   const [departures, setDepartures] = useState<DepartureLocation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ travelDate: '', numberOfPeople: 1, departureLocationId: '' });
+  const [form, setForm] = useState({ travelDate: '', numberOfPeople: 1, departureLocationId: '', phone: '' });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [formError, setFormError] = useState('');
   const [couponCode, setCouponCode] = useState('');
@@ -125,6 +125,8 @@ export default function PackageDetailPage() {
     if (!user) { router.push('/login'); return; }
     if (!form.travelDate) { setFormError('Please select a travel date.'); return; }
     if (!form.numberOfPeople || form.numberOfPeople < 1) { setFormError('Please enter number of people.'); return; }
+    if (!form.phone) { setFormError('Please enter your phone number.'); return; }
+    if (!/^\d{10}$/.test(form.phone)) { setFormError('Phone number must be exactly 10 digits.'); return; }
     setFormError('');
     setBookingLoading(true);
     try {
@@ -134,6 +136,7 @@ export default function PackageDetailPage() {
         numberOfPeople: form.numberOfPeople,
         departureLocationId: form.departureLocationId || undefined,
         couponCode: couponResult?.code || undefined,
+        phone: form.phone,
       });
       router.push(`/booking/${res.data.data.id}`);
     } catch (err: unknown) {
@@ -379,10 +382,36 @@ export default function PackageDetailPage() {
                     )}
                   </div>
 
+                  {/* Phone Number */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+                      📞 Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      maxLength={10}
+                      value={form.phone}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setForm({ ...form, phone: val });
+                        setFormError('');
+                      }}
+                      placeholder="10-digit mobile number"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {form.phone.length > 0 && form.phone.length < 10 && (
+                      <p className="text-xs text-red-400 mt-1">{10 - form.phone.length} more digit{10 - form.phone.length !== 1 ? 's' : ''} needed</p>
+                    )}
+                    {form.phone.length === 10 && (
+                      <p className="text-xs text-green-500 mt-1">✓ Valid number</p>
+                    )}
+                  </div>
+
                   {/* Departure City */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       🏙️ Departure City (optional)
+                    </label>
                     </label>
                     <select value={form.departureLocationId}
                       onChange={(e) => setForm({ ...form, departureLocationId: e.target.value })}

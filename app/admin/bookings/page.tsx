@@ -4,7 +4,16 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
-import { Booking } from '@/lib/types';
+interface Booking {
+  id: string;
+  travelDate: string;
+  numberOfPeople: number;
+  totalAmount: number;
+  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+  phone?: string;
+  user?: { name: string; email: string };
+  package?: { name: string };
+}
 import toast from 'react-hot-toast';
 import AdminLayout from '@/components/AdminLayout';
 
@@ -55,7 +64,7 @@ export default function AdminBookingsPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b">
                 <tr>
-                  {['User', 'Package', 'Travel Date', 'People', 'Amount', 'Status', 'Actions'].map((h) => (
+                  {['User', 'Package', 'Travel Date', 'People', 'Phone', 'Amount', 'Status', 'Actions'].map((h) => (
                     <th key={h} className="text-left px-4 py-3 font-semibold text-gray-600">{h}</th>
                   ))}
                 </tr>
@@ -67,6 +76,13 @@ export default function AdminBookingsPage() {
                     <td className="px-4 py-3 text-gray-700">{b.package?.name}</td>
                     <td className="px-4 py-3 text-gray-500">{new Date(b.travelDate).toLocaleDateString()}</td>
                     <td className="px-4 py-3 text-gray-500">{b.numberOfPeople}</td>
+                    <td className="px-4 py-3 text-gray-700">
+                      {b.phone ? (
+                        <span className="font-mono text-sm">{b.phone}</span>
+                      ) : (
+                        <span className="text-gray-400 text-xs">—</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-blue-600 font-medium">₹{b.totalAmount.toLocaleString()}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${statusColors[b.status]}`}>{b.status}</span>

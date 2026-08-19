@@ -107,6 +107,7 @@ model Booking {
   couponId            String?
   totalAmount         Float
   status              BookingStatus @default(PENDING)
+  phone               String?
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 

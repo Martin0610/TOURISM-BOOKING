@@ -49,10 +49,14 @@ export async function POST(request: NextRequest) {
     const authUser = await getAuthUser(request);
     requireAuth(authUser);
 
-    const { packageId, departureLocationId, travelDate, numberOfPeople, couponCode } = await request.json();
+    const { packageId, departureLocationId, travelDate, numberOfPeople, couponCode, phone } = await request.json();
 
     if (!packageId || !travelDate || !numberOfPeople) {
       return errorResponse('packageId, travelDate and numberOfPeople are required', 400);
+    }
+
+    if (phone && !/^\d{10}$/.test(phone)) {
+      return errorResponse('Phone number must be exactly 10 digits', 400);
     }
 
     const pkg = await prisma.package.findUnique({ where: { id: packageId } });
@@ -114,6 +118,7 @@ export async function POST(request: NextRequest) {
         couponId,
         totalAmount,
         status: 'PENDING',
+        phone: phone || null,
       },
       include: {
         package: true,
