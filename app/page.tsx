@@ -9,7 +9,7 @@ import {
   Compass, Shield, CreditCard, Star, MapPin, Users, Clock, Phone, 
   Gift, Percent, Tag, Sparkles, ArrowRight, CheckCircle2, ChevronDown, 
   Plane, Heart, Flame, MessageCircle, Check, Calendar, Search, 
-  Palmtree, Mountain, Landmark, Waves, Sun, Luggage, Trees, ShieldCheck, Crown
+  Palmtree, Mountain, Landmark, Waves, Sun, Luggage, Trees, ShieldCheck, Crown, Hotel
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
@@ -672,211 +672,294 @@ export default function Home() {
         </ContainerScroll>
       </section>
 
-      {/* Featured Packages Cards */}
-      <section className="py-24 px-4 bg-slate-50 dark:bg-slate-900/80">
+      {/* Top Trending Packages Cards - MakeMyTrip Style */}
+      <section className="py-20 px-4 bg-slate-50 dark:bg-slate-900/80">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-orange-500 mb-2">
-                <Flame className="w-4 h-4" /> Handpicked Escapes
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-2">
+                <Flame className="w-4 h-4 text-amber-500" /> Curated Escapes
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Top Trending Packages
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Top Trending Holiday Packages
               </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                Our most sought-after itineraries with maximum customer satisfaction.
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
+                Our most popular itineraries with verified accommodations and guaranteed departures.
               </p>
             </div>
             <Link
               href="/packages"
-              className="mt-4 md:mt-0 px-6 py-2.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300"
+              className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
             >
-              View All 10 Packages
+              <span>Explore All 10 Packages</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredDestinations.map((pkg) => (
-              <div
-                key={pkg.name}
-                className="group rounded-3xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col"
-              >
-                {/* Image Cover */}
-                <Link href={getPackageUrl(pkg.name)} className="relative h-64 overflow-hidden block">
-                  <img
-                    src={pkg.image}
-                    alt={pkg.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  
-                  {/* Top Badges */}
-                  <span className="absolute top-4 left-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                    {pkg.tag}
-                  </span>
-                  <span className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full border border-white/20 flex items-center gap-1">
-                    <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                    {pkg.rating} ({pkg.reviewsCount})
-                  </span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {featuredDestinations.map((pkg) => {
+              const discountAmount = pkg.originalPrice - pkg.price;
 
-                  <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs font-medium">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-rose-400" /> {pkg.state}
+              return (
+                <div
+                  key={pkg.name}
+                  className="group rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                >
+                  {/* Image Cover */}
+                  <Link href={getPackageUrl(pkg.name)} className="relative h-60 overflow-hidden block bg-slate-100 dark:bg-slate-800">
+                    <img
+                      src={pkg.image}
+                      alt={pkg.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
+                    
+                    {/* Top Badges */}
+                    <span className="absolute top-3.5 left-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20">
+                      {pkg.tag}
                     </span>
-                    <span className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2.5 py-0.5 rounded-full">
-                      <Clock className="w-3 h-3 text-cyan-300" /> {pkg.duration}
+                    <span className="absolute top-3.5 right-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
+                      <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                      <span className="font-bold">{pkg.rating}</span>
+                      <span className="text-slate-300 text-[10px]">({pkg.reviewsCount})</span>
                     </span>
-                  </div>
-                </Link>
 
-                {/* Body Details */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <Link href={getPackageUrl(pkg.name)}>
-                      <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-3 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
-                        {pkg.name}
-                      </h3>
-                    </Link>
-
-                    {/* Highlights Checklist */}
-                    <div className="space-y-1.5 mb-6">
-                      {pkg.highlights.map((h) => (
-                        <div key={h} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
-                          <span>{h}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Price & Action */}
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
-                    <div>
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                          ₹{pkg.price.toLocaleString()}
-                        </span>
-                        <span className="text-xs text-slate-400 line-through">
-                          ₹{pkg.originalPrice.toLocaleString()}
-                        </span>
-                      </div>
-                      <span className="text-[11px] text-slate-400 font-medium block">
-                        per person (all incl.)
+                    <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-white text-xs font-medium">
+                      <span className="flex items-center gap-1 drop-shadow">
+                        <MapPin className="w-3.5 h-3.5 text-rose-400" /> {pkg.state}
+                      </span>
+                      <span className="flex items-center gap-1 bg-slate-900/80 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-white/15">
+                        <Clock className="w-3 h-3 text-purple-300" /> {pkg.duration}
                       </span>
                     </div>
+                  </Link>
 
-                    <Link
-                      href={getPackageUrl(pkg.name)}
-                      className="inline-flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all cursor-pointer"
-                    >
-                      <span>Explore</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                  {/* Body Details */}
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                      <Link href={getPackageUrl(pkg.name)}>
+                        <h3 className="font-bold text-slate-900 dark:text-white text-base sm:text-lg mb-2.5 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">
+                          {pkg.name}
+                        </h3>
+                      </Link>
+
+                      {/* Highlights Checklist */}
+                      <div className="space-y-1.5 mb-5">
+                        {pkg.highlights.map((h) => (
+                          <div key={h} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                            <span>{h}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price & Action */}
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-slate-400 line-through font-medium">
+                            ₹{pkg.originalPrice.toLocaleString()}
+                          </span>
+                          <span className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-black px-1.5 py-0.2 rounded">
+                            SAVE ₹{discountAmount.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                          ₹{pkg.price.toLocaleString()}
+                        </div>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
+                          per person • taxes included
+                        </span>
+                      </div>
+
+                      <Link
+                        href={getPackageUrl(pkg.name)}
+                        className="inline-flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all group-hover:scale-105"
+                      >
+                        <span>View Details</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Why Choose TripEase (Bento Grid) */}
-      <section className="py-24 px-4 bg-white dark:bg-slate-950">
+      {/* Enterprise Trust & Safety Guarantees (MakeMyTrip & Booking.com Standard) */}
+      <section className="py-20 px-4 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400">
-              The TripEase Advantage
+              The TripEase Standard
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
-              Why 2,500+ Explorers Love Us
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1.5">
+              Why 2,500+ Explorers Trust TripEase
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-3">
-              We remove the hassle from vacation planning with transparent pricing and curated excellence.
+            <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2">
+              Enterprise security, transparent pricing, and 24/7 dedicated travel support for peace of mind.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Pillar 1 */}
+            <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="w-11 h-11 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4">
+                  <Hotel className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1.5">
+                  100% Verified Stays
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Every hotel, resort, and houseboat is physically inspected for hygiene, premium amenities, and prime location.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 text-[11px] font-bold text-purple-600 dark:text-purple-400">
+                3★, 4★ & Boutique Tiers
+              </div>
+            </div>
+
+            {/* Pillar 2 */}
+            <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="w-11 h-11 rounded-xl bg-cyan-100 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4">
+                  <Plane className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1.5">
+                  Multi-City Departures
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Fly or ride from Delhi, Mumbai, Bangalore, Chennai, and Hyderabad with instant route booking and baggage support.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 text-[11px] font-bold text-cyan-600 dark:text-cyan-400">
+                Flights • Trains • AC Coaches
+              </div>
+            </div>
+
+            {/* Pillar 3 */}
+            <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="w-11 h-11 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+                  <MessageCircle className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1.5">
+                  24/7 Dedicated Concierge
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Direct WhatsApp concierge and emergency phone hotline at +91 72003 36447 before and during your entire journey.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                Instant On-Trip Assistance
+              </div>
+            </div>
+
+            {/* Pillar 4 */}
+            <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="w-11 h-11 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1.5">
+                  Zero Hidden Fees
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Transparent GST-inclusive rates, flexible cancellation options, and 100% secure Razorpay transactions.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800 text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                Razorpay & UPI Verified
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Verified Traveler Reviews (TripAdvisor & Google Review Style) */}
+      <section className="py-20 px-4 bg-slate-50 dark:bg-slate-900/60">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400">
+              Verified Feedback
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1.5">
+              What Real Explorers Say
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Read authentic feedback from travelers who booked and completed trips with TripEase.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Bento Card 1 - Main Feature */}
-            <div className="md:col-span-2 bg-gradient-to-br from-purple-800 via-indigo-900 to-slate-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
-              <div className="relative z-10">
-                <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center mb-6">
-                  <Gift className="w-7 h-7 text-amber-300" />
+            {[
+              {
+                name: 'Priya & Rahul Sharma',
+                loc: 'Mumbai, Maharashtra',
+                pkgName: 'Kashmir Paradise on Earth',
+                text: 'The houseboat on Dal Lake and the Gulmarg gondola ride were breathtaking! Booking was completely seamless, and the 20% group discount for our family made it unbeatable value.',
+                rating: 5,
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+              },
+              {
+                name: 'Aditya Verma & Friends',
+                loc: 'Bangalore, Karnataka',
+                pkgName: 'Goa Beach Paradise',
+                text: 'We were a group of 5 and unlocked the 4+1 FREE ticket offer! Saved over ₹17,000 on our trip. Beach resort was incredible with great seafood and zero transport hassles.',
+                rating: 5,
+                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+              },
+              {
+                name: 'Dr. Meenakshi Sundaram',
+                loc: 'Chennai, Tamil Nadu',
+                pkgName: 'Kerala Backwaters Houseboat',
+                text: 'The private houseboat through Alleppey lagoons was top-notch hospitality. The local guide was very courteous and accommodating. TripEase handled everything flawlessly.',
+                rating: 5,
+                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
+              },
+            ].map((r) => (
+              <div
+                key={r.name}
+                className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-1">
+                      {[...Array(r.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+                      ✓ Verified Booking
+                    </span>
+                  </div>
+
+                  <p className="text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+                    &ldquo;{r.text}&rdquo;
+                  </p>
+
+                  <div className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 mb-4">
+                    Booked: {r.pkgName}
+                  </div>
                 </div>
-                <span className="text-amber-300 font-bold text-xs uppercase tracking-wider">Unmatched Value</span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold mt-1 mb-3">
-                  Book 4 Tickets, Get 1 FREE + 20% Group Savings
-                </h3>
-                <p className="text-purple-100 text-sm max-w-lg leading-relaxed">
-                  Travel is best enjoyed together. Our automatic discount engine calculates instant savings: 20% off for 3+ people and every 4th ticket is completely free!
-                </p>
-              </div>
-              <div className="mt-8 flex items-center gap-3 relative z-10">
-                <Link
-                  href="/packages"
-                  className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold px-6 py-3 rounded-2xl text-xs sm:text-sm shadow-lg transition-transform hover:scale-105"
-                >
-                  View Eligible Packages
-                </Link>
-              </div>
-              <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-            </div>
 
-            {/* Bento Card 2 - Departure flexibility */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-5">
-                  <Plane className="w-6 h-6" />
+                <div className="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <img
+                    src={r.avatar}
+                    alt={r.name}
+                    className="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-slate-700"
+                  />
+                  <div>
+                    <h4 className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm">{r.name}</h4>
+                    <p className="text-[11px] text-slate-400">{r.loc}</p>
+                  </div>
                 </div>
-                <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-2">
-                  Multi-City Departures
-                </h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                  Fly from Mumbai, Delhi, Bangalore, or take a train from your home city. Transparent transit add-ons with zero hidden surcharges.
-                </p>
               </div>
-              <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-cyan-600 dark:text-cyan-400">
-                <span>Flights · Trains · AC Buses</span>
-              </div>
-            </div>
-
-            {/* Bento Card 3 - Razorpay Secure */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5">
-                <CreditCard className="w-6 h-6" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-2">
-                100% Secure Checkout
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Pay safely with UPI, Credit/Debit Cards, or Net Banking powered by Razorpay with 256-bit encryption.
-              </p>
-            </div>
-
-            {/* Bento Card 4 - WhatsApp Concierge */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center mb-5">
-                <MessageCircle className="w-6 h-6" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-2">
-                24/7 WhatsApp Support
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Need to tweak your schedule or request hotel upgrades? Our direct WhatsApp desk is always ready to assist.
-              </p>
-            </div>
-
-            {/* Bento Card 5 - Handcrafted Itinerary */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
-              <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-5">
-                <Star className="w-6 h-6" />
-              </div>
-              <h3 className="font-extrabold text-slate-900 dark:text-white text-xl mb-2">
-                Curated Premium Stays
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Every hotel, houseboat, and resort is personally vetted for safety, cleanliness, breakfast inclusions, and prime location.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
