@@ -270,11 +270,11 @@ export default function PackageDetailPage() {
     }
     const digits = form.phone.replace(/\D/g, '');
     if (!digits) {
-      setFormError('Please enter your mobile number.');
+      setFormError('Please enter your 10-digit mobile number.');
       return;
     }
-    if (digits.length < 7 || digits.length > 15) {
-      setFormError('Please enter a valid mobile number (7 to 15 digits).');
+    if (digits.length !== 10) {
+      setFormError(`Please enter a valid 10-digit mobile number (${digits.length}/10 digits entered).`);
       return;
     }
     const formattedPhone = formatPhoneNumber(form.countryCode, digits);
@@ -782,7 +782,7 @@ export default function PackageDetailPage() {
                             }
                           }}
                           disabled={peopleCount <= 1}
-                          className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 text-slate-800 dark:text-white font-bold flex items-center justify-center transition cursor-pointer flex-shrink-0 border border-slate-200 dark:border-slate-700 text-lg select-none"
+                          className="md:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 text-slate-800 dark:text-white font-bold flex items-center justify-center transition cursor-pointer flex-shrink-0 border border-slate-200 dark:border-slate-700 text-lg select-none"
                           aria-label="Decrease travelers"
                         >
                           −
@@ -811,7 +811,7 @@ export default function PackageDetailPage() {
                               setForm((prev) => ({ ...prev, numberOfPeople: 1 }));
                             }
                           }}
-                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-center font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-center md:text-left font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
                         />
                         <button
                           type="button"
@@ -823,7 +823,7 @@ export default function PackageDetailPage() {
                             }
                           }}
                           disabled={peopleCount >= pkg.availableSeats}
-                          className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 text-slate-800 dark:text-white font-bold flex items-center justify-center transition cursor-pointer flex-shrink-0 border border-slate-200 dark:border-slate-700 text-lg select-none"
+                          className="md:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 text-slate-800 dark:text-white font-bold flex items-center justify-center transition cursor-pointer flex-shrink-0 border border-slate-200 dark:border-slate-700 text-lg select-none"
                           aria-label="Increase travelers"
                         >
                           +
@@ -852,11 +852,22 @@ export default function PackageDetailPage() {
                         <span className="flex items-center gap-1.5">
                           <Phone className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Mobile Number
                         </span>
-                        {user?.phone && (
-                          <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Profile Auto-filled
-                          </span>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {form.phone && (
+                            <span className={`text-[10px] font-mono font-bold ${
+                              form.phone.length === 10 
+                                ? 'text-emerald-600 dark:text-emerald-400' 
+                                : 'text-amber-600 dark:text-amber-400'
+                            }`}>
+                              {form.phone.length}/10 digits
+                            </span>
+                          )}
+                          {user?.phone && (
+                            <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Profile Auto-filled
+                            </span>
+                          )}
+                        </div>
                       </label>
                       <div className="flex gap-2">
                         {/* Custom Country Code Dropdown */}
@@ -920,12 +931,13 @@ export default function PackageDetailPage() {
                         <input
                           type="tel"
                           value={form.phone}
+                          maxLength={10}
                           onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, '');
+                            const val = e.target.value.replace(/\D/g, '').slice(0, 10);
                             setForm({ ...form, phone: val });
                             setFormError('');
                           }}
-                          placeholder="e.g. 9876543210"
+                          placeholder="e.g. 9876543210 (10 digits)"
                           className="flex-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono tracking-wide"
                         />
                       </div>
