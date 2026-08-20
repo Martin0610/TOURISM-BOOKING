@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Compass, Shield, CreditCard, Sparkles, Phone, ShieldCheck, ArrowRight, Mail } from 'lucide-react';
+import { Compass, Shield, CreditCard, Sparkles, Phone, ShieldCheck, ArrowRight, Mail, Copy, Check } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
@@ -17,6 +17,15 @@ export default function Footer() {
   const [subscribing, setSubscribing] = useState(false);
   const [policyModal, setPolicyModal] = useState<PolicyType>(null);
   const [vipInfo, setVipInfo] = useState<{ isVip: boolean; status: string; totalSpent: number } | null>(null);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+
+  const handleCopyPhone = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigator.clipboard.writeText('+917200336447');
+    setCopiedPhone(true);
+    toast.success('Phone number +91 72003 36447 copied to clipboard!');
+    setTimeout(() => setCopiedPhone(false), 2500);
+  };
 
   // Fetch VIP status for logged-in user
   useEffect(() => {
@@ -250,10 +259,23 @@ export default function Footer() {
                 </>
               )}
 
-              <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-1 text-xs">
-                <a href="tel:+917200336447" className="flex items-center gap-1.5 text-cyan-400 hover:underline">
-                  <Phone className="w-3.5 h-3.5" /> +91 72003 36447
-                </a>
+              <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-1.5 text-xs">
+                <button
+                  type="button"
+                  onClick={handleCopyPhone}
+                  title="Click to copy phone number"
+                  className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 hover:underline transition cursor-pointer text-xs group"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>+91 72003 36447</span>
+                  {copiedPhone ? (
+                    <span className="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-500/40 flex items-center gap-1">
+                      <Check className="w-3 h-3" /> Copied!
+                    </span>
+                  ) : (
+                    <Copy className="w-3 h-3 text-cyan-400/60 group-hover:text-cyan-300 transition" />
+                  )}
+                </button>
                 <a
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=mjv3140@gmail.com&su=${encodeURIComponent('Customer Support & Inquiry - TripEase Holidays')}&body=${encodeURIComponent('Hi TripEase Support Team,\n\nI am reaching out regarding:\n\n[Please enter your inquiry here]\n\nRegards,')}`}
                   target="_blank"
