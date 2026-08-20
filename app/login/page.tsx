@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Compass, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Compass, Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 function LoginContent() {
   const { login } = useAuth();
@@ -19,12 +19,26 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
+  // Validations
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim());
+  const isPasswordValid = form.password.length >= 6;
+  const canSubmit = isValidEmail && isPasswordValid;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isValidEmail) {
+      setError('Please enter a valid email address (e.g. user@example.com)');
+      return;
+    }
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
+    }
+
     setError('');
     setLoading(true);
     try {
-      await login(form.email, form.password);
+      await login(form.email.trim().toLowerCase(), form.password);
       
       // Get user from localStorage to check role
       const userStr = localStorage.getItem('user');
@@ -40,7 +54,7 @@ function LoginContent() {
         }
       }
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Login failed';
+      const msg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Invalid email or password. Please try again.';
       setError(msg);
     } finally {
       setLoading(false);
@@ -83,7 +97,10 @@ function LoginContent() {
                 <input
                   type="email"
                   value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value.toLowerCase() })}
+                  onChange={(e) => {
+                    setForm({ ...form, email: e.target.value.toLowerCase() });
+                    if (error) setError('');
+                  }}
                   className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium"
                   placeholder="you@example.com"
                 />
@@ -103,7 +120,10 @@ function LoginContent() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  onChange={(e) => {
+                    setForm({ ...form, password: e.target.value });
+                    if (error) setError('');
+                  }}
                   className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium"
                   placeholder="••••••••"
                 />
@@ -112,17 +132,37 @@ function LoginContent() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              {form.password && form.password.length < 6 && (
+                <p className="text-[11px] text-amber-300 mt-1 font-medium">
+                  Password must be at least 6 characters ({form.password.length}/6)
+                </p>
+              )}
             </div>
 
-            {/* Error message */}
+            {/* Persistent Error Alert (Stays until user enters new details) */}
             {error && (
-              <div className="bg-red-500/25 border border-red-400/50 rounded-xl px-4 py-3 text-sm text-white font-medium">
-                {error}
+              <div className="bg-rose-500/25 border border-rose-400/50 rounded-xl p-3.5 text-sm text-white font-medium flex items-start gap-2.5 animate-in fade-in duration-200">
+                <AlertCircle className="w-4 h-4 text-rose-300 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="leading-snug text-xs sm:text-sm">{error}</p>
+                  {error.includes('verify your email') && (
+                    <Link 
+                      href={`/verify-email?email=${encodeURIComponent(form.email)}`}
+                      className="text-xs text-amber-300 hover:underline font-bold mt-1.5 inline-block"
+                    >
+                      Click here to enter verification OTP →
+                    </Link>
+                  )}
+                </div>
               </div>
             )}
 
-            <button type="submit" disabled={loading || !form.email || !form.password}
-              className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 mt-2 cursor-pointer">
+            {/* Submit Button (Only activates when valid email + 6 chars password) */}
+            <button 
+              type="submit" 
+              disabled={loading || !canSubmit}
+              className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+            >
               {loading ? 'Signing in...' : (<>Sign In <ArrowRight className="w-4 h-4" /></>)}
             </button>
           </form>

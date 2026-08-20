@@ -19,9 +19,16 @@ api.interceptors.response.use(
   (res) => res,
   (error) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      const pathname = window.location.pathname;
+      const isAuthPage = ['/login', '/register', '/forgot-password', '/verify-email'].includes(pathname);
+      const isAuthEndpoint = error.config?.url?.includes('/api/auth/');
+
+      // Only purge and redirect if not already on an authentication page/endpoint
+      if (!isAuthPage && !isAuthEndpoint) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
