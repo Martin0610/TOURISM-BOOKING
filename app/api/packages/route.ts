@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
         ...(maxPrice && { pricePerPerson: { lte: parseFloat(maxPrice) } }),
         ...(duration && { durationDays: parseInt(duration) }),
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'asc' },
     });
 
     return successResponse(packages);

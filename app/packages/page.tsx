@@ -180,6 +180,28 @@ function PackagesContent() {
       list.sort((a, b) => b.pricePerPerson - a.pricePerPerson);
     } else if (sortBy === 'duration') {
       list.sort((a, b) => b.durationDays - a.durationDays);
+    } else {
+      // Default: 'featured' -> Keep Goa 1st, Kerala 2nd, and the rest in curated order
+      const getFeaturedRank = (name: string, dest: string, state: string) => {
+        const text = `${name} ${dest} ${state}`.toLowerCase();
+        if (text.includes('goa')) return 1;
+        if (text.includes('kerala') || text.includes('alleppey')) return 2;
+        if (text.includes('rajasthan') || text.includes('jaipur')) return 3;
+        if (text.includes('manali') || text.includes('himachal')) return 4;
+        if (text.includes('andaman')) return 5;
+        if (text.includes('kashmir') || text.includes('srinagar')) return 6;
+        if (text.includes('ladakh') || text.includes('leh')) return 7;
+        if (text.includes('golden triangle') || text.includes('delhi')) return 8;
+        if (text.includes('coorg')) return 9;
+        if (text.includes('varanasi')) return 10;
+        return 99;
+      };
+
+      list.sort((a, b) => {
+        const rankA = getFeaturedRank(a.name, a.destination, a.state);
+        const rankB = getFeaturedRank(b.name, b.destination, b.state);
+        return rankA - rankB;
+      });
     }
 
     return list;
