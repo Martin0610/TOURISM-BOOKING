@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
   try {
     const { name, email, password, phone } = await request.json();
     
-    if (!name || !email || !password) {
-      return errorResponse('Name, email and password are required', 400);
+    if (!name || !email || !password || !phone) {
+      return errorResponse('Name, email, mobile number, and password are required', 400);
     }
 
     // Validate email format, domain, and check for disposable emails

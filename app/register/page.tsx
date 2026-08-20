@@ -53,7 +53,7 @@ export default function RegisterPage() {
   }, []);
 
   const strength = getPasswordStrength(form.password);
-  const canSubmit = form.name && form.email && form.password && strength.score >= 3 && agreeTerms;
+  const canSubmit = form.name && form.email && form.password && phone.replace(/\D/g, '').length === 10 && strength.score >= 3 && agreeTerms;
 
   const handlePolicyAccept = (acceptedType: PolicyType) => {
     if (acceptedType === 'terms') {
@@ -140,15 +140,15 @@ export default function RegisterPage() {
     if (!agreeTerms) { setError('Please read and tick the box to agree to the Terms of Service & Privacy Policy.'); return; }
     
     const digits = phone.replace(/\D/g, '');
-    if (digits && digits.length !== 10) {
-      setError(`Please enter a valid 10-digit mobile number (${digits.length}/10 digits entered).`);
+    if (!digits || digits.length !== 10) {
+      setError(`Please enter a valid 10-digit mobile number (${digits ? digits.length : 0}/10 digits entered).`);
       return;
     }
 
     setError('');
     setLoading(true);
     try {
-      const formattedPhone = digits ? formatPhoneNumber(countryCode, digits) : undefined;
+      const formattedPhone = formatPhoneNumber(countryCode, digits);
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -238,14 +238,14 @@ export default function RegisterPage() {
             {/* Mobile Number with Custom Project-Handled Country Code Dropdown */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-semibold text-white">Mobile Number (Optional)</label>
-                {phone && (
-                  <span className={`text-[10px] font-mono font-bold ${
-                    phone.length === 10 ? 'text-emerald-400' : 'text-amber-300'
-                  }`}>
-                    {phone.length}/10 digits
-                  </span>
-                )}
+                <label className="block text-sm font-semibold text-white">
+                  Mobile Number <span className="text-rose-400">*</span>
+                </label>
+                <span className={`text-[10px] font-mono font-bold ${
+                  phone.length === 10 ? 'text-emerald-400' : 'text-amber-300'
+                }`}>
+                  {phone.length}/10 digits
+                </span>
               </div>
               <div className="flex gap-2">
                 {/* Custom Country Code Dropdown */}
