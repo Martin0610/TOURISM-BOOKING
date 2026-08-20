@@ -59,9 +59,18 @@ export async function PUT(
 
     const { status } = await request.json();
 
-    // Admin can only confirm bookings, not cancel them
-    if (authUser!.role === 'ADMIN' && status === 'CANCELLED') {
-      return errorResponse('Admin cannot cancel bookings. Only users can cancel their own bookings.', 403);
+    if (status === 'CANCELLED' && booking.status !== 'CANCELLED') {
+      // Restore seats
+      await prisma.package.update({
+        where: { id: booking.packageId },
+        data: { availableSeats: { increment: booking.numberOfPeople } },
+      });
+    } else if (status === 'CONFIRMED' && booking.status === 'CANCELLED') {
+      // Decrement seats
+      await prisma.package.update({
+        where: { id: booking.packageId },
+        data: { availableSeats: { decrement: booking.numberOfPeople } },
+      });
     }
 
     const updated = await prisma.booking.update({
@@ -70,7 +79,7 @@ export async function PUT(
       include: { package: true, departureLocation: true },
     });
 
-    return successResponse(updated, 'Booking updated');
+    return successResponse(updated, `Booking status updated to ${status}`);
   } catch (err) {
     if (err instanceof Error && err.message === 'UNAUTHORIZED') {
       return errorResponse('Authentication required', 401);
