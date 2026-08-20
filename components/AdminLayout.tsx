@@ -35,18 +35,49 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [badges, setBadges] = useState<{ bookings?: number; reviews?: number; vip?: number }>({});
 
+  // Mark current section as seen immediately when pathname changes
+  useEffect(() => {
+    if (pathname.startsWith('/admin/bookings')) {
+      localStorage.setItem('admin_seen_bookings', Date.now().toString());
+      setBadges((prev) => ({ ...prev, bookings: 0 }));
+    } else if (pathname.startsWith('/admin/reviews')) {
+      localStorage.setItem('admin_seen_reviews', Date.now().toString());
+      setBadges((prev) => ({ ...prev, reviews: 0 }));
+    } else if (pathname.startsWith('/admin/vip')) {
+      localStorage.setItem('admin_seen_vip', Date.now().toString());
+      setBadges((prev) => ({ ...prev, vip: 0 }));
+    }
+  }, [pathname]);
+
   useEffect(() => {
     if (user?.role === 'ADMIN') {
       const fetchNotifications = () => {
-        api.get('/api/admin/notifications')
-          .then((res) => setBadges(res.data.data || {}))
+        const sinceBookings = localStorage.getItem('admin_seen_bookings') || '';
+        const sinceReviews = localStorage.getItem('admin_seen_reviews') || '';
+        const sinceVip = localStorage.getItem('admin_seen_vip') || '';
+
+        const params: Record<string, string> = {};
+        if (sinceBookings) params.sinceBookings = sinceBookings;
+        if (sinceReviews) params.sinceReviews = sinceReviews;
+        if (sinceVip) params.sinceVip = sinceVip;
+
+        api.get('/api/admin/notifications', { params })
+          .then((res) => {
+            const data = res.data?.data || {};
+            // Suppress badge if currently on that page
+            if (pathname.startsWith('/admin/bookings')) data.bookings = 0;
+            if (pathname.startsWith('/admin/reviews')) data.reviews = 0;
+            if (pathname.startsWith('/admin/vip')) data.vip = 0;
+            setBadges(data);
+          })
           .catch(() => {});
       };
+
       fetchNotifications();
       const interval = setInterval(fetchNotifications, 15000);
       return () => clearInterval(interval);
     }
-  }, [user]);
+  }, [user, pathname]);
 
   const handleLogout = () => { logout(); router.push('/login'); };
 
