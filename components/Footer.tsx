@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Compass, Shield, CreditCard, Sparkles, Phone, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Compass, Shield, CreditCard, Sparkles, Phone, ShieldCheck, ArrowRight, Mail } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
@@ -254,7 +254,14 @@ export default function Footer() {
                 <a href="tel:+917200336447" className="flex items-center gap-1.5 text-cyan-400 hover:underline">
                   <Phone className="w-3.5 h-3.5" /> +91 72003 36447
                 </a>
-                <p className="text-slate-500">mjv3140@gmail.com</p>
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=mjv3140@gmail.com&su=${encodeURIComponent('Customer Support & Inquiry - TripEase Holidays')}&body=${encodeURIComponent('Hi TripEase Support Team,\n\nI am reaching out regarding:\n\n[Please enter your inquiry here]\n\nRegards,')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-slate-400 hover:text-white hover:underline transition cursor-pointer"
+                >
+                  <Mail className="w-3.5 h-3.5 text-purple-400" /> mjv3140@gmail.com
+                </a>
               </div>
             </div>
           </div>

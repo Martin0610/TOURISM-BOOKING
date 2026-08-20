@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { X, ShieldCheck, FileText, RotateCcw, CheckCircle2, Lock, Phone, ChevronDown, Check, Sparkles } from 'lucide-react';
+import { X, ShieldCheck, FileText, RotateCcw, CheckCircle2, Lock, Phone, ChevronDown, Check, Sparkles, Mail } from 'lucide-react';
 
 export type PolicyType = 'terms' | 'privacy' | 'cancellation' | null;
 
@@ -290,19 +290,30 @@ export default function PolicyModal({ type, onClose, onAccept }: PolicyModalProp
             </>
           )}
 
-          {/* Concierge Help box */}
-          <div className="p-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 rounded-2xl border border-purple-500/40 flex items-center justify-between text-white shadow-md shadow-purple-950/20">
-            <div>
-              <p className="text-xs font-bold text-white">Have questions about this policy?</p>
-              <p className="text-[11px] text-purple-200/80">Our customer support concierge is available 24/7.</p>
-            </div>
-            <a 
-              href="tel:+917200336447"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition shadow-md shadow-purple-600/30 cursor-pointer"
-            >
-              <Phone className="w-3.5 h-3.5" /> Call Concierge
-            </a>
-          </div>
+          {/* Email Support Help box */}
+          {(() => {
+            const policyTitle = activeType === 'terms' ? 'Terms of Service' : activeType === 'privacy' ? 'Privacy Policy' : 'Cancellation Policy';
+            const emailSubject = encodeURIComponent(`Clarifications on ${policyTitle} - TripEase`);
+            const emailBody = encodeURIComponent(`Hi TripEase Support Team,\n\nI have a question and require clarification regarding the ${policyTitle}.\n\n[Please enter your question here]\n\nRegards,`);
+            const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=mjv3140@gmail.com&su=${emailSubject}&body=${emailBody}`;
+
+            return (
+              <div className="p-4 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-950 rounded-2xl border border-purple-500/40 flex items-center justify-between text-white shadow-md shadow-purple-950/20">
+                <div>
+                  <p className="text-xs font-bold text-white">Have questions about this policy?</p>
+                  <p className="text-[11px] text-purple-200/80">Our support desk is available to clarify any doubts.</p>
+                </div>
+                <a 
+                  href={gmailComposeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition shadow-md shadow-purple-600/30 cursor-pointer"
+                >
+                  <Mail className="w-3.5 h-3.5" /> Email Support
+                </a>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Footer actions with smooth scroll-to-bottom indicator */}
