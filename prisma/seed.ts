@@ -122,7 +122,7 @@ const packages = [
     inclusions: 'Hotel accommodation (6 nights)\nDaily breakfast\nAll inter-island ferry tickets\nLocal sightseeing\nSnorkelling session\nProfessional guide',
     exclusions: 'Flights to Port Blair\nLunch and dinner\nScuba diving charges\nPersonal expenses\nTravel insurance',
     cancellationPolicy: 'Free cancellation up to 14 days before travel. 30% refund for 7–14 days. No refund within 7 days.',
-    imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
+    imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
   },
   {
     name: 'Varanasi Spiritual Journey',
