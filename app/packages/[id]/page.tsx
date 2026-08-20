@@ -48,7 +48,13 @@ export default function PackageDetailPage() {
   }, [user, authLoading, id, router]);
   
   // Booking Form State with Country Code
-  const [form, setForm] = useState({ 
+  const [form, setForm] = useState<{
+    travelDate: string;
+    numberOfPeople: number | string;
+    departureLocationId: string;
+    countryCode: string;
+    phone: string;
+  }>({ 
     travelDate: '', 
     numberOfPeople: 1, 
     departureLocationId: '', 
@@ -189,17 +195,18 @@ export default function PackageDetailPage() {
   };
 
   // Calculations
+  const peopleCount = Math.max(1, typeof form.numberOfPeople === 'number' ? form.numberOfPeople : (parseInt(form.numberOfPeople as string, 10) || 1));
   const selectedDeparture = departures.find((d) => d.id === form.departureLocationId);
-  const packageAmount = pkg ? pkg.pricePerPerson * form.numberOfPeople : 0;
-  const transportAmount = selectedDeparture ? selectedDeparture.transportPrice * form.numberOfPeople : 0;
+  const packageAmount = pkg ? pkg.pricePerPerson * peopleCount : 0;
+  const transportAmount = selectedDeparture ? selectedDeparture.transportPrice * peopleCount : 0;
   
   // 4+1 free ticket calculation
-  const freeTickets = form.numberOfPeople >= 4 ? Math.floor(form.numberOfPeople / 4) : 0;
-  const paidPeople = form.numberOfPeople - freeTickets;
+  const freeTickets = peopleCount >= 4 ? Math.floor(peopleCount / 4) : 0;
+  const paidPeople = peopleCount - freeTickets;
   const packageAmountAfterFree = pkg ? pkg.pricePerPerson * paidPeople : 0;
   
   // 20% Group discount (only if 3 people and freeTickets is 0)
-  const isGroupDiscount = form.numberOfPeople >= 3 && freeTickets === 0;
+  const isGroupDiscount = peopleCount >= 3 && freeTickets === 0;
   const discountAmount = isGroupDiscount 
     ? Math.round(packageAmount * 0.20) 
     : (freeTickets > 0 ? packageAmount - packageAmountAfterFree : 0);
@@ -257,7 +264,7 @@ export default function PackageDetailPage() {
       setFormError('Please select a travel date.');
       return;
     }
-    if (!form.numberOfPeople || form.numberOfPeople < 1) {
+    if (!form.numberOfPeople || Number(form.numberOfPeople) < 1) {
       setFormError('Please specify at least 1 traveler.');
       return;
     }
@@ -278,7 +285,7 @@ export default function PackageDetailPage() {
       const res = await api.post('/api/bookings', {
         packageId: id,
         travelDate: form.travelDate,
-        numberOfPeople: form.numberOfPeople,
+        numberOfPeople: peopleCount,
         departureLocationId: form.departureLocationId || undefined,
         couponCode: couponResult?.code || undefined,
         phone: formattedPhone,
@@ -758,23 +765,73 @@ export default function PackageDetailPage() {
 
                     {/* Number of Travelers Stepper */}
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-cyan-500" /> Travelers Count
+                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Travelers Count
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">Max {pkg.availableSeats} seats</span>
                       </label>
-                      <input
-                        type="number"
-                        min={1}
-                        max={pkg.availableSeats}
-                        value={form.numberOfPeople}
-                        onChange={(e) => {
-                          setForm({ ...form, numberOfPeople: parseInt(e.target.value) || 1 });
-                          setFormError('');
-                        }}
-                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const current = typeof form.numberOfPeople === 'number' ? form.numberOfPeople : (parseInt(form.numberOfPeople as string, 10) || 1);
+                            if (current > 1) {
+                              setForm({ ...form, numberOfPeople: current - 1 });
+                              setFormError('');
+                            }
+                          }}
+                          disabled={peopleCount <= 1}
+                          className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 text-slate-800 dark:text-white font-bold flex items-center justify-center transition cursor-pointer flex-shrink-0 border border-slate-200 dark:border-slate-700 text-lg select-none"
+                          aria-label="Decrease travelers"
+                        >
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          min={1}
+                          max={pkg.availableSeats}
+                          value={form.numberOfPeople}
+                          onFocus={(e) => e.target.select()}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '') {
+                              setForm({ ...form, numberOfPeople: '' });
+                            } else {
+                              const parsed = parseInt(val, 10);
+                              if (!isNaN(parsed)) {
+                                const clamped = pkg.availableSeats ? Math.min(pkg.availableSeats, Math.max(1, parsed)) : Math.max(1, parsed);
+                                setForm({ ...form, numberOfPeople: clamped });
+                              }
+                            }
+                            setFormError('');
+                          }}
+                          onBlur={() => {
+                            if (!form.numberOfPeople || Number(form.numberOfPeople) < 1) {
+                              setForm((prev) => ({ ...prev, numberOfPeople: 1 }));
+                            }
+                          }}
+                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-center font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const current = typeof form.numberOfPeople === 'number' ? form.numberOfPeople : (parseInt(form.numberOfPeople as string, 10) || 1);
+                            if (current < pkg.availableSeats) {
+                              setForm({ ...form, numberOfPeople: current + 1 });
+                              setFormError('');
+                            }
+                          }}
+                          disabled={peopleCount >= pkg.availableSeats}
+                          className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-40 text-slate-800 dark:text-white font-bold flex items-center justify-center transition cursor-pointer flex-shrink-0 border border-slate-200 dark:border-slate-700 text-lg select-none"
+                          aria-label="Increase travelers"
+                        >
+                          +
+                        </button>
+                      </div>
 
                       {/* Dynamic Celebration Discount Banners */}
-                      {form.numberOfPeople === 3 && (
+                      {peopleCount === 3 && (
                         <div className="mt-2 p-2.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1.5">
                           <PartyPopper className="w-4 h-4 text-emerald-500 animate-bounce" />
                           <span>20% Group Discount unlocked! Add 1 more for 4+1 FREE!</span>
@@ -1160,7 +1217,7 @@ export default function PackageDetailPage() {
                     {/* Dynamic Cost Breakdown */}
                     <div className="p-4 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
                       <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                        <span>Package (₹{pkg.pricePerPerson.toLocaleString()} × {form.numberOfPeople})</span>
+                        <span>Package (₹{pkg.pricePerPerson.toLocaleString()} × {peopleCount})</span>
                         <span>₹{packageAmount.toLocaleString()}</span>
                       </div>
 
@@ -1180,7 +1237,7 @@ export default function PackageDetailPage() {
 
                       {selectedDeparture && (
                         <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                          <span>Transit ({selectedDeparture.departureCity} × {form.numberOfPeople})</span>
+                          <span>Transit ({selectedDeparture.departureCity} × {peopleCount})</span>
                           <span>+₹{transportAmount.toLocaleString()}</span>
                         </div>
                       )}
