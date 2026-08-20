@@ -37,6 +37,7 @@ export default function PackageDetailPage() {
   const [departures, setDepartures] = useState<DepartureLocation[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
   const [isUserVip, setIsUserVip] = useState(false);
 
   // Redirect unsigned users to login with redirect back to this package
@@ -634,21 +635,39 @@ export default function PackageDetailPage() {
                       Our destination specialists can adjust stays, add extra nights, and arrange private transfers on WhatsApp.
                     </p>
                   </div>
-                  <div className="flex gap-2.5">
+                  <div className="flex flex-wrap items-center gap-2.5">
                     <a
                       href="https://wa.me/917200336447?text=Hi!%20I'm%20interested%20in%20customizing%20the%20package:%20"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md transition-transform hover:scale-105"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-105 cursor-pointer"
                     >
-                      <MessageCircle className="w-4 h-4" /> WhatsApp Us
+                      <MessageCircle className="w-4 h-4" />
+                      <span>WhatsApp Us</span>
                     </a>
-                    <a
-                      href="tel:+917200336447"
-                      className="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 border border-white/20 transition"
+                    {/* Laptop / Desktop: Contact Expert + Phone Number + Copy Icon */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          navigator.clipboard.writeText('+91 72003 36447');
+                          setCopiedPhone(true);
+                          toast.success('Expert contact +91 72003 36447 copied to clipboard!');
+                          setTimeout(() => setCopiedPhone(false), 2500);
+                        }
+                      }}
+                      className="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 border border-white/20 transition-all hover:border-white/40 cursor-pointer shadow-sm"
+                      title="Click to copy expert phone number"
                     >
-                      <Phone className="w-3.5 h-3.5" /> Call Expert
-                    </a>
+                      <Phone className="w-3.5 h-3.5 text-purple-300" />
+                      <span>Contact Expert:</span>
+                      <span className="font-mono text-amber-300 font-bold">+91 72003 36447</span>
+                      {copiedPhone ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400 font-bold" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5 text-slate-300 hover:text-white" />
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>

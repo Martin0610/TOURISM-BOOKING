@@ -9,7 +9,7 @@ import {
   Compass, Shield, CreditCard, Star, MapPin, Users, Clock, Phone, 
   Gift, Percent, Tag, Sparkles, ArrowRight, CheckCircle2, ChevronDown, 
   Plane, Heart, Flame, MessageCircle, Check, Calendar, Search, 
-  Palmtree, Mountain, Landmark, Waves, Sun, Luggage, Trees, ShieldCheck
+  Palmtree, Mountain, Landmark, Waves, Sun, Luggage, Trees, ShieldCheck, Crown
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
@@ -460,26 +460,131 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-3.5 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white shadow-inner border-y border-white/10">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-center md:text-left">
-            <span className="p-1.5 bg-amber-400 text-slate-950 rounded-lg font-bold text-xs inline-flex items-center gap-1.5 shadow-sm">
-              <Gift className="w-3.5 h-3.5" /> COUPONS
-            </span>
-            <span className="text-sm font-semibold text-white">Check out these amazing coupons while booking:</span>
+      {/* MakeMyTrip Style Offers & Deals Section */}
+      <section className="py-12 px-4 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 bg-amber-500 text-slate-950 rounded-lg font-black text-xs inline-flex items-center gap-1 shadow-sm">
+                  <Gift className="w-3.5 h-3.5" /> DEALS
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                  Offers & Promotions
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                Exclusive seasonal discounts, group saver perks, and VIP rewards.
+              </p>
+            </div>
+
+            <Link
+              href="/packages"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+            >
+              <span>View All Packages</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2.5">
-            {coupons.map((coupon) => (
-              <div
-                key={coupon.code}
-                className="flex items-center gap-2 bg-white/15 border border-white/30 rounded-xl px-3.5 py-1.5 text-xs font-mono font-bold shadow-sm"
-              >
-                <Tag className="w-3.5 h-3.5 text-amber-300" />
-                <span className="tracking-wide text-white font-black">{coupon.code}</span>
-                <span className="text-amber-200 text-[11px] font-sans font-semibold">({coupon.discount})</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Offer Card 1: 4+1 Free */}
+            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  <span className="text-purple-600 dark:text-purple-400">GROUP SPECIAL</span>
+                  <span className="text-[10px]">T&C&apos;S APPLY</span>
+                </div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                  4+1 FREE Group Ticket Offer
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                  Book for 4 or more travelers and every 4th ticket is 100% FREE on package price.
+                </p>
               </div>
-            ))}
+              <div className="mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-700/70 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-md border border-purple-200 dark:border-purple-800">
+                  AUTO-APPLIED
+                </span>
+                <Link href="/packages" className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline">
+                  BOOK NOW →
+                </Link>
+              </div>
+            </div>
+
+            {/* Offer Card 2: 20% Group Pass */}
+            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  <span className="text-emerald-600 dark:text-emerald-400">INSTANT 20% OFF</span>
+                  <span className="text-[10px]">3+ PAX</span>
+                </div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                  Friends & Family Group Pass
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                  Travel with 3+ friends or family and automatically save a flat 20% on the entire booking.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-700/70 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+                  CODE: TRIP2026
+                </span>
+                <Link href="/packages" className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline">
+                  BOOK NOW →
+                </Link>
+              </div>
+            </div>
+
+            {/* Offer Card 3: VIP Elite Club */}
+            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                    <Crown className="w-3 h-3 text-amber-500 fill-amber-500" /> VIP EXCLUSIVE
+                  </span>
+                  <span className="text-[10px]">TIER REWARD</span>
+                </div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                  TripEase VIP Elite Pass
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                  Unlock up to ₹2,500 extra discounts, 0% cancellation deductions, and concierge service.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-700/70 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">
+                  CODE: VIPELITE
+                </span>
+                <Link href="/vip" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
+                  JOIN VIP →
+                </Link>
+              </div>
+            </div>
+
+            {/* Offer Card 4: Welcome Bonus */}
+            <div className="bg-slate-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  <span className="text-blue-600 dark:text-blue-400">FLAT SAVINGS</span>
+                  <span className="text-[10px]">ALL DESTINATIONS</span>
+                </div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-snug">
+                  ₹500 Flat Welcome Voucher
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                  Get instant ₹500 off across any domestic tour package with no minimum cap.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-slate-200/70 dark:border-slate-700/70 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
+                  CODE: EXPLORE500
+                </span>
+                <Link href="/packages" className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline">
+                  BOOK NOW →
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
