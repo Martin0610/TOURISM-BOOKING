@@ -91,7 +91,7 @@ export default function RegisterPage() {
       const res = await fetch('/api/auth/validate-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.toLowerCase() }),
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
       });
 
       const data = await res.json();
@@ -100,9 +100,12 @@ export default function RegisterPage() {
         setError(data.message);
       } else {
         setError('');
-        if (data.suggestion) {
+        if (data.suggestion && data.suggestion.toLowerCase().trim() !== email.toLowerCase().trim()) {
           setEmailSuggestion(data.suggestion);
           setEmailWarning(data.warning || `Did you mean ${data.suggestion}?`);
+        } else {
+          setEmailSuggestion('');
+          setEmailWarning('');
         }
       }
     } catch (err) {
@@ -134,18 +137,25 @@ export default function RegisterPage() {
     e.preventDefault();
     if (strength.score < 3) { setError('Please choose a stronger password before signing up.'); return; }
     if (!agreeTerms) { setError('Please read and tick the box to agree to the Terms of Service & Privacy Policy.'); return; }
+    
+    const digits = phone.replace(/\D/g, '');
+    if (digits && digits.length !== 10) {
+      setError(`Please enter a valid 10-digit mobile number (${digits.length}/10 digits entered).`);
+      return;
+    }
+
     setError('');
     setLoading(true);
     try {
-      const formattedPhone = formatPhoneNumber(countryCode, phone);
+      const formattedPhone = digits ? formatPhoneNumber(countryCode, digits) : undefined;
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: form.name,
-          email: form.email.toLowerCase(),
+          email: form.email.toLowerCase().trim(),
           password: form.password,
-          phone: formattedPhone || undefined,
+          phone: formattedPhone,
         }),
       });
 
@@ -210,7 +220,7 @@ export default function RegisterPage() {
                   </div>
                 )}
               </div>
-              {emailWarning && emailSuggestion && (
+              {emailWarning && emailSuggestion && emailSuggestion.toLowerCase().trim() !== form.email.toLowerCase().trim() && (
                 <div className="mt-2 bg-yellow-500/20 border border-yellow-400/40 rounded-lg px-3 py-2 flex items-center justify-between">
                   <p className="text-xs text-yellow-200">{emailWarning}</p>
                   <button
@@ -226,7 +236,16 @@ export default function RegisterPage() {
 
             {/* Mobile Number with Custom Project-Handled Country Code Dropdown */}
             <div>
-              <label className="block text-sm font-semibold text-white mb-1.5">Mobile Number (Optional)</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm font-semibold text-white">Mobile Number (Optional)</label>
+                {phone && (
+                  <span className={`text-[10px] font-mono font-bold ${
+                    phone.length === 10 ? 'text-emerald-400' : 'text-amber-300'
+                  }`}>
+                    {phone.length}/10 digits
+                  </span>
+                )}
+              </div>
               <div className="flex gap-2">
                 {/* Custom Country Code Dropdown */}
                 <div className="relative" ref={countryRef}>
@@ -288,8 +307,13 @@ export default function RegisterPage() {
                   <input
                     type="tel"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                    placeholder="9876543210"
+                    maxLength={10}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                      setPhone(val);
+                      if (error.includes('mobile number')) setError('');
+                    }}
+                    placeholder="9876543210 (10 digits)"
                     className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-mono tracking-wide font-medium"
                   />
                 </div>

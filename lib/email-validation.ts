@@ -76,7 +76,13 @@ function isDisposableEmail(email: string): boolean {
  */
 function checkTypo(email: string): string | null {
   const domain = getDomain(email);
-  return DOMAIN_TYPOS[domain] || null;
+  if (!domain) return null;
+  // Standard valid domains should never trigger a typo suggestion
+  const validProviders = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'proton.me', 'protonmail.com'];
+  if (validProviders.includes(domain.toLowerCase())) {
+    return null;
+  }
+  return DOMAIN_TYPOS[domain.toLowerCase()] || null;
 }
 
 /**
@@ -116,14 +122,17 @@ export function validateEmailClient(email: string): EmailValidationResult {
   }
 
   // Typo detection
+  const domain = getDomain(email);
   const suggestion = checkTypo(email);
-  if (suggestion) {
-    const correctedEmail = email.replace(getDomain(email), suggestion);
-    return {
-      isValid: true,
-      warning: `Did you mean ${correctedEmail}?`,
-      suggestion: correctedEmail,
-    };
+  if (suggestion && suggestion.toLowerCase() !== domain.toLowerCase()) {
+    const correctedEmail = email.replace(domain, suggestion);
+    if (correctedEmail.toLowerCase().trim() !== email.toLowerCase().trim()) {
+      return {
+        isValid: true,
+        warning: `Did you mean ${correctedEmail}?`,
+        suggestion: correctedEmail,
+      };
+    }
   }
 
   return { isValid: true };
