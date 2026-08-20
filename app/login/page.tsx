@@ -19,17 +19,19 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  // Validations
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim());
-  const isPasswordValid = form.password.length >= 6;
-  const canSubmit = isValidEmail && isPasswordValid;
+  // Button unlocks as soon as they have entered some email and at least 6 characters for password
+  const canSubmit = form.email.trim().length > 0 && form.password.length >= 6;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if email format is valid
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim());
     if (!isValidEmail) {
-      setError('Please enter a valid email address (e.g. user@example.com)');
+      setError('Please enter a valid email address (e.g. name@example.com)');
       return;
     }
+
     if (form.password.length < 6) {
       setError('Password must be at least 6 characters long.');
       return;
@@ -132,11 +134,6 @@ function LoginContent() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              {form.password && form.password.length < 6 && (
-                <p className="text-[11px] text-amber-300 mt-1 font-medium">
-                  Password must be at least 6 characters ({form.password.length}/6)
-                </p>
-              )}
             </div>
 
             {/* Persistent Error Alert (Stays until user enters new details) */}
@@ -157,7 +154,7 @@ function LoginContent() {
               </div>
             )}
 
-            {/* Submit Button (Only activates when valid email + 6 chars password) */}
+            {/* Submit Button (Only unlocks once 6 digits/chars are typed for password) */}
             <button 
               type="submit" 
               disabled={loading || !canSubmit}

@@ -135,6 +135,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.password.length < 6) { setError('Password must be at least 6 characters long.'); return; }
     if (strength.score < 3) { setError('Please choose a stronger password before signing up.'); return; }
     if (!agreeTerms) { setError('Please read and tick the box to agree to the Terms of Service & Privacy Policy.'); return; }
     
