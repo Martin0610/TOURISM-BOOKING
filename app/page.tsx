@@ -285,9 +285,9 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/50 to-slate-950/95 backdrop-blur-[0.5px]" />
           <div className="absolute inset-0 bg-radial-gradient from-transparent via-slate-950/40 to-slate-950/90" />
           
-          <div className={`absolute -top-32 left-1/4 w-[34rem] h-[34rem] ${currentTheme.glowColor} rounded-full blur-[130px] pointer-events-none transition-all duration-1000`} />
-          <div className={`absolute top-1/3 right-10 w-[30rem] h-[30rem] ${currentTheme.glowColor} rounded-full blur-[130px] pointer-events-none transition-all duration-1000`} />
-          <div className="absolute bottom-10 left-10 w-[28rem] h-[28rem] bg-indigo-500/15 rounded-full blur-[120px] pointer-events-none" />
+          <div className={`hidden sm:block absolute -top-32 left-1/4 w-[34rem] h-[34rem] ${currentTheme.glowColor} rounded-full blur-[130px] pointer-events-none transition-all duration-1000`} />
+          <div className={`hidden sm:block absolute top-1/3 right-10 w-[30rem] h-[30rem] ${currentTheme.glowColor} rounded-full blur-[130px] pointer-events-none transition-all duration-1000`} />
+          <div className="hidden sm:block absolute bottom-10 left-10 w-[28rem] h-[28rem] bg-indigo-500/15 rounded-full blur-[120px] pointer-events-none" />
         </div>
 
         {/* Hero Content */}
@@ -696,6 +696,8 @@ export default function Home() {
                     <img
                       src={pkg.image}
                       alt={pkg.name}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
