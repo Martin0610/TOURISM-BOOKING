@@ -217,9 +217,9 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      {/* Live Home Page Backdrop Dimmer */}
+      {/* Live Home Page Backdrop Dimmer (Crisp & Clear like AbhiBus Reference - No Blur) */}
       <div 
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-200"
+        className="fixed inset-0 bg-black/40 transition-opacity duration-200"
         onClick={onClose}
       />
 
