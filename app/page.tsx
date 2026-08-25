@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
@@ -18,6 +18,7 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { Package } from '@/lib/types';
 import Footer from '@/components/Footer';
+import { getAuthToken } from '@/lib/authStorage';
 
 const VIBE_OPTIONS = [
   { value: '', label: 'All Experiences', icon: Compass, color: 'text-blue-500' },
@@ -203,6 +204,7 @@ export default function Home() {
   }, []);
 
   const [dbPackages, setDbPackages] = useState<Package[]>([]);
+  const [favoriteCategory, setFavoriteCategory] = useState<string | null>(null);
 
   useEffect(() => {
     api.get('/api/packages')
@@ -213,6 +215,136 @@ export default function Home() {
       })
       .catch(() => {});
   }, []);
+
+  // Fetch user bookings and analyze category preference
+  useEffect(() => {
+    if (user && getAuthToken()) {
+      api.get('/api/bookings')
+        .then((res) => {
+          if (res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+            const bookings = res.data.data;
+            const categoryCounts: Record<string, number> = {};
+            let mostRecentCategory: string | null = null;
+            
+            bookings.forEach((b: any) => {
+              const cat = b.package?.category;
+              if (cat) {
+                if (!mostRecentCategory && b.status !== 'CANCELLED') {
+                  mostRecentCategory = cat;
+                }
+                categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+              }
+            });
+
+            let topCat: string | null = mostRecentCategory;
+            let maxCount = 0;
+            for (const [cat, count] of Object.entries(categoryCounts)) {
+              if (count > maxCount) {
+                maxCount = count;
+                topCat = cat;
+              }
+            }
+            if (topCat) {
+              setFavoriteCategory(topCat);
+            }
+          }
+        })
+        .catch(() => {});
+    } else {
+      setFavoriteCategory(null);
+    }
+  }, [user]);
+
+  // Compute recommended / trending packages dynamically based on user history
+  const displayPackages = useMemo(() => {
+    if (favoriteCategory && dbPackages.length > 0) {
+      const matched = dbPackages.filter((p) => p.category?.toLowerCase() === favoriteCategory.toLowerCase());
+      const others = dbPackages.filter((p) => p.category?.toLowerCase() !== favoriteCategory.toLowerCase());
+      const combined = [...matched, ...others].slice(0, 3);
+
+      return combined.map((p) => {
+        const originalPrice = Math.round(p.pricePerPerson * 1.18);
+        const isFav = p.category?.toLowerCase() === favoriteCategory.toLowerCase();
+        
+        let packageHighlights: string[] = ['Handpicked 4-Star Stay', 'Guided Excursions', 'All-Inclusive Breakfast'];
+        if (p.itinerary) {
+          try {
+            const parsed = typeof p.itinerary === 'string' ? JSON.parse(p.itinerary) : p.itinerary;
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              packageHighlights = parsed.slice(0, 3).map((it: any) => typeof it === 'string' ? it : it.title || `Day ${it.day}: Sightseeing`);
+            }
+          } catch {
+            const lines = typeof p.itinerary === 'string' ? p.itinerary.split('\n').filter((l: string) => l.trim().length > 0) : [];
+            if (lines.length > 0) packageHighlights = lines.slice(0, 3);
+          }
+        }
+
+        return {
+          id: p.id,
+          name: p.name,
+          state: p.state || p.destination,
+          price: p.pricePerPerson,
+          originalPrice,
+          duration: `${p.durationDays}D / ${p.durationNights}N`,
+          category: p.category,
+          rating: 4.9,
+          reviewsCount: 140 + (p.name.length * 7) % 60,
+          image: p.imageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+          tag: isFav ? 'Recommended' : 'Trending',
+          highlights: packageHighlights,
+        };
+      });
+    }
+
+    return featuredDestinations;
+  }, [favoriteCategory, dbPackages]);
+
+  // Dynamic Section Title & Subtitle based on user booking history
+  const sectionTitle = useMemo(() => {
+    if (!favoriteCategory) {
+      return {
+        badge: 'Curated Escapes',
+        title: 'Top Trending Holiday Packages',
+        subtitle: 'Our most popular itineraries with verified accommodations and guaranteed departures.',
+      };
+    }
+
+    const cat = favoriteCategory.toLowerCase();
+    if (cat.includes('hill') || cat.includes('mountain')) {
+      return {
+        badge: `Personalized For You (${favoriteCategory})`,
+        title: 'Recommended Mountain & Hill Escapes',
+        subtitle: `Based on your recent trip booking history, we handpicked these serene mountain packages for you.`,
+      };
+    }
+    if (cat.includes('beach') || cat.includes('island')) {
+      return {
+        badge: `Personalized For You (${favoriteCategory})`,
+        title: 'Recommended Coastal & Beach Escapes',
+        subtitle: `Because you love coastal getaways, explore these top-rated beach tours.`,
+      };
+    }
+    if (cat.includes('heritage') || cat.includes('culture') || cat.includes('spiritual')) {
+      return {
+        badge: `Personalized For You (${favoriteCategory})`,
+        title: 'Recommended Royal Heritage & Cultural Tours',
+        subtitle: `Curated for history & cultural enthusiasts based on your previous trip preferences.`,
+      };
+    }
+    if (cat.includes('nature')) {
+      return {
+        badge: `Personalized For You (${favoriteCategory})`,
+        title: 'Recommended Nature & Backwater Retreats',
+        subtitle: `Handpicked tranquil nature and backwater getaways tailored to your travel history.`,
+      };
+    }
+
+    return {
+      badge: `Personalized For You (${favoriteCategory})`,
+      title: `Recommended ${favoriteCategory} Packages`,
+      subtitle: `Specially curated based on your past bookings and preferred travel vibe.`,
+    };
+  }, [favoriteCategory]);
 
   const getPackageUrl = (pkgNameOrId: string) => {
     const found = dbPackages.find(
@@ -658,41 +790,51 @@ export default function Home() {
         </ContainerScroll>
       </section>
 
-      {/* Top Trending Packages Cards - MakeMyTrip Style */}
+      {/* Top Trending & Personalized Packages Cards - MakeMyTrip Style */}
       <section className="py-20 px-4 bg-slate-50 dark:bg-slate-900/80">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-2">
-                <Flame className="w-4 h-4 text-amber-500" /> Curated Escapes
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-2 bg-purple-50 dark:bg-purple-950/60 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800/60">
+                {favoriteCategory ? (
+                  <>
+                    <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400 animate-pulse" />
+                    <span>{sectionTitle.badge}</span>
+                  </>
+                ) : (
+                  <>
+                    <Flame className="w-4 h-4 text-amber-500" />
+                    <span>{sectionTitle.badge}</span>
+                  </>
+                )}
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Top Trending Holiday Packages
+                {sectionTitle.title}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
-                Our most popular itineraries with verified accommodations and guaranteed departures.
+                {sectionTitle.subtitle}
               </p>
             </div>
             <Link
-              href="/packages"
+              href={favoriteCategory ? `/packages?category=${encodeURIComponent(favoriteCategory)}` : '/packages'}
               className="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
             >
-              <span>Explore All 10 Packages</span>
+              <span>{favoriteCategory ? `Explore All ${favoriteCategory} Packages` : 'Explore All 10 Packages'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredDestinations.map((pkg) => {
+            {displayPackages.map((pkg) => {
               const discountAmount = pkg.originalPrice - pkg.price;
 
               return (
                 <div
-                  key={pkg.name}
+                  key={pkg.id || pkg.name}
                   className="group rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                 >
                   {/* Image Cover */}
-                  <Link href={getPackageUrl(pkg.name)} className="relative h-60 overflow-hidden block bg-slate-100 dark:bg-slate-800">
+                  <Link href={getPackageUrl(pkg.id || pkg.name)} className="relative h-60 overflow-hidden block bg-slate-100 dark:bg-slate-800">
                     <img
                       src={pkg.image}
                       alt={pkg.name}
@@ -703,10 +845,10 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
                     
                     {/* Top Badges */}
-                    <span className="absolute top-3.5 left-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20">
+                    <span className="absolute top-3.5 left-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20 shadow-sm">
                       {pkg.tag}
                     </span>
-                    <span className="absolute top-3.5 right-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1">
+                    <span className="absolute top-3.5 right-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1 shadow-sm">
                       <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                       <span className="font-bold">{pkg.rating}</span>
                       <span className="text-slate-300 text-[10px]">({pkg.reviewsCount})</span>
@@ -725,7 +867,7 @@ export default function Home() {
                   {/* Body Details */}
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                      <Link href={getPackageUrl(pkg.name)}>
+                      <Link href={getPackageUrl(pkg.id || pkg.name)}>
                         <h3 className="font-bold text-slate-900 dark:text-white text-base sm:text-lg mb-2.5 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">
                           {pkg.name}
                         </h3>
@@ -733,10 +875,10 @@ export default function Home() {
 
                       {/* Highlights Checklist */}
                       <div className="space-y-1.5 mb-5">
-                        {pkg.highlights.map((h) => (
+                        {pkg.highlights.map((h: string) => (
                           <div key={h} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
                             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
-                            <span>{h}</span>
+                            <span className="line-clamp-1">{h}</span>
                           </div>
                         ))}
                       </div>
@@ -762,7 +904,7 @@ export default function Home() {
                       </div>
 
                       <Link
-                        href={getPackageUrl(pkg.name)}
+                        href={getPackageUrl(pkg.id || pkg.name)}
                         className="inline-flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all group-hover:scale-105"
                       >
                         <span>View Details</span>
