@@ -459,7 +459,7 @@ export default function Home() {
           </p>
 
           {/* Trip Planner Search Widget */}
-          <div className="relative z-30 max-w-3xl mx-auto bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white mb-4">
+          <div className="relative z-30 max-w-3xl mx-auto bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white mb-8">
             <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
               {/* Destination Input */}
               <div className="sm:col-span-5 text-left bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-blue-500 transition">
@@ -483,20 +483,11 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setVibeDropdownOpen(!vibeDropdownOpen)}
-                  className="w-full flex items-center justify-between text-sm font-semibold text-slate-900 dark:text-white focus:outline-none cursor-pointer text-left"
+                  className="w-full text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-between py-0.5 text-left cursor-pointer"
                 >
-                  <div className="flex items-center gap-2 truncate">
-                    {(() => {
-                      const selected = VIBE_OPTIONS.find((o) => o.value === selectedCategory) || VIBE_OPTIONS[0];
-                      const Icon = selected.icon;
-                      return (
-                        <>
-                          <Icon className={`w-4 h-4 ${selected.color} flex-shrink-0`} />
-                          <span className="truncate text-slate-900 dark:text-white">{selected.label}</span>
-                        </>
-                      );
-                    })()}
-                  </div>
+                  <span className="truncate">
+                    {VIBE_OPTIONS.find((v) => v.value === selectedCategory)?.label || 'All Experiences'}
+                  </span>
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${vibeDropdownOpen ? 'rotate-180 text-blue-500' : ''}`} />
                 </button>
 
@@ -543,39 +534,6 @@ export default function Home() {
                 </button>
               </div>
             </form>
-          </div>
-
-          {/* Quick-Tap Trending Destination Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-8 text-xs">
-            <span className="text-slate-300 font-semibold flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5 text-amber-400" /> Popular:
-            </span>
-            {QUICK_DESTINATIONS.map((dest) => {
-              const Icon = dest.icon;
-              const matchedPkg = dbPackages.find((p) =>
-                p.destination.toLowerCase().includes(dest.query.toLowerCase()) ||
-                p.name.toLowerCase().includes(dest.query.toLowerCase())
-              );
-              const priceDisplay = matchedPkg
-                ? `₹${matchedPkg.pricePerPerson.toLocaleString('en-IN')}`
-                : dest.price;
-
-              return (
-                <button
-                  key={dest.label}
-                  type="button"
-                  onClick={() => {
-                    setSearchDestination(dest.query);
-                    setActiveHeroTheme(dest.themeIdx);
-                  }}
-                  className="bg-slate-900/80 hover:bg-slate-800 text-white px-3 py-1 rounded-full border border-white/15 backdrop-blur-md transition-colors flex items-center gap-1.5 cursor-pointer text-xs"
-                >
-                  <Icon className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="font-medium text-white">{dest.label}</span>
-                  <span className="text-amber-300 font-semibold">({priceDisplay})</span>
-                </button>
-              );
-            })}
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto relative z-10">

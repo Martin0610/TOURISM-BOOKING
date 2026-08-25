@@ -79,35 +79,35 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full pt-3 pb-2 px-3 sm:px-6 transition-all duration-300 pointer-events-none">
-      <div className={`max-w-7xl mx-auto rounded-xl transition-all duration-300 pointer-events-auto ${
+      <div className={`max-w-7xl mx-auto rounded-full transition-all duration-300 pointer-events-auto ${
         scrolled 
           ? 'bg-white/95 dark:bg-slate-900/95 shadow-md shadow-slate-900/5 dark:shadow-black/20 border border-slate-200 dark:border-slate-800 backdrop-blur-md' 
           : 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shadow-sm border border-slate-200/80 dark:border-slate-800/80'
       }`}>
-        <div className="flex justify-between items-center h-16 px-4 sm:px-6">
+        <div className="flex justify-between items-center h-14 sm:h-16 px-4 sm:px-7">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
-              <Compass className="w-5 h-5" />
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
+              <Compass className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <span className="font-bold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 TripEase
               </span>
-              <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wider uppercase -mt-0.5 pl-0.5">
+              <span className="text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wider uppercase -mt-0.5 pl-0.5">
                 Explore India
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/60">
+          {/* Desktop Navigation - Single outer layer with clean spacious links */}
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8">
             <Link
               href="/"
-              className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`text-sm transition-colors ${
                 isActive('/')
-                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm font-semibold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'text-blue-600 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium'
               }`}
             >
               Home
@@ -115,10 +115,10 @@ export default function Navbar() {
 
             <Link
               href="/packages"
-              className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`text-sm transition-colors ${
                 isActive('/packages')
-                  ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm font-semibold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'text-blue-600 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium'
               }`}
             >
               Packages
@@ -128,10 +128,10 @@ export default function Navbar() {
               <>
                 <Link
                   href="/my-bookings"
-                  className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  className={`text-sm transition-colors ${
                     isActive('/my-bookings')
-                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
+                      ? 'text-blue-600 dark:text-blue-400 font-bold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium'
                   }`}
                 >
                   My Bookings
@@ -139,10 +139,10 @@ export default function Navbar() {
 
                 <Link
                   href="/wishlist"
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 relative ${
+                  className={`text-sm transition-colors flex items-center gap-1.5 relative ${
                     isActive('/wishlist')
-                      ? 'bg-white dark:bg-slate-700 text-rose-600 dark:text-rose-400 shadow-sm font-semibold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400'
+                      ? 'text-rose-600 dark:text-rose-400 font-bold'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 font-medium'
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${isActive('/wishlist') ? 'fill-rose-600 dark:fill-rose-400 text-rose-600 dark:text-rose-400' : ''}`} />
@@ -159,27 +159,27 @@ export default function Navbar() {
             {user && user.role === 'ADMIN' && (
               <Link
                 href="/admin"
-                className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                className={`text-sm transition-colors flex items-center gap-1.5 ${
                   pathname.startsWith('/admin')
-                    ? 'bg-blue-600 text-white shadow-sm font-semibold'
+                    ? 'text-blue-600 dark:text-blue-400 font-bold'
                     : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 font-semibold'
                 }`}
               >
                 <ShieldCheck className="w-4 h-4" />
-                Admin Panel
+                <span>Admin Panel</span>
               </Link>
             )}
 
             {/* VIP Club placed at the very last position */}
             <Link
               href="/vip"
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
+              className={`text-sm transition-colors flex items-center gap-1.5 ${
                 isActive('/vip')
-                  ? 'bg-amber-500 text-white shadow-sm font-bold'
+                  ? 'text-amber-600 dark:text-amber-400 font-bold'
                   : 'text-amber-600 dark:text-amber-400 hover:text-amber-700 font-semibold'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>VIP Club</span>
             </Link>
           </nav>
@@ -193,13 +193,13 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-colors cursor-pointer ${
                     userDropdownOpen
                       ? 'bg-blue-50 dark:bg-slate-800 border-blue-400 dark:border-blue-500'
                       : 'bg-slate-50 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                   }`}
                 >
-                  <div className="w-6 h-6 rounded-md bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex items-center gap-1">
@@ -346,13 +346,13 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-1.5 rounded-lg transition-colors"
+                  className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 px-3.5 py-1.5 rounded-full transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-colors"
                 >
                   Sign Up
                 </Link>
@@ -365,7 +365,7 @@ export default function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 transition"
+              className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 transition cursor-pointer"
               aria-label="Toggle menu"
             >
               {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
