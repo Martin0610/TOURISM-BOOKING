@@ -18,7 +18,7 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import { COUNTRY_CODES, parsePhoneNumber, formatPhoneNumber } from '@/lib/countryCodes';
-import { getAuthToken } from '@/lib/authStorage';
+import { getAuthToken, getAuthUser } from '@/lib/authStorage';
 
 interface Review {
   id: string;
@@ -42,34 +42,7 @@ export default function PackageDetailPage() {
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [isUserVip, setIsUserVip] = useState(false);
 
-  // Restore pending booking details if returning from login
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = sessionStorage.getItem(`pending_booking_${id}`);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed) {
-            setForm((prev) => ({
-              ...prev,
-              travelDate: parsed.travelDate || prev.travelDate,
-              numberOfPeople: parsed.numberOfPeople || prev.numberOfPeople,
-              departureLocationId: parsed.departureLocationId || prev.departureLocationId,
-              countryCode: parsed.countryCode || prev.countryCode,
-              phone: parsed.phone || prev.phone,
-            }));
-            if (parsed.couponCode) {
-              setCouponCode(parsed.couponCode);
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Error reading pending booking:', err);
-      }
-    }
-  }, [id]);
-  
-  // Booking Form State with Country Code
+  // Booking Form State with Country Code (Declared before hooks)
   const [form, setForm] = useState<{
     travelDate: string;
     numberOfPeople: number | string;
@@ -107,17 +80,68 @@ export default function PackageDetailPage() {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
-  // Auto-fill phone & country code from logged-in user profile
+  // Comprehensive Autofill & Restoration for Phone & Form parameters
   useEffect(() => {
-    if (user?.phone) {
-      const parsed = parsePhoneNumber(user.phone);
-      setForm((prev) => ({
-        ...prev,
-        countryCode: parsed.countryCode,
-        phone: parsed.number,
-      }));
+    if (typeof window === 'undefined') return;
+
+    try {
+      // 1. Check package-specific pending booking
+      const saved = sessionStorage.getItem(`pending_booking_${id}`);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed) {
+          setForm((prev) => ({
+            ...prev,
+            travelDate: parsed.travelDate || prev.travelDate,
+            numberOfPeople: parsed.numberOfPeople || prev.numberOfPeople,
+            departureLocationId: parsed.departureLocationId !== undefined ? parsed.departureLocationId : prev.departureLocationId,
+            countryCode: parsed.countryCode || prev.countryCode,
+            phone: parsed.phone || prev.phone,
+          }));
+          if (parsed.couponCode) {
+            setCouponCode(parsed.couponCode);
+          }
+          return;
+        }
+      }
+
+      // 2. If logged in user has phone, autofill from user profile
+      if (user?.phone) {
+        const parsed = parsePhoneNumber(user.phone);
+        setForm((prev) => ({
+          ...prev,
+          countryCode: parsed.countryCode || prev.countryCode,
+          phone: parsed.number || prev.phone,
+        }));
+        return;
+      }
+
+      // 3. Check cached user in storage
+      const cachedUser = getAuthUser();
+      if (cachedUser?.phone) {
+        const parsed = parsePhoneNumber(cachedUser.phone);
+        setForm((prev) => ({
+          ...prev,
+          countryCode: parsed.countryCode || prev.countryCode,
+          phone: parsed.number || prev.phone,
+        }));
+        return;
+      }
+
+      // 4. Check global saved phone in localStorage or sessionStorage
+      const savedPhone = localStorage.getItem('saved_phone') || sessionStorage.getItem('last_entered_phone');
+      if (savedPhone) {
+        const parsed = parsePhoneNumber(savedPhone);
+        setForm((prev) => ({
+          ...prev,
+          countryCode: parsed.countryCode || prev.countryCode,
+          phone: parsed.number || prev.phone,
+        }));
+      }
+    } catch (err) {
+      console.error('Error restoring booking/phone details:', err);
     }
-  }, [user]);
+  }, [id, user]);
   
   // Coupon State
   const [couponCode, setCouponCode] = useState(urlCoupon ? urlCoupon.toUpperCase().trim() : '');
@@ -992,8 +1016,12 @@ export default function PackageDetailPage() {
                           maxLength={10}
                           onChange={(e) => {
                             const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                            setForm({ ...form, phone: val });
+                            setForm((prev) => ({ ...prev, phone: val }));
                             setFormError('');
+                            if (typeof window !== 'undefined') {
+                              sessionStorage.setItem('last_entered_phone', val);
+                              localStorage.setItem('saved_phone', formatPhoneNumber(form.countryCode, val));
+                            }
                           }}
                           placeholder="9876543210 (10 digits)"
                           className="flex-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"

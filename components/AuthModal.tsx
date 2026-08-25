@@ -10,7 +10,7 @@ import {
   ChevronDown, Check, X, Sparkles, AlertCircle 
 } from 'lucide-react';
 import PolicyModal, { PolicyType } from '@/components/PolicyModal';
-import { COUNTRY_CODES, formatPhoneNumber } from '@/lib/countryCodes';
+import { COUNTRY_CODES, formatPhoneNumber, parsePhoneNumber } from '@/lib/countryCodes';
 import { getAuthUser } from '@/lib/authStorage';
 
 const getPasswordStrength = (password: string) => {
@@ -100,6 +100,11 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
     try {
       await login(loginEmail.trim().toLowerCase(), loginPassword);
       const user = getAuthUser();
+      if (user?.phone && typeof window !== 'undefined') {
+        localStorage.setItem('saved_phone', user.phone);
+        const parsed = parsePhoneNumber(user.phone);
+        sessionStorage.setItem('last_entered_phone', parsed.number);
+      }
       onClose();
       if (user) {
         if (user.role === 'ADMIN') {
@@ -170,6 +175,10 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
     setRegLoading(true);
     try {
       const formattedPhone = formatPhoneNumber(regCountryCode, digits);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('saved_phone', formattedPhone);
+        sessionStorage.setItem('last_entered_phone', digits);
+      }
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
