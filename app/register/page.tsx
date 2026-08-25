@@ -183,16 +183,89 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-3 sm:p-6 bg-slate-900/60 backdrop-blur-md">
-      {/* Background — Majestic Scenic Alpine Sunset */}
-      <div className="fixed inset-0 -z-10">
-        <img 
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600" 
-          alt="Travel Background" 
-          className="w-full h-full object-cover brightness-50" 
-        />
-        <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-xs" />
+    <div className="min-h-screen relative flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+      {/* Real Home Page Layout in the Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none select-none -z-10">
+        <div className="relative min-h-screen flex items-center justify-center pt-32 pb-20 px-4 bg-gradient-to-b from-[#021B2B] via-[#06334F] to-[#02131F]">
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1920&q=90"
+              alt="Goa Coastal"
+              className="w-full h-full object-cover object-center brightness-[0.75]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/50 to-slate-950/95" />
+          </div>
+
+          <div className="relative z-10 max-w-5xl mx-auto text-center text-white pt-2 opacity-85">
+            {/* Chips */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white border border-blue-400">
+                Goa Coastal
+              </span>
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/80 text-slate-200 border border-white/15">
+                Kashmir Valleys
+              </span>
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/80 text-slate-200 border border-white/15">
+                Kerala Lagoons
+              </span>
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-slate-900/80 text-slate-200 border border-white/15">
+                Royal Heritage
+              </span>
+            </div>
+
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.12] mb-5 text-white">
+              Discover The Soul Of India,<br />
+              <span className="text-blue-300">One Journey At A Time</span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-200 max-w-2xl mx-auto mb-8">
+              Premium curated tour packages with handpicked luxury stays, multi-city departures, and transparent all-inclusive pricing.
+            </p>
+
+            {/* Trip Planner Search Mock */}
+            <div className="max-w-3xl mx-auto bg-white dark:bg-slate-900 p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white mb-8 shadow-2xl">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
+                <div className="sm:col-span-5 text-left bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <span className="block text-[10px] font-bold uppercase text-slate-400">Where to?</span>
+                  <span className="text-sm font-semibold text-slate-400">Goa, Kashmir, Manali, Kerala...</span>
+                </div>
+                <div className="sm:col-span-4 text-left bg-slate-50 dark:bg-slate-800/80 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                  <span className="block text-[10px] font-bold uppercase text-slate-400">Experience Vibe</span>
+                  <span className="text-xs font-semibold text-slate-400">All Experiences</span>
+                </div>
+                <div className="sm:col-span-3">
+                  <div className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl text-center text-xs">
+                    Find Escapes
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick stats pills */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+              <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-700/60 text-center">
+                <div className="font-bold text-amber-400 text-sm">4.9 ★</div>
+                <div className="text-[11px] text-slate-400">2,500+ Explorers</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-700/60 text-center">
+                <div className="font-bold text-blue-400 text-sm">4+1 FREE</div>
+                <div className="text-[11px] text-slate-400">Group Ticket Offer</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-700/60 text-center">
+                <div className="font-bold text-emerald-400 text-sm">20% OFF</div>
+                <div className="text-[11px] text-slate-400">Groups of 3+ Pax</div>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-700/60 text-center">
+                <div className="font-bold text-slate-200 text-sm">₹0 Fee</div>
+                <div className="text-[11px] text-slate-400">Instant E-Voucher</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {/* Dimmed Backdrop Layer */}
+      <div className="fixed inset-0 bg-slate-950/45 backdrop-blur-[2px] z-0" onClick={handleClose} />
 
       {/* Floating Modal Card */}
       <div className="relative z-10 w-full max-w-4xl bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200">
