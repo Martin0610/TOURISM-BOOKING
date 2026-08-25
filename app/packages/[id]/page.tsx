@@ -28,6 +28,11 @@ interface Review {
   user: { name: string };
 }
 
+const getTodayLocalDate = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
 export default function PackageDetailPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -287,8 +292,13 @@ export default function PackageDetailPage() {
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
+    const todayLocalDate = getTodayLocalDate();
     if (!form.travelDate) {
       setFormError('Please select a travel date.');
+      return;
+    }
+    if (form.travelDate < todayLocalDate) {
+      setFormError('Please select a valid future travel date (past dates cannot be booked).');
       return;
     }
     if (!form.numberOfPeople || Number(form.numberOfPeople) < 1) {
@@ -820,7 +830,7 @@ export default function PackageDetailPage() {
                       </label>
                       <input
                         type="date"
-                        min={new Date().toISOString().split('T')[0]}
+                        min={getTodayLocalDate()}
                         value={form.travelDate}
                         onChange={(e) => {
                           setForm({ ...form, travelDate: e.target.value });
