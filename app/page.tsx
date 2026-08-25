@@ -18,6 +18,7 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { Package } from '@/lib/types';
 import Footer from '@/components/Footer';
+import AuthModal from '@/components/AuthModal';
 import { getAuthToken } from '@/lib/authStorage';
 
 const VIBE_OPTIONS = [
@@ -172,9 +173,20 @@ const faqs = [
   },
 ];
 
-export default function Home() {
+export default function Home({ defaultAuth, redirectUrl }: { defaultAuth?: 'login' | 'register'; redirectUrl?: string | null } = {}) {
   const { user } = useAuth();
   const router = useRouter();
+
+  // Floating Auth Modal State
+  const [authModalOpen, setAuthModalOpen] = useState(Boolean(defaultAuth));
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>(defaultAuth || 'login');
+
+  useEffect(() => {
+    if (defaultAuth) {
+      setAuthModalOpen(true);
+      setAuthModalMode(defaultAuth);
+    }
+  }, [defaultAuth]);
 
   // Search planner state
   const [searchDestination, setSearchDestination] = useState('');
@@ -1166,6 +1178,19 @@ export default function Home() {
 
       {/* Modern Footer */}
       <Footer />
+
+      {/* Floating MakeMyTrip / AbhiBus Style Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        initialMode={authModalMode}
+        onClose={() => {
+          setAuthModalOpen(false);
+          if (defaultAuth) {
+            router.push('/');
+          }
+        }}
+        redirectUrl={redirectUrl}
+      />
     </>
   );
 }
