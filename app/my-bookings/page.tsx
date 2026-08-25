@@ -169,17 +169,17 @@ export default function MyBookingsPage() {
       <WhatsAppButton />
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-        {/* Header Banner */}
-        <section className="bg-slate-900 text-white pt-24 pb-12 px-4 border-b border-slate-800 shadow-sm">
+        {/* Header Banner - Clean Light Cohesive Flow */}
+        <section className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white pt-28 pb-10 px-4 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-xs font-medium text-slate-300 mb-2.5">
-              <Luggage className="w-3.5 h-3.5 text-blue-400" />
+            <div className="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1 rounded-full text-xs font-medium text-slate-700 dark:text-slate-300 mb-2.5">
+              <Luggage className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               <span>Travel Dashboard</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
               My Tour Bookings
             </h1>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1">
+            <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1">
               Manage your confirmed vacations, review vouchers, and monitor trip schedules.
             </p>
           </div>

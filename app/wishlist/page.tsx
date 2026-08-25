@@ -70,17 +70,17 @@ export default function WishlistPage() {
       <WhatsAppButton />
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-        {/* Header Banner */}
-        <section className="bg-slate-900 text-white pt-24 pb-12 px-4 border-b border-slate-800 shadow-sm">
+        {/* Header Banner - Clean Light Cohesive Flow */}
+        <section className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white pt-28 pb-10 px-4 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-5xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-xs font-medium text-slate-300 mb-2.5">
-              <Heart className="w-3.5 h-3.5 fill-rose-400 text-rose-400" />
+            <div className="inline-flex items-center gap-2 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 px-3 py-1 rounded-full text-xs font-medium text-rose-700 dark:text-rose-300 mb-2.5">
+              <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
               <span>Saved Bucket List</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
               My Saved Wishlist ({items.length})
             </h1>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1">
+            <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm mt-1">
               Your favorite dream destinations ready to be explored and booked whenever you are.
             </p>
           </div>

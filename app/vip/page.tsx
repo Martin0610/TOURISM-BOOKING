@@ -105,19 +105,19 @@ export default function VipClubPage() {
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-blue-600 selection:text-white transition-colors duration-300">
         
-        {/* Top Hero Banner */}
-        <section className="relative bg-slate-900 text-white pt-28 pb-14 px-4 border-b border-slate-800 shadow-sm">
+        {/* Top Hero Banner - Clean Light Cohesive Flow */}
+        <section className="relative bg-white dark:bg-slate-900 text-slate-900 dark:text-white pt-28 pb-12 px-4 border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-5xl mx-auto relative z-10 text-center space-y-3">
-            <div className="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-3.5 py-1 rounded-full text-xs font-medium text-amber-300">
-              <Crown className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            <div className="inline-flex items-center gap-2 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-3.5 py-1 rounded-full text-xs font-medium text-amber-700 dark:text-amber-300">
+              <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <span>TripEase Elite VIP Club</span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-white">
               Redefining Luxury Travel Across India
             </h1>
 
-            <p className="text-slate-400 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
               Reserved for our most valued patrons. Unlock unlisted flash rates, dedicated 24/7 personal concierge support, companion passes, and curated bespoke itineraries.
             </p>
           </div>
