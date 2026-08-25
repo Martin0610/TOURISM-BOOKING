@@ -84,9 +84,9 @@ const HERO_THEMES = [
 
 const QUICK_DESTINATIONS = [
   { label: 'Goa', price: '₹17,500', icon: Palmtree, query: 'Goa', themeIdx: 0 },
-  { label: 'Kashmir Gulmarg', price: '₹22,000', icon: Mountain, query: 'Kashmir', themeIdx: 1 },
-  { label: 'Kerala Backwaters', price: '₹16,000', icon: Waves, query: 'Kerala', themeIdx: 2 },
-  { label: 'Rajasthan Royal', price: '₹18,500', icon: Landmark, query: 'Rajasthan', themeIdx: 3 },
+  { label: 'Kashmir Gulmarg', price: '₹31,500', icon: Mountain, query: 'Kashmir', themeIdx: 1 },
+  { label: 'Kerala Backwaters', price: '₹22,500', icon: Waves, query: 'Kerala', themeIdx: 2 },
+  { label: 'Rajasthan Royal', price: '₹27,800', icon: Landmark, query: 'Rajasthan', themeIdx: 3 },
 ];
 
 const featuredDestinations = [
@@ -552,6 +552,14 @@ export default function Home() {
             </span>
             {QUICK_DESTINATIONS.map((dest) => {
               const Icon = dest.icon;
+              const matchedPkg = dbPackages.find((p) =>
+                p.destination.toLowerCase().includes(dest.query.toLowerCase()) ||
+                p.name.toLowerCase().includes(dest.query.toLowerCase())
+              );
+              const priceDisplay = matchedPkg
+                ? `₹${matchedPkg.pricePerPerson.toLocaleString('en-IN')}`
+                : dest.price;
+
               return (
                 <button
                   key={dest.label}
@@ -564,7 +572,7 @@ export default function Home() {
                 >
                   <Icon className="w-3.5 h-3.5 text-amber-400" />
                   <span className="font-medium text-white">{dest.label}</span>
-                  <span className="text-amber-300 font-semibold">({dest.price})</span>
+                  <span className="text-amber-300 font-semibold">({priceDisplay})</span>
                 </button>
               );
             })}
