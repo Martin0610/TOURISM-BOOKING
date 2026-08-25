@@ -400,9 +400,11 @@ export default function PackageDetailPage() {
           <div className="flex items-center justify-between mb-5">
             <Link
               href="/packages"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3.5 py-1.5 rounded-lg shadow-sm transition-colors"
+              className="group relative inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> Back to Packages
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              <span>Back to Packages</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 rounded-full transition-all duration-300 ease-out group-hover:w-full" />
             </Link>
 
             <div className="flex items-center gap-2">
