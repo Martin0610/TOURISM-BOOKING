@@ -235,7 +235,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
       />
 
       {/* Floating Minimalist Auth Card */}
-      <div className="relative z-10 w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-7 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-md max-h-[92vh] overflow-y-auto no-scrollbar bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-7 animate-in fade-in zoom-in-95 duration-200 my-auto">
         
         {/* Top Header Row */}
         <div className="flex items-center justify-between mb-5">

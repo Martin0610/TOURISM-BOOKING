@@ -344,7 +344,7 @@ function PackagesContent() {
           )}
 
           {/* Minimalist Category Tabs with Animated Moving Underline (No Outer Container Box) */}
-          <div className="flex items-center gap-6 overflow-x-auto no-scrollbar border-b border-slate-200 dark:border-slate-800 mb-6 px-1">
+          <div className="flex items-center gap-6 overflow-x-auto no-scrollbar scroll-smooth overscroll-x-contain touch-pan-x border-b border-slate-200 dark:border-slate-800 mb-6 px-1 py-1">
             {categories.map((cat) => {
               const active = selectedCategory.toLowerCase() === cat.toLowerCase();
               const Icon = getCategoryIcon(cat);
