@@ -1,13 +1,34 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Home from '../page';
+import { useSearchParams, useRouter } from 'next/navigation';
+import AuthModal from '@/components/AuthModal';
+import StaticHomeBackdrop from '@/components/StaticHomeBackdrop';
 
 function RegisterContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || searchParams.get('next');
-  return <Home defaultAuth="register" redirectUrl={redirectUrl} />;
+
+  const handleClose = () => {
+    if (redirectUrl && redirectUrl.startsWith('/') && redirectUrl !== '/register') {
+      router.push(redirectUrl);
+    } else {
+      router.push('/');
+    }
+  };
+
+  return (
+    <>
+      <StaticHomeBackdrop />
+      <AuthModal
+        isOpen={true}
+        initialMode="register"
+        onClose={handleClose}
+        redirectUrl={redirectUrl}
+      />
+    </>
+  );
 }
 
 export default function RegisterPage() {

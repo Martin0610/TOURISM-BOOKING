@@ -107,11 +107,13 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
       }
       onClose();
       if (user) {
-        if (user.role === 'ADMIN') {
-          router.push('/admin');
-        } else if (redirectUrl && redirectUrl.startsWith('/')) {
+        if (redirectUrl && redirectUrl.startsWith('/') && redirectUrl !== '/login' && redirectUrl !== '/register' && redirectUrl !== '/') {
           router.push(redirectUrl);
-        } else {
+        } else if (typeof window !== 'undefined' && window.location.pathname.startsWith('/packages/')) {
+          // Stay on the package page, all entered details are intact!
+        } else if (user.role === 'ADMIN' && typeof window !== 'undefined' && window.location.pathname === '/login') {
+          router.push('/admin');
+        } else if (typeof window !== 'undefined' && (window.location.pathname === '/login' || window.location.pathname === '/register')) {
           router.push('/');
         }
       }
