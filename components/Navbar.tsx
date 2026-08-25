@@ -9,6 +9,7 @@ import {
   ShieldCheck, MapPin, ChevronDown, Mail, Phone, Crown, ShoppingBag 
 } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
+import AuthModal from './AuthModal';
 import api from '@/lib/api';
 import { getAuthToken } from '@/lib/authStorage';
 
@@ -20,7 +21,19 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [wishlistCount, setWishlistCount] = useState<number>(0);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
   const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOpenAuthModal = (e: Event) => {
+      const custom = e as CustomEvent<{ mode?: 'login' | 'register' }>;
+      setAuthModalMode(custom?.detail?.mode || 'login');
+      setAuthModalOpen(true);
+    };
+    window.addEventListener('open-auth-modal', handleOpenAuthModal);
+    return () => window.removeEventListener('open-auth-modal', handleOpenAuthModal);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -386,18 +399,26 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link
-                  href="/login"
-                  className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 px-3.5 py-1.5 rounded-full transition-colors"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('login');
+                    setAuthModalOpen(true);
+                  }}
+                  className="text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 px-3.5 py-1.5 rounded-full transition-colors cursor-pointer"
                 >
                   Sign In
-                </Link>
-                <Link
-                  href="/register"
-                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-colors"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('register');
+                    setAuthModalOpen(true);
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-colors cursor-pointer"
                 >
                   Sign Up
-                </Link>
+                </button>
               </div>
             )}
           </div>
@@ -506,25 +527,40 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="pt-2 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2">
-                <Link
-                  href="/login"
-                  className="text-center py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
-                  onClick={() => setMenuOpen(false)}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setAuthModalMode('login');
+                    setAuthModalOpen(true);
+                  }}
+                  className="text-center py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 cursor-pointer"
                 >
                   Sign In
-                </Link>
-                <Link
-                  href="/register"
-                  className="text-center py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white shadow-sm"
-                  onClick={() => setMenuOpen(false)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setAuthModalMode('register');
+                    setAuthModalOpen(true);
+                  }}
+                  className="text-center py-2 text-sm font-semibold rounded-lg bg-blue-600 text-white shadow-sm cursor-pointer"
                 >
                   Register
-                </Link>
+                </button>
               </div>
             )}
           </div>
         )}
       </div>
+
+      {/* In-Place Floating Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        initialMode={authModalMode}
+        onClose={() => setAuthModalOpen(false)}
+      />
     </header>
   );
 }

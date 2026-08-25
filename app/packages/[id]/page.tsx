@@ -96,7 +96,7 @@ export default function PackageDetailPage() {
             numberOfPeople: parsed.numberOfPeople || prev.numberOfPeople,
             departureLocationId: parsed.departureLocationId !== undefined ? parsed.departureLocationId : prev.departureLocationId,
             countryCode: parsed.countryCode || prev.countryCode,
-            phone: parsed.phone || prev.phone,
+            phone: parsed.phone || '',
           }));
           if (parsed.couponCode) {
             setCouponCode(parsed.couponCode);
@@ -111,31 +111,16 @@ export default function PackageDetailPage() {
         setForm((prev) => ({
           ...prev,
           countryCode: parsed.countryCode || prev.countryCode,
-          phone: parsed.number || prev.phone,
+          phone: parsed.number || '',
         }));
         return;
       }
 
-      // 3. Check cached user in storage
-      const cachedUser = getAuthUser();
-      if (cachedUser?.phone) {
-        const parsed = parsePhoneNumber(cachedUser.phone);
+      // 3. If user is logged out, ensure phone is empty
+      if (!user) {
         setForm((prev) => ({
           ...prev,
-          countryCode: parsed.countryCode || prev.countryCode,
-          phone: parsed.number || prev.phone,
-        }));
-        return;
-      }
-
-      // 4. Check global saved phone in localStorage or sessionStorage
-      const savedPhone = localStorage.getItem('saved_phone') || sessionStorage.getItem('last_entered_phone');
-      if (savedPhone) {
-        const parsed = parsePhoneNumber(savedPhone);
-        setForm((prev) => ({
-          ...prev,
-          countryCode: parsed.countryCode || prev.countryCode,
-          phone: parsed.number || prev.phone,
+          phone: '',
         }));
       }
     } catch (err) {

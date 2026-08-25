@@ -109,12 +109,12 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
       if (user) {
         if (redirectUrl && redirectUrl.startsWith('/') && redirectUrl !== '/login' && redirectUrl !== '/register' && redirectUrl !== '/') {
           router.push(redirectUrl);
-        } else if (typeof window !== 'undefined' && window.location.pathname.startsWith('/packages/')) {
-          // Stay on the package page, all entered details are intact!
-        } else if (user.role === 'ADMIN' && typeof window !== 'undefined' && window.location.pathname === '/login') {
-          router.push('/admin');
         } else if (typeof window !== 'undefined' && (window.location.pathname === '/login' || window.location.pathname === '/register')) {
-          router.push('/');
+          if (user.role === 'ADMIN') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
         }
       }
     } catch (err: unknown) {
