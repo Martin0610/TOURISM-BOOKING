@@ -7,7 +7,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { 
   Compass, Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff, 
-  ChevronDown, Check, X, ShieldCheck, Gift, Tag, Sparkles, AlertCircle 
+  ChevronDown, Check, X, Sparkles, AlertCircle 
 } from 'lucide-react';
 import PolicyModal, { PolicyType } from '@/components/PolicyModal';
 import { COUNTRY_CODES, formatPhoneNumber } from '@/lib/countryCodes';
@@ -217,508 +217,452 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      {/* Live Home Page Backdrop Dimmer (Crisp & Clear like AbhiBus Reference - No Blur) */}
+      {/* Crisp Background Dimmer */}
       <div 
         className="fixed inset-0 bg-black/40 transition-opacity duration-200"
         onClick={onClose}
       />
 
-      {/* Floating 2-Column Modal Card */}
-      <div className="relative z-10 w-full max-w-4xl bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-200">
+      {/* Floating Minimalist Auth Card */}
+      <div className="relative z-10 w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-7 animate-in fade-in zoom-in-95 duration-200">
         
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3.5 right-3.5 z-30 p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
-          title="Close and return"
-          aria-label="Close"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* Left Visual Promotional Banner (MakeMyTrip / AbhiBus Style) */}
-        <div className="relative md:w-5/12 bg-gradient-to-br from-blue-900 via-slate-900 to-slate-950 p-6 sm:p-8 text-white flex flex-col justify-between overflow-hidden">
-          <div className="absolute inset-0 opacity-15 pointer-events-none">
-            <img 
-              src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800" 
-              alt="Holiday" 
-              className="w-full h-full object-cover" 
-            />
-          </div>
-
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2.5 mb-6">
-              <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md">
-                <Compass className="w-5 h-5" />
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="font-bold text-xl tracking-tight text-white leading-none">
-                  TripEase
-                </span>
-                <span className="text-[9px] font-semibold text-blue-200 tracking-wider uppercase mt-0.5">
-                  Explore India
-                </span>
-              </div>
+        {/* Top Header Row */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-xs">
+              <Compass className="w-4 h-4" />
             </div>
-
-            <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-tight mb-2">
-              {mode === 'login' ? 'Unlock Exclusive Vacation Deals' : 'Start Your Journey With Us'}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
-              {mode === 'login' 
-                ? 'Sign in to manage itineraries, track active bookings, and enjoy automated group savings.'
-                : 'Create an account to book handcrafted packages, unlock group savings, and access instant vouchers.'}
-            </p>
-
-            {/* Feature Perks List */}
-            <div className="space-y-3">
-              <div className="flex items-start gap-2.5 text-xs text-slate-200">
-                <div className="w-6 h-6 rounded-md bg-blue-600/30 border border-blue-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Gift className="w-3.5 h-3.5 text-amber-300" />
-                </div>
-                <div>
-                  <strong className="block text-white font-semibold">4+1 Free Ticket Program</strong>
-                  <span>Automatic complimentary ticket on groups of 4+</span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5 text-xs text-slate-200">
-                <div className="w-6 h-6 rounded-md bg-blue-600/30 border border-blue-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Tag className="w-3.5 h-3.5 text-emerald-300" />
-                </div>
-                <div>
-                  <strong className="block text-white font-semibold">20% Group Discount</strong>
-                  <span>Instant saving applied on family & group packages</span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5 text-xs text-slate-200">
-                <div className="w-6 h-6 rounded-md bg-blue-600/30 border border-blue-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-sky-300" />
-                </div>
-                <div>
-                  <strong className="block text-white font-semibold">100% Verified Stays</strong>
-                  <span>Handcrafted itineraries with transparent all-inclusive prices</span>
-                </div>
-              </div>
+            <div className="flex flex-col text-left">
+              <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white leading-none">
+                TripEase
+              </span>
+              <span className="text-[9px] font-semibold text-blue-600 dark:text-blue-400 tracking-wider uppercase mt-0.5">
+                Explore India
+              </span>
             </div>
           </div>
 
-          <div className="relative z-10 mt-6 pt-4 border-t border-slate-700/60 flex items-center gap-2 text-xs text-amber-300">
-            <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0" />
-            <span>VIP Club patrons receive unlisted private rates</span>
-          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
+            title="Close"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Right Side Form (Sign In / Register) */}
-        <div className="md:w-7/12 p-6 sm:p-8 flex flex-col justify-between bg-white dark:bg-slate-900 max-h-[90vh] overflow-y-auto">
+        {/* Top Tab Switcher */}
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800/90 rounded-xl mb-4">
+          <button
+            type="button"
+            onClick={() => setMode('login')}
+            className={`flex-1 py-1.5 text-xs font-bold text-center rounded-lg transition-all cursor-pointer ${
+              mode === 'login'
+                ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('register')}
+            className={`flex-1 py-1.5 text-xs font-bold text-center rounded-lg transition-all cursor-pointer ${
+              mode === 'register'
+                ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            Create Account
+          </button>
+        </div>
+
+        {/* Minimalist Perks Pill */}
+        <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 rounded-xl px-3 py-1.5 mb-5 text-[11px] font-medium text-blue-700 dark:text-blue-300">
+          <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+          <span className="truncate">4+1 Free Ticket · 20% Group Pass · ₹0 Fee</span>
+        </div>
+
+        {mode === 'login' ? (
+          /* --- SIGN IN FORM --- */
           <div>
-            {/* Top Toggle Switch */}
-            <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-5 max-w-xs">
-              <button
-                type="button"
-                onClick={() => setMode('login')}
-                className={`flex-1 py-1.5 px-3 text-xs font-bold text-center rounded-lg transition-colors cursor-pointer ${
-                  mode === 'login'
-                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+            <div className="mb-4">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                Welcome Back
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Sign in to access your bookings & group savings
+              </p>
+            </div>
+
+            <form onSubmit={handleLoginSubmit} className="space-y-3.5" noValidate>
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+                  <input
+                    type="email"
+                    value={loginEmail}
+                    onChange={(e) => {
+                      setLoginEmail(e.target.value.toLowerCase());
+                      if (loginError) setLoginError('');
+                    }}
+                    className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    Password
+                  </label>
+                  <Link 
+                    href="/forgot-password" 
+                    onClick={onClose}
+                    className="text-[11px] text-blue-600 dark:text-blue-400 hover:underline font-semibold"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+                  <input
+                    type={loginShowPassword ? 'text' : 'password'}
+                    value={loginPassword}
+                    onChange={(e) => {
+                      setLoginPassword(e.target.value);
+                      if (loginError) setLoginError('');
+                    }}
+                    className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition"
+                    placeholder="••••••••"
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setLoginShowPassword(!loginShowPassword)}
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
+                    aria-label={loginShowPassword ? "Hide password" : "Show password"}
+                  >
+                    {loginShowPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {loginError && (
+                <div className="bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl p-2.5 text-xs text-rose-700 dark:text-rose-200 font-medium flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-rose-500 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1 leading-snug">
+                    {loginError}
+                    {loginError.includes('verify your email') && (
+                      <Link 
+                        href={`/verify-email?email=${encodeURIComponent(loginEmail)}`}
+                        onClick={onClose}
+                        className="text-xs text-amber-600 dark:text-amber-400 hover:underline font-bold block mt-1"
+                      >
+                        Enter OTP →
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                disabled={loginLoading || !canSubmitLogin}
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
               >
-                Sign In
+                {loginLoading ? 'Signing in...' : (<>Sign In <ArrowRight className="w-4 h-4" /></>)}
               </button>
+            </form>
+          </div>
+        ) : (
+          /* --- REGISTER FORM --- */
+          <div>
+            <div className="mb-3.5">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                Create Account
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Join TripEase for group discounts & instant vouchers
+              </p>
+            </div>
+
+            <form onSubmit={handleRegisterSubmit} className="space-y-3" noValidate>
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+                  <input 
+                    type="text" 
+                    value={regForm.name} 
+                    onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+                    placeholder="John Doe" 
+                    className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+                  <input 
+                    type="email" 
+                    value={regForm.email}
+                    onChange={(e) => handleEmailChange(e.target.value)}
+                    placeholder="you@example.com" 
+                    className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition" 
+                  />
+                  {validatingEmail && (
+                    <div className="absolute right-3 top-2.5">
+                      <div className="w-4 h-4 border-2 border-slate-400 border-t-blue-600 rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                </div>
+                {emailWarning && emailSuggestion && emailSuggestion.toLowerCase().trim() !== regForm.email.toLowerCase().trim() && (
+                  <div className="mt-1 bg-yellow-50 dark:bg-yellow-950/40 border border-yellow-300 dark:border-yellow-800 rounded-lg px-2.5 py-1 flex items-center justify-between">
+                    <p className="text-[11px] text-yellow-800 dark:text-yellow-200">{emailWarning}</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRegForm({ ...regForm, email: emailSuggestion });
+                        setEmailSuggestion('');
+                        setEmailWarning('');
+                      }}
+                      className="text-[11px] text-yellow-700 dark:text-yellow-300 hover:underline font-bold ml-2 cursor-pointer"
+                    >
+                      Use this
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Number */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    Mobile Number <span className="text-rose-500">*</span>
+                  </label>
+                  <span className={`text-[10px] font-mono font-bold ${
+                    regPhone.length === 10 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
+                  }`}>
+                    {regPhone.length}/10 digits
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <div className="relative" ref={countryRef}>
+                    <button
+                      type="button"
+                      onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
+                      className={`h-[38px] bg-slate-50 dark:bg-slate-800/90 border rounded-xl px-2.5 text-xs text-slate-900 dark:text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer min-w-[80px] justify-between ${
+                        countryDropdownOpen ? 'border-blue-500 ring-1 ring-blue-500' : 'border-slate-200 dark:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm leading-none">
+                          {(COUNTRY_CODES.find((c) => c.code === regCountryCode) || COUNTRY_CODES[0]).flag}
+                        </span>
+                        <span className="font-mono text-xs">
+                          {(COUNTRY_CODES.find((c) => c.code === regCountryCode) || COUNTRY_CODES[0]).code}
+                        </span>
+                      </div>
+                      <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${countryDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {countryDropdownOpen && (
+                      <div className="absolute top-full left-0 mt-1.5 w-60 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 py-1 z-50 max-h-52 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
+                        {COUNTRY_CODES.map((c) => {
+                          const isSelected = regCountryCode === c.code;
+                          return (
+                            <button
+                              key={c.code}
+                              type="button"
+                              onClick={() => {
+                                setRegCountryCode(c.code);
+                                setCountryDropdownOpen(false);
+                              }}
+                              className={`w-full px-3 py-1.5 text-xs font-medium flex items-center justify-between transition text-left cursor-pointer ${
+                                isSelected ? 'bg-blue-600 text-white font-semibold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className="text-base">{c.flag}</span>
+                                <div>
+                                  <span className="font-semibold">{c.name}</span>
+                                  <span className="text-[10px] opacity-75 block font-mono">{c.code}</span>
+                                </div>
+                              </div>
+                              {isSelected && <Check className="w-3.5 h-3.5 text-white font-bold" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative flex-1">
+                    <Phone className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+                    <input
+                      type="tel"
+                      value={regPhone}
+                      maxLength={10}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setRegPhone(val);
+                        if (regError.includes('mobile number')) setRegError('');
+                      }}
+                      placeholder="9876543210"
+                      className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono font-medium transition"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+                  <input 
+                    type={regShowPassword ? 'text' : 'password'} 
+                    value={regForm.password}
+                    onChange={(e) => setRegForm({ ...regForm, password: e.target.value })}
+                    placeholder="••••••••" 
+                    className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition" 
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setRegShowPassword(!regShowPassword)}
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
+                    aria-label={regShowPassword ? "Hide password" : "Show password"}
+                  >
+                    {regShowPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                {regForm.password.length > 0 && (
+                  <div className="mt-1.5">
+                    <div className="flex gap-1 mb-1">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= strength.score ? strength.color : 'bg-slate-200 dark:bg-slate-800'}`} />
+                      ))}
+                    </div>
+                    <p className={`text-[10px] font-semibold ${strength.score >= 3 ? 'text-emerald-600 dark:text-emerald-400' : strength.score === 2 ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                      Strength: {strength.label}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Terms & Privacy */}
+              <div className="flex items-start gap-2 pt-0.5">
+                <input
+                  type="checkbox"
+                  id="agreeTerms"
+                  checked={agreeTerms}
+                  onChange={(e) => {
+                    if (!hasReadTerms || !hasReadPrivacy) {
+                      e.preventDefault();
+                      toast('Please review the agreements till the end before accepting.');
+                      if (!hasReadTerms) setPolicyModal('terms');
+                      else if (!hasReadPrivacy) setPolicyModal('privacy');
+                      return;
+                    }
+                    setAgreeTerms(e.target.checked);
+                    if (e.target.checked && regError.includes('Terms')) setRegError('');
+                  }}
+                  className="mt-0.5 w-3.5 h-3.5 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600"
+                />
+                <label 
+                  htmlFor="agreeTerms" 
+                  onClick={(e) => {
+                    if (!hasReadTerms || !hasReadPrivacy) {
+                      e.preventDefault();
+                      toast('Please review the agreements till the end before accepting.');
+                      if (!hasReadTerms) setPolicyModal('terms');
+                      else if (!hasReadPrivacy) setPolicyModal('privacy');
+                    }
+                  }}
+                  className="text-[11px] text-slate-600 dark:text-slate-300 leading-tight cursor-pointer select-none"
+                >
+                  I agree to the{' '}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPolicyModal('terms');
+                    }}
+                    className="text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
+                  >
+                    <span>Terms</span>
+                    {hasReadTerms && <span className="text-emerald-500 font-bold ml-0.5">✓</span>}
+                  </button>{' '}
+                  &{' '}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPolicyModal('privacy');
+                    }}
+                    className="text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
+                  >
+                    <span>Privacy Policy</span>
+                    {hasReadPrivacy && <span className="text-emerald-500 font-bold ml-0.5">✓</span>}
+                  </button>.
+                </label>
+              </div>
+
+              {regError && (
+                <div className="bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl px-3 py-1.5 text-xs text-rose-700 dark:text-rose-200 font-medium">
+                  {regError}
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                disabled={regLoading || !canSubmitRegister}
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
+              >
+                {regLoading ? 'Creating account...' : (<>Create Account <ArrowRight className="w-4 h-4" /></>)}
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Minimalist Switch Footer */}
+        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+          {mode === 'login' ? (
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Don&apos;t have an account?{' '}
               <button
                 type="button"
                 onClick={() => setMode('register')}
-                className={`flex-1 py-1.5 px-3 text-xs font-bold text-center rounded-lg transition-colors cursor-pointer ${
-                  mode === 'register'
-                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold hover:underline cursor-pointer"
               >
                 Create Account
               </button>
-            </div>
-
-            {mode === 'login' ? (
-              /* --- SIGN IN VIEW --- */
-              <div>
-                <div className="mb-5">
-                  <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-                    Welcome Back
-                  </h1>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Enter your credentials to access your traveler profile
-                  </p>
-                </div>
-
-                <form onSubmit={handleLoginSubmit} className="space-y-3.5" noValidate>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                      <input
-                        type="email"
-                        value={loginEmail}
-                        onChange={(e) => {
-                          setLoginEmail(e.target.value.toLowerCase());
-                          if (loginError) setLoginError('');
-                        }}
-                        className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition"
-                        placeholder="you@example.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                        Password
-                      </label>
-                      <Link 
-                        href="/forgot-password" 
-                        onClick={onClose}
-                        className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-                      >
-                        Forgot Password?
-                      </Link>
-                    </div>
-                    <div className="relative">
-                      <Lock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                      <input
-                        type={loginShowPassword ? 'text' : 'password'}
-                        value={loginPassword}
-                        onChange={(e) => {
-                          setLoginPassword(e.target.value);
-                          if (loginError) setLoginError('');
-                        }}
-                        className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition"
-                        placeholder="••••••••"
-                      />
-                      <button 
-                        type="button" 
-                        onClick={() => setLoginShowPassword(!loginShowPassword)}
-                        className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
-                        aria-label={loginShowPassword ? "Hide password" : "Show password"}
-                      >
-                        {loginShowPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-                  </div>
-
-                  {loginError && (
-                    <div className="bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl p-3 text-xs text-rose-700 dark:text-rose-200 font-medium flex items-start gap-2.5 animate-in fade-in duration-150">
-                      <AlertCircle className="w-4 h-4 text-rose-500 dark:text-rose-400 flex-shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <p className="leading-snug">{loginError}</p>
-                        {loginError.includes('verify your email') && (
-                          <Link 
-                            href={`/verify-email?email=${encodeURIComponent(loginEmail)}`}
-                            onClick={onClose}
-                            className="text-xs text-amber-600 dark:text-amber-400 hover:underline font-bold mt-1.5 inline-block"
-                          >
-                            Click here to enter verification OTP →
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  <button 
-                    type="submit" 
-                    disabled={loginLoading || !canSubmitLogin}
-                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
-                  >
-                    {loginLoading ? 'Signing in...' : (<>Sign In <ArrowRight className="w-4 h-4" /></>)}
-                  </button>
-                </form>
-              </div>
-            ) : (
-              /* --- SIGN UP VIEW --- */
-              <div>
-                <div className="mb-4">
-                  <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-                    Create Your Account
-                  </h1>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Fill in your details below to register
-                  </p>
-                </div>
-
-                <form onSubmit={handleRegisterSubmit} className="space-y-3" noValidate>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
-                      <input 
-                        type="text" 
-                        value={regForm.name} 
-                        onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
-                        placeholder="John Doe" 
-                        className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition" 
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
-                      <input 
-                        type="email" 
-                        value={regForm.email}
-                        onChange={(e) => handleEmailChange(e.target.value)}
-                        placeholder="you@example.com" 
-                        className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition" 
-                      />
-                      {validatingEmail && (
-                        <div className="absolute right-3 top-2.5">
-                          <div className="w-4 h-4 border-2 border-slate-400 border-t-blue-600 rounded-full animate-spin"></div>
-                        </div>
-                      )}
-                    </div>
-                    {emailWarning && emailSuggestion && emailSuggestion.toLowerCase().trim() !== regForm.email.toLowerCase().trim() && (
-                      <div className="mt-1.5 bg-yellow-50 dark:bg-yellow-950/40 border border-yellow-300 dark:border-yellow-800 rounded-lg px-2.5 py-1.5 flex items-center justify-between">
-                        <p className="text-xs text-yellow-800 dark:text-yellow-200">{emailWarning}</p>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setRegForm({ ...regForm, email: emailSuggestion });
-                            setEmailSuggestion('');
-                            setEmailWarning('');
-                          }}
-                          className="text-xs text-yellow-700 dark:text-yellow-300 hover:underline font-bold ml-2 cursor-pointer"
-                        >
-                          Use this
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Mobile Number */}
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                        Mobile Number <span className="text-rose-500">*</span>
-                      </label>
-                      <span className={`text-[10px] font-mono font-bold ${
-                        regPhone.length === 10 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
-                      }`}>
-                        {regPhone.length}/10 digits
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="relative" ref={countryRef}>
-                        <button
-                          type="button"
-                          onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                          className={`h-[38px] bg-slate-50 dark:bg-slate-800/90 border rounded-xl px-2.5 text-xs text-slate-900 dark:text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer min-w-[85px] justify-between ${
-                            countryDropdownOpen ? 'border-blue-500 ring-1 ring-blue-500' : 'border-slate-300 dark:border-slate-700 hover:border-slate-400'
-                          }`}
-                        >
-                          <div className="flex items-center gap-1">
-                            <span className="text-sm leading-none">
-                              {(COUNTRY_CODES.find((c) => c.code === regCountryCode) || COUNTRY_CODES[0]).flag}
-                            </span>
-                            <span className="font-mono text-xs">
-                              {(COUNTRY_CODES.find((c) => c.code === regCountryCode) || COUNTRY_CODES[0]).code}
-                            </span>
-                          </div>
-                          <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${countryDropdownOpen ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        {countryDropdownOpen && (
-                          <div className="absolute top-full left-0 mt-1.5 w-64 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 py-1 z-50 max-h-56 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
-                            {COUNTRY_CODES.map((c) => {
-                              const isSelected = regCountryCode === c.code;
-                              return (
-                                <button
-                                  key={c.code}
-                                  type="button"
-                                  onClick={() => {
-                                    setRegCountryCode(c.code);
-                                    setCountryDropdownOpen(false);
-                                  }}
-                                  className={`w-full px-3 py-2 text-xs font-medium flex items-center justify-between transition text-left cursor-pointer ${
-                                    isSelected ? 'bg-blue-600 text-white font-semibold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                  }`}
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-base">{c.flag}</span>
-                                    <div>
-                                      <span className="font-semibold">{c.name}</span>
-                                      <span className="text-[10px] opacity-75 block font-mono">{c.code}</span>
-                                    </div>
-                                  </div>
-                                  {isSelected && <Check className="w-3.5 h-3.5 text-white font-bold" />}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="relative flex-1">
-                        <Phone className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
-                        <input
-                          type="tel"
-                          value={regPhone}
-                          maxLength={10}
-                          onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                            setRegPhone(val);
-                            if (regError.includes('mobile number')) setRegError('');
-                          }}
-                          placeholder="9876543210"
-                          className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono font-medium transition"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Password */}
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
-                      <input 
-                        type={regShowPassword ? 'text' : 'password'} 
-                        value={regForm.password}
-                        onChange={(e) => setRegForm({ ...regForm, password: e.target.value })}
-                        placeholder="••••••••" 
-                        className="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 rounded-xl pl-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium transition" 
-                      />
-                      <button 
-                        type="button" 
-                        onClick={() => setRegShowPassword(!regShowPassword)}
-                        className="absolute right-3.5 top-2.5 text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
-                        aria-label={regShowPassword ? "Hide password" : "Show password"}
-                      >
-                        {regShowPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
-                    </div>
-                    {regForm.password.length > 0 && (
-                      <div className="mt-1.5">
-                        <div className="flex gap-1 mb-1">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= strength.score ? strength.color : 'bg-slate-200 dark:bg-slate-800'}`} />
-                          ))}
-                        </div>
-                        <p className={`text-[11px] font-semibold ${strength.score >= 3 ? 'text-emerald-600 dark:text-emerald-400' : strength.score === 2 ? 'text-amber-600 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400'}`}>
-                          Strength: {strength.label}{strength.score < 3 ? ' — add uppercase, numbers or symbols' : ''}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Terms & Privacy */}
-                  <div className="flex items-start gap-2 pt-0.5">
-                    <input
-                      type="checkbox"
-                      id="agreeTerms"
-                      checked={agreeTerms}
-                      onChange={(e) => {
-                        if (!hasReadTerms || !hasReadPrivacy) {
-                          e.preventDefault();
-                          toast('Please review the agreements till the end before accepting.');
-                          if (!hasReadTerms) setPolicyModal('terms');
-                          else if (!hasReadPrivacy) setPolicyModal('privacy');
-                          return;
-                        }
-                        setAgreeTerms(e.target.checked);
-                        if (e.target.checked && regError.includes('Terms')) setRegError('');
-                      }}
-                      className="mt-0.5 w-4 h-4 rounded border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600"
-                    />
-                    <label 
-                      htmlFor="agreeTerms" 
-                      onClick={(e) => {
-                        if (!hasReadTerms || !hasReadPrivacy) {
-                          e.preventDefault();
-                          toast('Please review the agreements till the end before accepting.');
-                          if (!hasReadTerms) setPolicyModal('terms');
-                          else if (!hasReadPrivacy) setPolicyModal('privacy');
-                        }
-                      }}
-                      className="text-xs text-slate-600 dark:text-slate-300 leading-tight cursor-pointer select-none"
-                    >
-                      I agree to the{' '}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPolicyModal('terms');
-                        }}
-                        className="text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
-                      >
-                        <span>Terms of Service</span>
-                        {hasReadTerms && <span className="text-emerald-500 font-bold ml-0.5">✓</span>}
-                      </button>{' '}
-                      and{' '}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPolicyModal('privacy');
-                        }}
-                        className="text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
-                      >
-                        <span>Privacy Policy</span>
-                        {hasReadPrivacy && <span className="text-emerald-500 font-bold ml-0.5">✓</span>}
-                      </button>.
-                    </label>
-                  </div>
-
-                  {regError && (
-                    <div className="bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl px-3 py-2 text-xs text-rose-700 dark:text-rose-200 font-medium">
-                      {regError}
-                    </div>
-                  )}
-
-                  <button 
-                    type="submit" 
-                    disabled={regLoading || !canSubmitRegister}
-                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
-                  >
-                    {regLoading ? 'Creating account...' : (<>Create Account <ArrowRight className="w-4 h-4" /></>)}
-                  </button>
-                </form>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-            {mode === 'login' ? (
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Don&apos;t have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => setMode('register')}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold hover:underline cursor-pointer"
-                >
-                  Create Account
-                </button>
-              </p>
-            ) : (
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Already have an account?{' '}
-                <button
-                  type="button"
-                  onClick={() => setMode('login')}
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold hover:underline cursor-pointer"
-                >
-                  Sign In
-                </button>
-              </p>
-            )}
-          </div>
+            </p>
+          ) : (
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('login')}
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-bold hover:underline cursor-pointer"
+              >
+                Sign In
+              </button>
+            </p>
+          )}
         </div>
 
       </div>
