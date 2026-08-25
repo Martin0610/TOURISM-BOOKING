@@ -86,17 +86,17 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-[padding] duration-200 ease-out pointer-events-none ${
+    <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out pointer-events-none ${
       scrolled ? 'pt-3 px-3 sm:px-6' : 'pt-0 px-0'
     }`}>
-      <div className={`transition-[max-width,border-radius,background-color,box-shadow,border-color,padding] duration-200 ease-out pointer-events-auto ${
+      <div className={`transition-all duration-300 ease-in-out pointer-events-auto ${
         scrolled 
           ? (menuOpen 
               ? 'max-w-6xl mx-auto px-4 sm:px-7 rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md' 
-              : 'max-w-6xl mx-auto px-4 sm:px-7 rounded-[32px] bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md')
+              : 'max-w-6xl mx-auto px-4 sm:px-7 rounded-full bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md')
           : 'w-full max-w-full px-4 sm:px-8 lg:px-12 rounded-none bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-xs'
       }`}>
-        <div className={`flex justify-between items-center transition-[height] duration-200 ease-out ${scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
+        <div className={`flex justify-between items-center transition-all duration-300 ease-in-out ${scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
