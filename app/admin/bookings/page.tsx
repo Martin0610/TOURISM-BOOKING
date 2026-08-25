@@ -21,9 +21,9 @@ interface Booking {
 }
 
 const statusColors: Record<string, string> = {
-  PENDING: 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900',
-  CONFIRMED: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900',
-  CANCELLED: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900',
+  PENDING: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900',
+  CONFIRMED: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900',
+  CANCELLED: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900',
 };
 
 export default function AdminBookingsPage() {
@@ -122,14 +122,14 @@ export default function AdminBookingsPage() {
       <div className="max-w-6xl space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white">All Bookings</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">All Bookings</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Review and manage customer travel bookings with double confirmation controls.
             </p>
           </div>
           <button
             onClick={fetchBookings}
-            className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline cursor-pointer"
+            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
           >
             Refresh List
           </button>
@@ -138,59 +138,59 @@ export default function AdminBookingsPage() {
         {loading ? (
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl h-16 animate-pulse border border-slate-200 dark:border-slate-800" />
+              <div key={i} className="bg-white dark:bg-slate-900 rounded-xl h-16 animate-pulse border border-slate-200 dark:border-slate-800" />
             ))}
           </div>
         ) : (
-          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead className="bg-slate-50 dark:bg-slate-850 text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+              <table className="w-full text-xs sm:text-sm text-left">
+                <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     {['User', 'Package', 'Travel Date', 'People', 'Phone', 'Amount', 'Status', 'Actions'].map((h) => (
-                      <th key={h} className="px-4 py-3.5 font-bold">{h}</th>
+                      <th key={h} className="px-4 py-3 font-semibold">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {bookings.map((b) => (
                     <tr key={b.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="px-4 py-3.5 font-bold text-slate-900 dark:text-white">
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
                         <div>{b.user?.name || 'Unknown User'}</div>
                         <div className="text-[11px] text-slate-400 font-normal">{b.user?.email}</div>
                       </td>
-                      <td className="px-4 py-3.5 font-medium text-slate-800 dark:text-slate-200 max-w-[200px] truncate">
+                      <td className="px-4 py-3 font-medium text-slate-800 dark:text-slate-200 max-w-[200px] truncate">
                         {b.package?.name || 'Vacation Package'}
                       </td>
-                      <td className="px-4 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap text-xs">
+                      <td className="px-4 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap text-xs">
                         {new Date(b.travelDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </td>
-                      <td className="px-4 py-3.5 text-slate-700 dark:text-slate-300 font-semibold text-center">
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300 font-semibold text-center">
                         {b.numberOfPeople}
                       </td>
-                      <td className="px-4 py-3.5 text-slate-700 dark:text-slate-300">
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
                         {b.phone ? (
-                          <span className="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">{b.phone}</span>
+                          <span className="font-mono text-xs bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">{b.phone}</span>
                         ) : (
                           <span className="text-slate-400 text-xs">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3.5 font-black text-purple-600 dark:text-purple-400 whitespace-nowrap">
+                      <td className="px-4 py-3 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                         ₹{b.totalAmount.toLocaleString()}
                       </td>
-                      <td className="px-4 py-3.5">
-                        <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold inline-block ${statusColors[b.status] || 'bg-slate-100 text-slate-800'}`}>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold inline-block ${statusColors[b.status] || 'bg-slate-100 text-slate-800'}`}>
                           {b.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3.5">
+                      <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {/* Confirm Button (shown for PENDING or CANCELLED bookings) */}
                           {b.status !== 'CONFIRMED' && (
                             <button
                               type="button"
                               onClick={() => openConfirmModal(b)}
-                              className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm transition cursor-pointer"
+                              className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs transition cursor-pointer"
                               title="Confirm booking"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -203,7 +203,7 @@ export default function AdminBookingsPage() {
                             <button
                               type="button"
                               onClick={() => openCancelModal(b)}
-                              className="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-bold px-3 py-1.5 rounded-xl transition cursor-pointer"
+                              className="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-semibold px-2.5 py-1 rounded-md transition cursor-pointer"
                               title="Cancel booking"
                             >
                               <XCircle className="w-3.5 h-3.5" />
@@ -225,8 +225,8 @@ export default function AdminBookingsPage() {
 
             {bookings.length === 0 && (
               <div className="text-center py-16 text-slate-400">
-                <Clock className="w-12 h-12 mx-auto mb-2 opacity-40" />
-                <p className="text-sm font-semibold">No bookings registered yet.</p>
+                <Clock className="w-10 h-10 mx-auto mb-2 opacity-40" />
+                <p className="text-xs font-medium">No bookings registered yet.</p>
               </div>
             )}
           </div>

@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   if (loading) return (
     <AdminLayout>
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600" />
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
       </div>
     </AdminLayout>
   );
@@ -77,8 +77,8 @@ export default function AdminDashboard() {
   if (!stats) return (
     <AdminLayout>
       <div className="flex flex-col items-center justify-center h-64 gap-3">
-        <p className="text-gray-500">{error ? 'Failed to load dashboard stats. Please refresh.' : 'No data available.'}</p>
-        <button onClick={() => window.location.reload()} className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition">
+        <p className="text-slate-500">{error ? 'Failed to load dashboard stats. Please refresh.' : 'No data available.'}</p>
+        <button onClick={() => window.location.reload()} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition cursor-pointer">
           Refresh
         </button>
       </div>
@@ -92,10 +92,10 @@ export default function AdminDashboard() {
   ].filter(d => d.value > 0);
 
   const statCards = [
-    { label: 'Total Packages', value: stats.totalPackages, icon: Package, color: 'bg-purple-600', change: 'Active listings' },
-    { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'bg-emerald-500', change: 'Registered' },
-    { label: 'Total Bookings', value: stats.totalBookings, icon: ShoppingBag, color: 'bg-indigo-600', change: `${stats.confirmedBookings} confirmed` },
-    { label: 'Total Revenue', value: `₹${stats.totalRevenue.toLocaleString('en-IN')}`, icon: IndianRupee, color: 'bg-orange-500', change: 'From payments' },
+    { label: 'Total Packages', value: stats.totalPackages, icon: Package, color: 'bg-blue-600', change: 'Active listings' },
+    { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'bg-emerald-600', change: 'Registered' },
+    { label: 'Total Bookings', value: stats.totalBookings, icon: ShoppingBag, color: 'bg-slate-800', change: `${stats.confirmedBookings} confirmed` },
+    { label: 'Total Revenue', value: `₹${stats.totalRevenue.toLocaleString('en-IN')}`, icon: IndianRupee, color: 'bg-amber-600', change: 'From payments' },
   ];
 
   return (

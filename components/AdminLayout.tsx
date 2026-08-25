@@ -84,15 +84,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col transition-transform duration-300 shadow-2xl ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-auto`}>
-        {/* Brand Logo matching Homepage */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col transition-transform duration-300 shadow-xl ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-auto`}>
+        {/* Brand Logo */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-500 via-indigo-600 to-purple-700 flex items-center justify-center text-white shadow-md shadow-purple-500/30">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm">
             <Compass className="w-5 h-5" />
           </div>
           <div>
-            <p className="font-extrabold text-white text-base tracking-tight">TripEase</p>
-            <p className="text-[11px] text-purple-400 font-semibold tracking-wider uppercase">Admin Control</p>
+            <p className="font-bold text-white text-base tracking-tight">TripEase</p>
+            <p className="text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Admin Control</p>
           </div>
           <button className="ml-auto lg:hidden text-slate-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
             <X className="w-5 h-5" />
@@ -110,23 +110,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={href}
                 href={href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 group ${
+                className={`flex items-center gap-3 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors group ${
                   active
-                    ? 'bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
-                    : 'text-slate-400 hover:bg-slate-800/70 hover:text-white'
+                    ? 'bg-blue-600 text-white shadow-sm font-semibold'
+                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                 }`}
               >
-                <Icon className={`w-4.5 h-4.5 flex-shrink-0 ${active ? 'text-white' : 'text-slate-400 group-hover:text-purple-400 transition-colors'}`} />
+                <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`} />
                 <span className="truncate">{label}</span>
 
                 {/* Live Notification Badge */}
                 {count && count > 0 ? (
-                  <span className={`ml-auto text-[11px] font-black px-2 py-0.5 rounded-full shadow-sm flex items-center justify-center min-w-[20px] ${
+                  <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center justify-center min-w-[20px] ${
                     active
-                      ? 'bg-white text-purple-700 font-extrabold'
+                      ? 'bg-white text-blue-700'
                       : badgeKey === 'vip'
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
-                      : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white border border-purple-400/30'
+                      ? 'bg-amber-500 text-white'
+                      : 'bg-slate-800 text-slate-200 border border-slate-700'
                   }`}>
                     {count}
                   </span>
@@ -139,9 +139,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* User Card & Quick Links */}
-        <div className="px-4 py-4 border-t border-slate-800 bg-slate-900/60">
+        <div className="px-4 py-4 border-t border-slate-800 bg-slate-950/50">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-500 via-indigo-600 to-purple-700 flex items-center justify-center text-white text-xs font-bold shadow-md shadow-purple-500/20">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
               {user?.name?.charAt(0).toUpperCase() || 'A'}
             </div>
             <div className="flex-1 min-w-0">
@@ -151,13 +151,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 text-slate-400 hover:text-rose-400 text-xs font-semibold py-2 px-3 rounded-xl hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 text-slate-400 hover:text-rose-400 text-xs font-semibold py-1.5 px-3 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" /> Logout
           </button>
           <Link
             href="/"
-            className="w-full flex items-center gap-2 text-slate-400 hover:text-purple-400 text-xs font-semibold py-2 px-3 rounded-xl hover:bg-slate-800/80 transition-colors mt-1"
+            className="w-full flex items-center gap-2 text-slate-400 hover:text-white text-xs font-semibold py-1.5 px-3 rounded-lg hover:bg-slate-800 transition-colors mt-1"
           >
             <Globe className="w-4 h-4" /> View Live Site
           </Link>
@@ -171,19 +171,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar matching website frosted glass aesthetic */}
-        <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        {/* Top bar */}
+        <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3.5 flex items-center justify-between sticky top-0 z-30 shadow-sm">
           <button className="lg:hidden text-slate-700 dark:text-slate-300" onClick={() => setSidebarOpen(true)}>
             <Menu className="w-6 h-6" />
           </button>
           <div className="hidden lg:block">
-            <h1 className="text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
               {navItems.find((n) => n.href === pathname)?.label || 'Admin Control'}
             </h1>
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <span className="bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60 text-xs font-bold px-3 py-1 rounded-full">
+            <span className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold px-2.5 py-1 rounded-md">
               ADMINISTRATOR
             </span>
           </div>

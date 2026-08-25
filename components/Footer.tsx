@@ -108,19 +108,19 @@ export default function Footer() {
             {/* Col 1: Brand info */}
             <div className="lg:col-span-2 space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-purple-600 flex items-center justify-center text-white shadow-md shadow-purple-600/20">
+                <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm">
                   <Compass className="w-5 h-5" />
                 </div>
-                <span className="font-extrabold text-2xl text-white tracking-tight">
+                <span className="font-bold text-2xl text-white tracking-tight">
                   TripEase
                 </span>
               </div>
               <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
                 India&apos;s premier travel booking engine. Offering curated vacation packages with multi-city departures, group savings, and instant digital vouchers.
               </p>
-              <div className="flex items-center gap-4 text-xs text-slate-300">
+              <div className="flex items-center gap-4 text-xs text-slate-400">
                 <span className="flex items-center gap-1"><Shield className="w-4 h-4 text-emerald-400" /> Razorpay Verified</span>
-                <span className="flex items-center gap-1"><CreditCard className="w-4 h-4 text-cyan-400" /> UPI & NetBanking</span>
+                <span className="flex items-center gap-1"><CreditCard className="w-4 h-4 text-blue-400" /> UPI & NetBanking</span>
               </div>
             </div>
 
@@ -260,30 +260,30 @@ export default function Footer() {
                 </>
               )}
 
-              <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-1.5 text-xs">
+              <div className="mt-4 pt-4 border-t border-slate-800 space-y-1.5 text-xs">
                 <button
                   type="button"
                   onClick={handleCopyPhone}
                   title="Click to copy phone number"
-                  className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 hover:underline transition cursor-pointer text-xs group"
+                  className="flex items-center gap-1.5 text-slate-300 hover:text-white transition cursor-pointer text-xs group"
                 >
-                  <Phone className="w-3.5 h-3.5" />
+                  <Phone className="w-3.5 h-3.5 text-slate-400" />
                   <span>+91 72003 36447</span>
                   {copiedPhone ? (
                     <span className="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-500/40 flex items-center gap-1">
                       <Check className="w-3 h-3" /> Copied!
                     </span>
                   ) : (
-                    <Copy className="w-3 h-3 text-cyan-400/60 group-hover:text-cyan-300 transition" />
+                    <Copy className="w-3 h-3 text-slate-500 group-hover:text-slate-300 transition" />
                   )}
                 </button>
                 <a
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=mjv3140@gmail.com&su=${encodeURIComponent('Customer Support & Inquiry - TripEase Holidays')}&body=${encodeURIComponent('Hi TripEase Support Team,\n\nI am reaching out regarding:\n\n[Please enter your inquiry here]\n\nRegards,')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-slate-400 hover:text-white hover:underline transition cursor-pointer"
+                  className="flex items-center gap-1.5 text-slate-400 hover:text-white transition cursor-pointer"
                 >
-                  <Mail className="w-3.5 h-3.5 text-purple-400" /> mjv3140@gmail.com
+                  <Mail className="w-3.5 h-3.5 text-blue-400" /> mjv3140@gmail.com
                 </a>
               </div>
             </div>

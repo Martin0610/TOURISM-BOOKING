@@ -42,7 +42,7 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
 
   if (submitted) {
     return (
-      <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-xl text-xs font-semibold">
+      <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
         <CheckCircle2 className="w-3.5 h-3.5" /> Review Submitted
       </div>
     );
@@ -52,7 +52,7 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
     return (
       <button
         onClick={() => setShow(true)}
-        className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 px-3.5 py-1.5 rounded-xl text-xs font-bold hover:bg-amber-100 transition shadow-sm"
+        className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition cursor-pointer"
       >
         <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> Write Review
       </button>
@@ -60,14 +60,14 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
   }
 
   return (
-    <div className="w-full mt-3 bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-2xl p-4 space-y-3">
+    <div className="w-full mt-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3.5 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-slate-800 dark:text-white">Rate your experience:</span>
+        <span className="text-xs font-semibold text-slate-800 dark:text-white">Rate your experience:</span>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((s) => (
-            <button key={s} type="button" onClick={() => setRating(s)} className="p-0.5">
+            <button key={s} type="button" onClick={() => setRating(s)} className="p-0.5 cursor-pointer">
               <Star
-                className={`w-5 h-5 transition-transform hover:scale-125 ${
+                className={`w-4 h-4 transition-transform hover:scale-110 ${
                   s <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-300 dark:text-slate-600'
                 }`}
               />
@@ -81,20 +81,20 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
         onChange={(e) => setComment(e.target.value)}
         rows={2}
         placeholder="How was the hotel, itinerary, and guide experience?"
-        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
       <div className="flex gap-2">
         <button
           onClick={submit}
           disabled={loading}
-          className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1.5 rounded-xl text-xs font-bold disabled:opacity-60 transition shadow"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-60 transition cursor-pointer"
         >
           {loading ? 'Submitting...' : 'Post Review'}
         </button>
         <button
           onClick={() => setShow(false)}
-          className="text-slate-500 hover:text-slate-700 text-xs px-2"
+          className="text-slate-500 hover:text-slate-700 text-xs px-2 cursor-pointer"
         >
           Cancel
         </button>
@@ -106,15 +106,15 @@ function ReviewForm({ bookingId, packageId, onDone }: { bookingId: string; packa
 const statusConfig: Record<string, { label: string; badgeClass: string }> = {
   PENDING: {
     label: 'Payment Pending',
-    badgeClass: 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    badgeClass: 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800',
   },
   CONFIRMED: {
     label: 'Confirmed',
-    badgeClass: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+    badgeClass: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
   },
   CANCELLED: {
     label: 'Cancelled',
-    badgeClass: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+    badgeClass: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800',
   },
 };
 
@@ -169,72 +169,72 @@ export default function MyBookingsPage() {
       <WhatsAppButton />
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-        {/* Top Header Banner */}
-        <section className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white pt-28 pb-14 px-4 shadow-md">
+        {/* Header Banner */}
+        <section className="bg-slate-900 text-white pt-24 pb-12 px-4 border-b border-slate-800 shadow-sm">
           <div className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-semibold text-cyan-300 mb-3">
-              <Luggage className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-xs font-medium text-slate-300 mb-2.5">
+              <Luggage className="w-3.5 h-3.5 text-blue-400" />
               <span>Travel Dashboard</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
               My Tour Bookings
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm mt-1">
+            <p className="text-slate-400 text-xs sm:text-sm mt-1">
               Manage your confirmed vacations, review vouchers, and monitor trip schedules.
             </p>
           </div>
         </section>
 
         {/* Bookings List */}
-        <div className="max-w-4xl mx-auto px-4 -mt-6">
+        <div className="max-w-4xl mx-auto px-4 pt-6">
           {loading ? (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white dark:bg-slate-900 rounded-3xl h-44 animate-pulse border border-slate-200 dark:border-slate-800" />
+                <div key={i} className="bg-white dark:bg-slate-900 rounded-xl h-40 animate-pulse border border-slate-200 dark:border-slate-800" />
               ))}
             </div>
           ) : bookings.length === 0 ? (
-            <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-8">
-              <Luggage className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4 animate-float" />
-              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">No bookings found</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">
+            <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+              <Luggage className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1.5">No bookings found</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-5">
                 You haven&apos;t booked any dream getaways yet. Explore our handcrafted packages today!
               </p>
               <Link
                 href="/packages"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs px-6 py-3 rounded-full transition shadow-lg shadow-blue-500/25"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-5 py-2.5 rounded-lg transition shadow-sm"
               >
                 <span>Browse Tourism Packages</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           ) : (
-            <div className="space-y-5">
+            <div className="space-y-4">
               {bookings.map((booking) => {
                 const conf = statusConfig[booking.status] || statusConfig.PENDING;
                 return (
                   <div
                     key={booking.id}
-                    className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-md transition overflow-hidden"
+                    className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm transition overflow-hidden"
                   >
                     {/* Header Bar */}
-                    <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800">
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[11px] font-mono font-bold text-slate-400">
+                          <span className="text-[11px] font-mono font-medium text-slate-400">
                             #{booking.id.slice(-8).toUpperCase()}
                           </span>
-                          <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${conf.badgeClass}`}>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${conf.badgeClass}`}>
                             {conf.label}
                           </span>
                         </div>
-                        <h3 className="font-extrabold text-slate-900 dark:text-white text-lg">
+                        <h3 className="font-bold text-slate-900 dark:text-white text-base sm:text-lg">
                           {booking.package?.name}
                         </h3>
                       </div>
 
                       <div className="sm:text-right">
-                        <div className="text-xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+                        <div className="text-xl font-bold text-slate-900 dark:text-white">
                           ₹{booking.totalAmount.toLocaleString()}
                         </div>
                         <span className="text-[11px] text-slate-400 font-medium">
@@ -244,18 +244,18 @@ export default function MyBookingsPage() {
                     </div>
 
                     {/* Metadata matrix */}
-                    <div className="p-5 space-y-4">
+                    <div className="p-4 sm:p-5 space-y-3.5">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                         <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
                           <MapPin className="w-4 h-4 text-rose-500 flex-shrink-0" />
                           <span>{booking.package?.destination}, {booking.package?.state}</span>
                         </div>
                         <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                          <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                          <Calendar className="w-4 h-4 text-blue-600 flex-shrink-0" />
                           <span>{new Date(booking.travelDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                         </div>
                         <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                          <Plane className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                          <Plane className="w-4 h-4 text-blue-500 flex-shrink-0" />
                           <span>
                             {booking.departureLocation
                               ? `${booking.departureLocation.departureCity} (${booking.departureLocation.transportMode})`
@@ -265,12 +265,12 @@ export default function MyBookingsPage() {
                       </div>
 
                       {/* Bottom Actions Bar */}
-                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
-                        <div className="flex flex-wrap items-center gap-2.5">
+                      <div className="pt-3.5 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-2">
                           {booking.status === 'PENDING' && (
                             <Link
                               href={`/booking/${booking.id}`}
-                              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md shadow-orange-500/20 transition"
+                              className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm transition"
                             >
                               <CreditCard className="w-3.5 h-3.5" />
                               <span>Complete Payment</span>
@@ -280,7 +280,7 @@ export default function MyBookingsPage() {
                           {booking.status === 'CONFIRMED' && (
                             <Link
                               href={`/booking/${booking.id}`}
-                              className="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-sm"
+                              className="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-semibold text-xs px-3.5 py-1.5 rounded-lg transition shadow-sm"
                             >
                               <span>View E-Voucher</span>
                               <ChevronRight className="w-3.5 h-3.5" />
@@ -308,7 +308,7 @@ export default function MyBookingsPage() {
                           canCancel(booking.travelDate.toString()) ? (
                             <button
                               onClick={() => handleCancel(booking.id)}
-                              className="text-xs font-semibold text-rose-500 hover:text-rose-700 hover:underline transition"
+                              className="text-xs font-semibold text-rose-500 hover:text-rose-600 hover:underline transition cursor-pointer"
                             >
                               Cancel Booking
                             </button>

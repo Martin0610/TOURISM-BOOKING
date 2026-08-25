@@ -285,56 +285,55 @@ function PackagesContent() {
       <WhatsAppButton />
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-        {/* Hero Header Banner */}
-        <section className="relative bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white py-16 px-4 overflow-hidden shadow-md">
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]" />
+        {/* Header Banner */}
+        <section className="relative bg-slate-900 text-white py-12 px-4 border-b border-slate-800 shadow-sm">
           <div className="relative z-10 max-w-7xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1 rounded-full text-xs font-semibold text-cyan-300 mb-4 animate-float">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-3.5 py-1 rounded-full text-xs font-medium text-slate-300 mb-3">
+              <Compass className="w-3.5 h-3.5 text-blue-400" />
               <span>10 Curated Indian Escapes</span>
-              <span className="text-white/60">·</span>
-              <span className="text-amber-300">4+1 Free Ticket Offer Active</span>
+              <span className="text-slate-500">·</span>
+              <span className="text-amber-400 font-semibold">4+1 Free Ticket Active</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2">
               Explore Our Tourism Packages
             </h1>
-            <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base font-light">
-              Handcrafted holiday packages across India with verified hotels, sightseeing, flexible departures, and guaranteed transparent pricing.
+            <p className="text-slate-400 max-w-2xl mx-auto text-xs sm:text-sm">
+              Handcrafted holiday packages across India with verified hotels, sightseeing, flexible departures, and transparent pricing.
             </p>
 
             {/* Quick stats pills */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-6 text-xs text-slate-200">
-              <span className="bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/15">
-                <Gift className="w-3.5 h-3.5 text-amber-300" /> 4+1 Free Ticket on 4+ Pax
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-5 text-xs text-slate-300">
+              <span className="bg-slate-800/80 px-3 py-1 rounded-full flex items-center gap-1.5 border border-slate-700">
+                <Gift className="w-3.5 h-3.5 text-amber-400" /> 4+1 Free Ticket on 4+ Pax
               </span>
-              <span className="bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/15">
-                <Tag className="w-3.5 h-3.5 text-emerald-300" /> 20% Group Discount (3+ Pax)
+              <span className="bg-slate-800/80 px-3 py-1 rounded-full flex items-center gap-1.5 border border-slate-700">
+                <Tag className="w-3.5 h-3.5 text-emerald-400" /> 20% Group Discount (3+ Pax)
               </span>
-              <span className="bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-white/15">
-                <ShieldCheck className="w-3.5 h-3.5 text-cyan-300" /> 100% Free Cancellation Option
+              <span className="bg-slate-800/80 px-3 py-1 rounded-full flex items-center gap-1.5 border border-slate-700">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" /> Free Cancellation Option
               </span>
             </div>
           </div>
         </section>
 
         {/* Main Content Area */}
-        <div className="max-w-7xl mx-auto px-4 pt-8">
+        <div className="max-w-7xl mx-auto px-4 pt-6">
           {/* VIP Promo Banner if arrived via email / VIP link */}
           {searchParams.get('coupon') && (
-            <div className="bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-indigo-500/15 border border-amber-300 dark:border-amber-500/40 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm animate-in fade-in duration-300">
+            <div className="bg-amber-950/20 border border-amber-800/50 rounded-xl p-3.5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center flex-shrink-0">
-                  <Crown className="w-5 h-5 text-amber-500 fill-amber-500" />
+                <div className="w-8 h-8 rounded-lg bg-amber-400/20 border border-amber-400/30 flex items-center justify-center flex-shrink-0">
+                  <Crown className="w-4 h-4 text-amber-400 fill-amber-400" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black text-amber-700 dark:text-amber-300 uppercase tracking-wider">VIP Exclusive Promo Active</span>
-                    <span className="bg-amber-400/30 text-amber-900 dark:text-amber-200 text-xs font-mono font-black px-2 py-0.5 rounded border border-amber-400/50">
+                    <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">VIP Exclusive Promo Active</span>
+                    <span className="bg-amber-400/20 text-amber-200 text-xs font-mono font-bold px-2 py-0.5 rounded border border-amber-400/40">
                       {searchParams.get('coupon')}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                  <p className="text-xs text-slate-400 mt-0.5">
                     Click any tour below to automatically apply your VIP discount at checkout!
                   </p>
                 </div>
@@ -343,8 +342,8 @@ function PackagesContent() {
           )}
 
           {/* Category Tabs Carousel */}
-          <div className="bg-white dark:bg-slate-900 p-2.5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 mb-6">
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 px-0.5">
+          <div className="bg-white dark:bg-slate-900 p-2 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 mb-6">
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5">
               {categories.map((cat) => {
                 const active = selectedCategory.toLowerCase() === cat.toLowerCase();
                 const Icon = getCategoryIcon(cat);
@@ -352,13 +351,13 @@ function PackagesContent() {
                   <button
                     key={cat}
                     onClick={() => handleCategorySelect(cat)}
-                    className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer ${
+                    className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1.5 cursor-pointer ${
                       active
-                        ? 'bg-purple-600 text-white shadow-sm shadow-purple-600/25'
-                        : 'bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70 hover:border-purple-300'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-3.5 h-3.5" />
                     <span>{cat === 'All' ? 'All Packages' : cat}</span>
                   </button>
                 );
@@ -367,12 +366,12 @@ function PackagesContent() {
           </div>
 
           {/* Interactive Filters Bar */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 mb-8 space-y-4 relative z-30">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 mb-6 space-y-3.5 relative z-30">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
               {/* Search Box */}
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
-                  <Search className="w-3.5 h-3.5 text-purple-600" /> Search Packages
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
+                  <Search className="w-3.5 h-3.5 text-blue-600" /> Search Packages
                 </label>
                 <div className="relative">
                   <input
@@ -380,14 +379,14 @@ function PackagesContent() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Destination, state, activity..."
-                    className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                    className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                   {search && (
                     <button
                       onClick={() => setSearch('')}
-                      className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
+                      className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 cursor-pointer"
                     >
-                      <X className="w-4 h-4" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -395,7 +394,7 @@ function PackagesContent() {
 
               {/* State Filter */}
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5 text-rose-500" /> State / Region
                 </label>
                 <input
@@ -403,17 +402,17 @@ function PackagesContent() {
                   value={stateFilter}
                   onChange={(e) => setStateFilter(e.target.value)}
                   placeholder="e.g. Goa, Kerala, Himachal..."
-                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
               </div>
 
               {/* Price Range Slider */}
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     Max Price
                   </label>
-                  <span className="text-xs font-bold text-purple-600 dark:text-purple-400">
+                  <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
                     Up to ₹{maxPrice.toLocaleString()}
                   </span>
                 </div>
@@ -424,19 +423,19 @@ function PackagesContent() {
                   step={1000}
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 mt-2"
                 />
               </div>
 
               {/* Sort By Custom Dropdown with Icons */}
               <div ref={sortRef} className="relative z-40">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
-                  <ArrowUpDown className="w-3.5 h-3.5 text-amber-500" /> Sort By
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-slate-500" /> Sort By
                 </label>
                 <button
                   type="button"
                   onClick={() => setSortDropdownOpen(!sortDropdownOpen)}
-                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 cursor-pointer flex items-center justify-between text-left"
+                  className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer flex items-center justify-between text-left"
                 >
                   <div className="flex items-center gap-2 truncate">
                     {(() => {
@@ -444,18 +443,18 @@ function PackagesContent() {
                       const Icon = selected.icon;
                       return (
                         <>
-                          <Icon className={`w-4 h-4 ${selected.color} flex-shrink-0`} />
-                          <span className="truncate font-semibold text-xs sm:text-sm">{selected.label}</span>
+                          <Icon className={`w-3.5 h-3.5 ${selected.color} flex-shrink-0`} />
+                          <span className="truncate font-medium text-xs sm:text-sm">{selected.label}</span>
                         </>
                       );
                     })()}
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${sortDropdownOpen ? 'rotate-180 text-purple-600' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${sortDropdownOpen ? 'rotate-180 text-blue-600' : ''}`} />
                 </button>
 
                 {/* Dropdown Menu */}
                 {sortDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700 py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-slate-100 dark:divide-slate-800">
+                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1 z-50 divide-y divide-slate-100 dark:divide-slate-800">
                     {SORT_OPTIONS.map((opt) => {
                       const Icon = opt.icon;
                       const isSelected = sortBy === opt.value;
@@ -467,17 +466,17 @@ function PackagesContent() {
                             setSortBy(opt.value as typeof sortBy);
                             setSortDropdownOpen(false);
                           }}
-                          className={`w-full px-3.5 py-2 text-xs sm:text-sm font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                          className={`w-full px-3 py-2 text-xs sm:text-sm font-medium flex items-center justify-between transition text-left cursor-pointer ${
                             isSelected
-                              ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-300 font-bold'
+                              ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-semibold'
                               : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                           }`}
                         >
-                          <div className="flex items-center gap-2.5">
-                            <Icon className={`w-4 h-4 ${opt.color}`} />
+                          <div className="flex items-center gap-2">
+                            <Icon className={`w-3.5 h-3.5 ${opt.color}`} />
                             <span>{opt.label}</span>
                           </div>
-                          {isSelected && <Check className="w-4 h-4 text-purple-600 dark:text-purple-400 font-bold" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 font-bold" />}
                         </button>
                       );
                     })}
@@ -489,14 +488,14 @@ function PackagesContent() {
             {/* Sub-bar: Active Filter Chips & View Mode Switcher */}
             <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-slate-500 dark:text-slate-400">
+                <span className="font-medium text-slate-500 dark:text-slate-400">
                   Showing <strong className="text-slate-900 dark:text-white font-bold">{filteredPackages.length}</strong> destination{filteredPackages.length !== 1 ? 's' : ''}
                 </span>
 
                 {(search || stateFilter || (selectedCategory && selectedCategory !== 'All') || maxPrice < 45000) && (
                   <button
                     onClick={clearFilters}
-                    className="text-rose-500 hover:text-rose-600 font-semibold underline ml-2 cursor-pointer"
+                    className="text-rose-500 hover:text-rose-600 font-medium underline ml-2 cursor-pointer text-xs"
                   >
                     Reset all filters
                   </button>
@@ -504,28 +503,28 @@ function PackagesContent() {
               </div>
 
               {/* Grid / List View Switcher */}
-              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded-lg transition ${
+                  className={`p-1.5 rounded transition cursor-pointer ${
                     viewMode === 'grid'
-                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-cyan-400 shadow-sm'
+                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
                       : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                   }`}
                   title="Grid view"
                 >
-                  <LayoutGrid className="w-4 h-4" />
+                  <LayoutGrid className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-1.5 rounded-lg transition ${
+                  className={`p-1.5 rounded transition cursor-pointer ${
                     viewMode === 'list'
-                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-cyan-400 shadow-sm'
+                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-xs'
                       : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                   }`}
                   title="List view"
                 >
-                  <List className="w-4 h-4" />
+                  <List className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -535,26 +534,26 @@ function PackagesContent() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-white dark:bg-slate-900 rounded-3xl h-96 animate-pulse border border-slate-200 dark:border-slate-800" />
+                <div key={i} className="bg-white dark:bg-slate-900 rounded-xl h-96 animate-pulse border border-slate-200 dark:border-slate-800" />
               ))}
             </div>
           ) : filteredPackages.length === 0 ? (
-            <div className="text-center py-24 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
-              <Globe className="w-16 h-16 text-slate-300 dark:text-slate-600 mx-auto mb-4 animate-float" />
-              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">No matching packages found</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-6">
+            <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+              <Globe className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1.5">No matching packages found</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-5">
                 Try adjusting your search criteria, price range, or category filter to discover other escapes.
               </p>
               <button
                 onClick={clearFilters}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-2.5 rounded-full transition"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-5 py-2.5 rounded-lg transition cursor-pointer"
               >
                 Clear All Filters
               </button>
             </div>
           ) : viewMode === 'grid' ? (
-            /* GRID VIEW - MakeMyTrip & Booking.com Standard */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            /* GRID VIEW */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredPackages.map((pkg) => {
                 const originalPrice = Math.round(pkg.pricePerPerson * 1.18);
                 const discountAmount = originalPrice - pkg.pricePerPerson;
@@ -563,10 +562,10 @@ function PackagesContent() {
                   <Link
                     key={pkg.id}
                     href={getPkgUrl(pkg.id)}
-                    className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                    className="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
                   >
                     {/* Card Media Header */}
-                    <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                    <div className="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-800">
                       {pkg.imageUrl ? (
                         <img
                           src={pkg.imageUrl}
@@ -577,14 +576,14 @@ function PackagesContent() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-slate-400">
-                          <Globe className="w-16 h-16" />
+                          <Globe className="w-12 h-12" />
                         </div>
                       )}
                       
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/20" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
 
                       {/* Category Tag */}
-                      <span className="absolute top-3.5 left-3.5 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20 shadow-sm">
+                      <span className="absolute top-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20 shadow-sm">
                         {pkg.category}
                       </span>
 
@@ -596,13 +595,13 @@ function PackagesContent() {
 
                         if (isVipUser) {
                           return (
-                            <span className="absolute top-3.5 right-14 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 border border-amber-300">
+                            <span className="absolute top-3 right-12 bg-amber-500 text-slate-950 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 border border-amber-300">
                               <Crown className="w-3 h-3 fill-slate-950" /> VIP {vipDeal.discountType === 'PERCENTAGE' ? `${vipDeal.discountValue}% OFF` : `₹${vipDeal.discountValue} OFF`}
                             </span>
                           );
                         }
                         return (
-                          <span className="absolute top-3.5 right-14 bg-slate-900/90 backdrop-blur text-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-md flex items-center gap-1">
+                          <span className="absolute top-3 right-12 bg-slate-900/90 text-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm flex items-center gap-1">
                             <Lock className="w-2.5 h-2.5 text-amber-400" /> VIP Deal
                           </span>
                         );
@@ -612,11 +611,11 @@ function PackagesContent() {
                       {user?.role !== 'ADMIN' && (
                         <button
                           onClick={(e) => toggleWishlist(e, pkg.id)}
-                          className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-transform"
+                          className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform cursor-pointer"
                           title={wishlisted.has(pkg.id) ? 'Remove from wishlist' : 'Save to wishlist'}
                         >
                           <Heart
-                            className={`w-4 h-4 transition ${
+                            className={`w-3.5 h-3.5 transition ${
                               wishlisted.has(pkg.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-500 dark:text-slate-400'
                             }`}
                           />
@@ -624,48 +623,48 @@ function PackagesContent() {
                       )}
 
                       {/* Location & Seats Pill */}
-                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
-                        <span className="flex items-center gap-1 font-semibold drop-shadow text-slate-100">
+                      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-xs text-white">
+                        <span className="flex items-center gap-1 font-medium text-slate-100">
                           <MapPin className="w-3.5 h-3.5 text-rose-400" /> {pkg.destination}, {pkg.state}
                         </span>
-                        <span className="bg-emerald-950/80 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-emerald-300 border border-emerald-500/30">
+                        <span className="bg-emerald-950/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] font-semibold text-emerald-300 border border-emerald-500/30">
                           {pkg.availableSeats} seats left
                         </span>
                       </div>
                     </div>
 
                     {/* Card Content */}
-                    <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div className="p-4 flex-1 flex flex-col justify-between">
                       <div>
                         {/* Rating Row */}
-                        <div className="flex items-center gap-2 mb-2 text-xs">
-                          <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-extrabold px-2 py-0.5 rounded flex items-center gap-1 text-[11px]">
+                        <div className="flex items-center gap-2 mb-1.5 text-xs">
+                          <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-bold px-1.5 py-0.2 rounded flex items-center gap-1 text-[10px]">
                             <Star className="w-3 h-3 fill-amber-500 text-amber-500" /> 4.8
                           </span>
-                          <span className="text-slate-500 dark:text-slate-400 text-[11px] font-medium">
-                            (120+ verified travelers)
+                          <span className="text-slate-500 dark:text-slate-400 text-[10px]">
+                            (120+ verified explorers)
                           </span>
                         </div>
 
-                        <h3 className="font-bold text-slate-900 dark:text-white text-base sm:text-lg mb-1.5 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">
+                        <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
                           {pkg.name}
                         </h3>
 
-                        <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 leading-relaxed mb-4">
+                        <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 leading-relaxed mb-3">
                           {pkg.shortDescription}
                         </p>
 
                         {/* Specs Badge Pills */}
-                        <div className="flex flex-wrap gap-1.5 text-[11px] text-slate-600 dark:text-slate-300 font-medium mb-4">
-                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md flex items-center gap-1 border border-slate-200/60 dark:border-slate-700/60">
-                            <Clock className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+                        <div className="flex flex-wrap gap-1.5 text-[11px] text-slate-600 dark:text-slate-300 font-medium mb-3">
+                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded flex items-center gap-1 border border-slate-200 dark:border-slate-700">
+                            <Clock className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                             {pkg.durationDays}D / {pkg.durationNights}N
                           </span>
-                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md flex items-center gap-1 border border-slate-200/60 dark:border-slate-700/60">
+                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded flex items-center gap-1 border border-slate-200 dark:border-slate-700">
                             <Hotel className="w-3 h-3 text-amber-500" />
                             {pkg.hotelCategory}
                           </span>
-                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md flex items-center gap-1 border border-slate-200/60 dark:border-slate-700/60">
+                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded flex items-center gap-1 border border-slate-200 dark:border-slate-700">
                             <Utensils className="w-3 h-3 text-emerald-500" />
                             Meals Incl.
                           </span>
@@ -673,25 +672,25 @@ function PackagesContent() {
                       </div>
 
                       {/* Bottom Price & CTA */}
-                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                      <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-slate-400 line-through font-medium">
+                            <span className="text-xs text-slate-400 line-through">
                               ₹{originalPrice.toLocaleString()}
                             </span>
-                            <span className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-black px-1.5 py-0.2 rounded">
+                            <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-1.5 py-0.2 rounded border border-emerald-200 dark:border-emerald-800">
                               SAVE ₹{discountAmount.toLocaleString()}
                             </span>
                           </div>
-                          <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                          <div className="text-xl font-bold text-slate-900 dark:text-white leading-tight">
                             ₹{pkg.pricePerPerson.toLocaleString()}
                           </div>
-                          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
                             per person • taxes included
                           </span>
                         </div>
 
-                        <span className="inline-flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all group-hover:scale-105">
+                        <span className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition-colors">
                           <span>View Details</span>
                           <ChevronRight className="w-3.5 h-3.5" />
                         </span>
@@ -702,7 +701,7 @@ function PackagesContent() {
               })}
             </div>
           ) : (
-            /* LIST VIEW - MakeMyTrip & Booking.com Standard */
+            /* LIST VIEW */
             <div className="space-y-4">
               {filteredPackages.map((pkg) => {
                 const originalPrice = Math.round(pkg.pricePerPerson * 1.18);
@@ -712,9 +711,9 @@ function PackagesContent() {
                   <Link
                     key={pkg.id}
                     href={getPkgUrl(pkg.id)}
-                    className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row"
+                    className="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row"
                   >
-                    <div className="md:w-72 h-52 md:h-auto relative overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+                    <div className="md:w-72 h-48 md:h-auto relative overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
                       <img
                         src={pkg.imageUrl || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'}
                         alt={pkg.name}
@@ -722,7 +721,7 @@ function PackagesContent() {
                         decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <span className="absolute top-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
+                      <span className="absolute top-3 left-3 bg-slate-900/85 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/20">
                         {pkg.category}
                       </span>
 
@@ -734,33 +733,33 @@ function PackagesContent() {
 
                         if (isVipUser) {
                           return (
-                            <span className="absolute bottom-3 left-3 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 border border-amber-300">
+                            <span className="absolute bottom-3 left-3 bg-amber-500 text-slate-950 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 border border-amber-300">
                               <Crown className="w-3 h-3 fill-slate-950" /> VIP {vipDeal.discountType === 'PERCENTAGE' ? `${vipDeal.discountValue}% OFF` : `₹${vipDeal.discountValue} OFF`}
                             </span>
                           );
                         }
                         return (
-                          <span className="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur text-amber-300 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-md flex items-center gap-1">
+                          <span className="absolute bottom-3 left-3 bg-slate-900/90 text-amber-300 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-amber-500/40 shadow-sm flex items-center gap-1">
                             <Lock className="w-2.5 h-2.5 text-amber-400" /> VIP Exclusive
                           </span>
                         );
                       })()}
                     </div>
 
-                    <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div className="p-5 flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex items-start justify-between gap-4 mb-2">
                           <div>
                             <div className="flex items-center gap-2 mb-1 text-xs">
-                              <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-extrabold px-1.5 py-0.2 rounded flex items-center gap-1 text-[10px]">
+                              <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 font-bold px-1.5 py-0.2 rounded flex items-center gap-1 text-[10px]">
                                 <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" /> 4.8
                               </span>
-                              <span className="text-slate-500 text-[11px]">120+ reviews</span>
+                              <span className="text-slate-500 text-[10px]">120+ reviews</span>
                             </div>
-                            <h3 className="font-bold text-slate-900 dark:text-white text-xl group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                            <h3 className="font-bold text-slate-900 dark:text-white text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                               {pkg.name}
                             </h3>
-                            <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5 font-medium">
+                            <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                               <MapPin className="w-3.5 h-3.5 text-rose-500" /> {pkg.destination}, {pkg.state}
                             </p>
                           </div>
@@ -768,10 +767,10 @@ function PackagesContent() {
                           {user?.role !== 'ADMIN' && (
                             <button
                               onClick={(e) => toggleWishlist(e, pkg.id)}
-                              className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:scale-110 transition"
+                              className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:scale-110 transition cursor-pointer"
                             >
                               <Heart
-                                className={`w-4 h-4 ${
+                                className={`w-3.5 h-3.5 ${
                                   wishlisted.has(pkg.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-400'
                                 }`}
                               />
@@ -779,45 +778,45 @@ function PackagesContent() {
                           )}
                         </div>
 
-                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-3">
                           {pkg.shortDescription}
                         </p>
 
                         <div className="flex flex-wrap gap-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
-                          <span className="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md flex items-center gap-1 border border-slate-200/60 dark:border-slate-700/60">
-                            <Clock className="w-3.5 h-3.5 text-purple-600" /> {pkg.durationDays}D / {pkg.durationNights}N
+                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded flex items-center gap-1 border border-slate-200 dark:border-slate-700">
+                            <Clock className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> {pkg.durationDays}D / {pkg.durationNights}N
                           </span>
-                          <span className="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md flex items-center gap-1 border border-slate-200/60 dark:border-slate-700/60">
+                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded flex items-center gap-1 border border-slate-200 dark:border-slate-700">
                             <Hotel className="w-3.5 h-3.5 text-amber-500" /> {pkg.hotelCategory}
                           </span>
-                          <span className="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md flex items-center gap-1 border border-slate-200/60 dark:border-slate-700/60">
+                          <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded flex items-center gap-1 border border-slate-200 dark:border-slate-700">
                             <Utensils className="w-3.5 h-3.5 text-emerald-500" /> Meals Incl.
                           </span>
-                          <span className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 rounded-md font-semibold border border-emerald-200 dark:border-emerald-800">
+                          <span className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded font-semibold border border-emerald-200 dark:border-emerald-800 text-[11px]">
                             {pkg.availableSeats} Seats Left
                           </span>
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs text-slate-400 line-through font-medium">
+                            <span className="text-xs text-slate-400 line-through">
                               ₹{originalPrice.toLocaleString()}
                             </span>
-                            <span className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-black px-1.5 py-0.2 rounded">
+                            <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-1.5 py-0.2 rounded border border-emerald-200 dark:border-emerald-800">
                               SAVE ₹{discountAmount.toLocaleString()}
                             </span>
                           </div>
-                          <div className="text-2xl font-black text-slate-900 dark:text-white">
+                          <div className="text-xl font-bold text-slate-900 dark:text-white">
                             ₹{pkg.pricePerPerson.toLocaleString()}
                           </div>
-                          <span className="text-[10px] text-slate-500 block font-medium">per person • taxes included</span>
+                          <span className="text-[10px] text-slate-500 block">per person • taxes included</span>
                         </div>
 
-                        <span className="inline-flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-sm">
+                        <span className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg transition shadow-sm">
                           <span>View Package</span>
-                          <ChevronRight className="w-4 h-4" />
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
                     </div>

@@ -22,7 +22,7 @@ const getPasswordStrength = (password: string) => {
   return { score, label: 'Strong', color: 'bg-green-500' };
 };
 
-const inputCls = "w-full bg-white/20 border border-white/40 text-white placeholder-white/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/25";
+const inputCls = "w-full bg-white/20 border border-white/40 text-white placeholder-white/60 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white/25";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -173,51 +173,51 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 py-8">
-      {/* Background — Majestic Scenic Alpine Sunset (Updated for Signup) */}
+      {/* Background — Majestic Scenic Alpine Sunset */}
       <div className="absolute inset-0 z-0">
         <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600" alt="bg" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/85 via-black/60 to-purple-900/80 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs" />
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="bg-white/10 backdrop-blur-2xl border border-white/25 rounded-3xl p-8 shadow-2xl shadow-purple-950/60">
-          <div className="text-center mb-7">
-            <Link href="/" className="inline-flex items-center gap-3 group mb-2">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-500 via-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform duration-300">
-                <Compass className="w-6 h-6 text-white" />
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 shadow-2xl backdrop-blur-md">
+          <div className="text-center mb-6">
+            <Link href="/" className="inline-flex items-center gap-2.5 group mb-2">
+              <div className="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
+                <Compass className="w-5 h-5" />
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-extrabold text-2xl tracking-tight text-white group-hover:opacity-95 leading-none">
+                <span className="font-bold text-2xl tracking-tight text-white leading-none">
                   TripEase
                 </span>
-                <span className="text-[10px] font-bold text-amber-400 tracking-wider uppercase mt-1 pl-1">
+                <span className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-1 pl-0.5">
                   Explore India
                 </span>
               </div>
             </Link>
-            <p className="text-white text-sm mt-1 font-medium">Create your free account</p>
+            <p className="text-slate-400 text-sm mt-1">Create your traveler account</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
             <div>
-              <label className="block text-sm font-semibold text-white mb-1.5">Full Name</label>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
+                <User className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                 <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="John Doe" className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium" />
+                  placeholder="John Doe" className="w-full bg-slate-800/90 border border-slate-700 text-white placeholder-slate-500 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white mb-1.5">Email</label>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
+                <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                 <input type="email" value={form.email}
                   onChange={(e) => handleEmailChange(e.target.value)}
-                  placeholder="you@example.com" className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium" />
+                  placeholder="you@example.com" className="w-full bg-slate-800/90 border border-slate-700 text-white placeholder-slate-500 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium" />
                 {validatingEmail && (
-                  <div className="absolute right-3 top-3.5">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div className="absolute right-3 top-3">
+                    <div className="w-4 h-4 border-2 border-slate-400 border-t-white rounded-full animate-spin"></div>
                   </div>
                 )}
               </div>
@@ -235,43 +235,43 @@ export default function RegisterPage() {
               )}
             </div>
 
-            {/* Mobile Number with Custom Project-Handled Country Code Dropdown */}
+            {/* Mobile Number with Country Code Dropdown */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-semibold text-white">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
                   Mobile Number <span className="text-rose-400">*</span>
                 </label>
                 <span className={`text-[10px] font-mono font-bold ${
-                  phone.length === 10 ? 'text-emerald-400' : 'text-amber-300'
+                  phone.length === 10 ? 'text-emerald-400' : 'text-amber-400'
                 }`}>
                   {phone.length}/10 digits
                 </span>
               </div>
               <div className="flex gap-2">
-                {/* Custom Country Code Dropdown */}
+                {/* Country Code Dropdown */}
                 <div className="relative" ref={countryRef}>
                   <button
                     type="button"
                     onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                    className={`h-[46px] bg-white/15 border rounded-xl px-2.5 text-xs text-white font-bold flex items-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm min-w-[95px] justify-between ${
+                    className={`h-[42px] bg-slate-800/90 border rounded-lg px-2.5 text-xs text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer min-w-[90px] justify-between ${
                       countryDropdownOpen
-                        ? 'border-purple-300 ring-2 ring-purple-400/40 bg-white/25'
-                        : 'border-white/30 hover:border-white/50 hover:bg-white/20'
+                        ? 'border-blue-500 ring-1 ring-blue-500 bg-slate-800'
+                        : 'border-slate-700 hover:border-slate-600'
                     }`}
                   >
                     <div className="flex items-center gap-1.5">
-                      <span className="text-base leading-none">
+                      <span className="text-sm leading-none">
                         {(COUNTRY_CODES.find((c) => c.code === countryCode) || COUNTRY_CODES[0]).flag}
                       </span>
                       <span className="font-mono text-xs">
                         {(COUNTRY_CODES.find((c) => c.code === countryCode) || COUNTRY_CODES[0]).code}
                       </span>
                     </div>
-                    <ChevronDown className={`w-3.5 h-3.5 text-white/70 transition-transform duration-200 ${countryDropdownOpen ? 'rotate-180 text-white' : ''}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${countryDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {countryDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-64 bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-2xl border border-purple-500/30 py-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-150 divide-y divide-white/10 text-white">
+                    <div className="absolute top-full left-0 mt-1.5 w-64 bg-slate-900 rounded-xl shadow-xl border border-slate-800 py-1 z-50 max-h-56 overflow-y-auto divide-y divide-slate-800 text-white">
                       {COUNTRY_CODES.map((c) => {
                         const isSelected = countryCode === c.code;
                         return (
@@ -282,20 +282,20 @@ export default function RegisterPage() {
                               setCountryCode(c.code);
                               setCountryDropdownOpen(false);
                             }}
-                            className={`w-full px-3.5 py-2 text-xs font-semibold flex items-center justify-between transition text-left cursor-pointer ${
+                            className={`w-full px-3 py-2 text-xs font-medium flex items-center justify-between transition text-left cursor-pointer ${
                               isSelected
-                                ? 'bg-purple-600/50 text-white font-bold'
-                                : 'text-slate-200 hover:bg-white/10'
+                                ? 'bg-blue-600 text-white font-semibold'
+                                : 'text-slate-300 hover:bg-slate-800'
                             }`}
                           >
                             <div className="flex items-center gap-2">
                               <span className="text-base">{c.flag}</span>
                               <div>
-                                <span className="font-bold">{c.name}</span>
-                                <span className="text-[10px] text-white/60 block font-mono">{c.code}</span>
+                                <span className="font-semibold">{c.name}</span>
+                                <span className="text-[10px] text-slate-400 block font-mono">{c.code}</span>
                               </div>
                             </div>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-purple-300 font-bold" />}
+                            {isSelected && <Check className="w-3.5 h-3.5 text-white font-bold" />}
                           </button>
                         );
                       })}
@@ -304,7 +304,7 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="relative flex-1">
-                  <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
+                  <Phone className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                   <input
                     type="tel"
                     value={phone}
@@ -315,21 +315,21 @@ export default function RegisterPage() {
                       if (error.includes('mobile number')) setError('');
                     }}
                     placeholder="9876543210 (10 digits)"
-                    className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-mono tracking-wide font-medium"
+                    className="w-full bg-slate-800/90 border border-slate-700 text-white placeholder-slate-500 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono font-medium"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white mb-1.5">Password</label>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-white/70" />
+                <Lock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                 <input type={showPassword ? 'text' : 'password'} value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  placeholder="••••••••" className="w-full bg-white/15 border border-white/30 text-white placeholder-white/50 rounded-xl pl-10 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white/20 font-medium" />
+                  placeholder="••••••••" className="w-full bg-slate-800/90 border border-slate-700 text-white placeholder-slate-500 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-medium" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3.5 text-white/70 hover:text-white transition cursor-pointer">
+                  className="absolute right-3 top-3 text-slate-400 hover:text-white transition cursor-pointer">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
@@ -337,17 +337,17 @@ export default function RegisterPage() {
                 <div className="mt-2">
                   <div className="flex gap-1 mb-1">
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${i <= strength.score ? strength.color : 'bg-white/25'}`} />
+                      <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${i <= strength.score ? strength.color : 'bg-slate-800'}`} />
                     ))}
                   </div>
-                  <p className={`text-xs font-semibold ${strength.score >= 3 ? 'text-green-300' : strength.score === 2 ? 'text-orange-300' : 'text-red-300'}`}>
+                  <p className={`text-xs font-semibold ${strength.score >= 3 ? 'text-emerald-400' : strength.score === 2 ? 'text-amber-400' : 'text-rose-400'}`}>
                     Strength: {strength.label}{strength.score < 3 ? ' — add uppercase, numbers or symbols' : ''}
                   </p>
                 </div>
               )}
             </div>
 
-            {/* Terms & Conditions Agreement Checkbox with Mandatory Read Lock */}
+            {/* Terms & Conditions Agreement Checkbox */}
             <div className="flex items-start gap-2.5 pt-1">
               <input
                 type="checkbox"
@@ -364,7 +364,7 @@ export default function RegisterPage() {
                   setAgreeTerms(e.target.checked);
                   if (e.target.checked && error.includes('Terms')) setError('');
                 }}
-                className="mt-0.5 w-4 h-4 rounded border-white/40 bg-white/20 text-purple-600 focus:ring-purple-400 focus:ring-offset-0 cursor-pointer accent-purple-500"
+                className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-800 text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600"
               />
               <label 
                 htmlFor="agreeTerms" 
@@ -376,7 +376,7 @@ export default function RegisterPage() {
                     else if (!hasReadPrivacy) setPolicyModal('privacy');
                   }
                 }}
-                className="text-xs text-white/90 leading-relaxed cursor-pointer select-none"
+                className="text-xs text-slate-300 leading-relaxed cursor-pointer select-none"
               >
                 I have read and agree to the{' '}
                 <button
@@ -385,13 +385,13 @@ export default function RegisterPage() {
                     e.stopPropagation();
                     setPolicyModal('terms');
                   }}
-                  className="text-purple-300 hover:text-white underline font-bold cursor-pointer inline-flex items-center gap-0.5"
+                  className="text-blue-400 hover:text-blue-300 underline font-semibold cursor-pointer inline-flex items-center gap-0.5"
                 >
                   <span>Terms of Service</span>
                   {hasReadTerms ? (
-                    <span className="text-emerald-400 font-black text-[11px] ml-0.5">✓</span>
+                    <span className="text-emerald-400 font-bold text-[11px] ml-0.5">✓</span>
                   ) : (
-                    <span className="text-[10px] ml-1 bg-purple-400/20 border border-purple-400/40 text-purple-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
+                    <span className="text-[10px] ml-1 bg-slate-800 border border-slate-700 text-slate-300 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
                   )}
                 </button>{' '}
                 and{' '}
@@ -401,37 +401,37 @@ export default function RegisterPage() {
                     e.stopPropagation();
                     setPolicyModal('privacy');
                   }}
-                  className="text-purple-300 hover:text-white underline font-bold cursor-pointer inline-flex items-center gap-0.5"
+                  className="text-blue-400 hover:text-blue-300 underline font-semibold cursor-pointer inline-flex items-center gap-0.5"
                 >
                   <span>Privacy Policy</span>
                   {hasReadPrivacy ? (
-                    <span className="text-emerald-400 font-black text-[11px] ml-0.5">✓</span>
+                    <span className="text-emerald-400 font-bold text-[11px] ml-0.5">✓</span>
                   ) : (
-                    <span className="text-[10px] ml-1 bg-purple-400/20 border border-purple-400/40 text-purple-200 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
+                    <span className="text-[10px] ml-1 bg-slate-800 border border-slate-700 text-slate-300 px-1.5 py-0.2 rounded font-normal">Tap to read</span>
                   )}
                 </button>.
               </label>
             </div>
 
-            {error && <div className="bg-red-500/25 border border-red-400/50 rounded-xl px-4 py-3 text-sm text-white font-medium">{error}</div>}
+            {error && <div className="bg-rose-950/60 border border-rose-800 rounded-lg px-3.5 py-2.5 text-xs text-rose-200 font-medium">{error}</div>}
 
             <button type="submit" disabled={loading || !canSubmit}
-              className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 cursor-pointer">
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer text-sm">
               {loading ? 'Creating account...' : (<>Create Account <ArrowRight className="w-4 h-4" /></>)}
             </button>
             {!canSubmit && form.password.length > 0 && strength.score < 3 && (
-              <p className="text-xs text-center text-orange-300 font-medium">Improve password strength to enable signup</p>
+              <p className="text-xs text-center text-amber-400 font-medium">Improve password strength to enable signup</p>
             )}
             {!canSubmit && form.password.length > 0 && strength.score >= 3 && !agreeTerms && (
-              <p className="text-xs text-center text-purple-200 font-medium">
+              <p className="text-xs text-center text-slate-400 font-medium">
                 {!hasReadTerms || !hasReadPrivacy ? 'Please read the Terms & Privacy Policy to enable agreement' : 'Please tick the box above to accept the Terms & Conditions'}
               </p>
             )}
           </form>
 
-          <p className="text-center text-sm text-white/80 mt-6">
+          <p className="text-center text-xs text-slate-400 mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-purple-300 hover:text-white font-bold underline transition-colors">Sign in</Link>
+            <Link href="/login" className="text-blue-400 hover:text-blue-300 font-semibold hover:underline transition-colors">Sign in</Link>
           </p>
         </div>
       </div>
