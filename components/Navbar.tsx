@@ -86,17 +86,17 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out pointer-events-none ${
-      scrolled ? 'pt-3 px-3 sm:px-6' : 'pt-0 px-0'
+    <header className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none ${
+      scrolled ? 'pt-3 px-3 sm:px-6 transition-[padding] duration-200 ease-out' : 'pt-0 px-0'
     }`}>
-      <div className={`transition-all duration-300 ease-in-out pointer-events-auto ${
+      <div className={`pointer-events-auto ${
         scrolled 
           ? (menuOpen 
-              ? 'max-w-6xl mx-auto px-4 sm:px-7 rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md' 
-              : 'max-w-6xl mx-auto px-4 sm:px-7 rounded-full bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md')
+              ? 'max-w-6xl mx-auto px-4 sm:px-7 rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md transition-all duration-200 ease-out' 
+              : 'max-w-6xl mx-auto px-4 sm:px-7 rounded-full bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md transition-all duration-200 ease-out')
           : 'w-full max-w-full px-4 sm:px-8 lg:px-12 rounded-none bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-xs'
       }`}>
-        <div className={`flex justify-between items-center transition-all duration-300 ease-in-out ${scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
+        <div className={`flex justify-between items-center ${scrolled ? 'h-14 sm:h-16 transition-all duration-200' : 'h-16 sm:h-20'}`}>
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
@@ -112,49 +112,64 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation - Single outer layer with clean spacious links */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+          {/* Desktop Navigation - Animated Minimalist Underlined Links */}
+          <nav className="hidden md:flex items-center gap-7 lg:gap-9">
             <Link
               href="/"
-              className={`text-sm transition-colors ${
+              className={`relative py-1 text-sm font-medium transition-colors group ${
                 isActive('/')
                   ? 'text-blue-600 dark:text-blue-400 font-bold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
               }`}
             >
-              Home
+              <span>Home</span>
+              <span className={`absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 ease-out ${
+                isActive('/')
+                  ? 'w-full bg-blue-600 dark:bg-blue-400'
+                  : 'w-0 group-hover:w-full bg-blue-500/70'
+              }`} />
             </Link>
 
             <Link
               href="/packages"
-              className={`text-sm transition-colors ${
+              className={`relative py-1 text-sm font-medium transition-colors group ${
                 isActive('/packages')
                   ? 'text-blue-600 dark:text-blue-400 font-bold'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
               }`}
             >
-              Packages
+              <span>Packages</span>
+              <span className={`absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 ease-out ${
+                isActive('/packages')
+                  ? 'w-full bg-blue-600 dark:bg-blue-400'
+                  : 'w-0 group-hover:w-full bg-blue-500/70'
+              }`} />
             </Link>
 
             {user && user.role !== 'ADMIN' && (
               <>
                 <Link
                   href="/my-bookings"
-                  className={`text-sm transition-colors ${
+                  className={`relative py-1 text-sm font-medium transition-colors group ${
                     isActive('/my-bookings')
                       ? 'text-blue-600 dark:text-blue-400 font-bold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
                   }`}
                 >
-                  My Bookings
+                  <span>My Bookings</span>
+                  <span className={`absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 ease-out ${
+                    isActive('/my-bookings')
+                      ? 'w-full bg-blue-600 dark:bg-blue-400'
+                      : 'w-0 group-hover:w-full bg-blue-500/70'
+                  }`} />
                 </Link>
 
                 <Link
                   href="/wishlist"
-                  className={`text-sm transition-colors flex items-center gap-1.5 relative ${
+                  className={`relative py-1 text-sm font-medium transition-colors group flex items-center gap-1.5 ${
                     isActive('/wishlist')
                       ? 'text-rose-600 dark:text-rose-400 font-bold'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 font-medium'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400'
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${isActive('/wishlist') ? 'fill-rose-600 dark:fill-rose-400 text-rose-600 dark:text-rose-400' : ''}`} />
@@ -164,6 +179,11 @@ export default function Navbar() {
                       {wishlistCount}
                     </span>
                   )}
+                  <span className={`absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 ease-out ${
+                    isActive('/wishlist')
+                      ? 'w-full bg-rose-500'
+                      : 'w-0 group-hover:w-full bg-rose-400/80'
+                  }`} />
                 </Link>
               </>
             )}
@@ -171,28 +191,38 @@ export default function Navbar() {
             {user && user.role === 'ADMIN' && (
               <Link
                 href="/admin"
-                className={`text-sm transition-colors flex items-center gap-1.5 ${
+                className={`relative py-1 text-sm font-semibold transition-colors group flex items-center gap-1.5 ${
                   pathname.startsWith('/admin')
                     ? 'text-blue-600 dark:text-blue-400 font-bold'
-                    : 'text-blue-600 dark:text-blue-400 hover:text-blue-700 font-semibold'
+                    : 'text-blue-600 dark:text-blue-400 hover:text-blue-700'
                 }`}
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>Admin Panel</span>
+                <span className={`absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 ease-out ${
+                  pathname.startsWith('/admin')
+                    ? 'w-full bg-blue-600 dark:bg-blue-400'
+                    : 'w-0 group-hover:w-full bg-blue-500/70'
+                }`} />
               </Link>
             )}
 
             {/* VIP Club placed at the very last position */}
             <Link
               href="/vip"
-              className={`text-sm transition-colors flex items-center gap-1.5 ${
+              className={`relative py-1 text-sm font-semibold transition-colors group flex items-center gap-1.5 ${
                 isActive('/vip')
                   ? 'text-amber-600 dark:text-amber-400 font-bold'
-                  : 'text-amber-600 dark:text-amber-400 hover:text-amber-700 font-semibold'
+                  : 'text-amber-600 dark:text-amber-400 hover:text-amber-700'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>VIP Club</span>
+              <span className={`absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 ease-out ${
+                isActive('/vip')
+                  ? 'w-full bg-amber-500'
+                  : 'w-0 group-hover:w-full bg-amber-400/80'
+              }`} />
             </Link>
           </nav>
 
