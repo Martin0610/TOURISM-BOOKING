@@ -163,9 +163,9 @@ export default function VipClubPage() {
                     <Crown className="w-6 h-6 fill-slate-950" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
-                        Active VIP Elite Member
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1.5 shadow-xs">
+                        <Crown className="w-3 h-3 text-amber-600 fill-amber-500" /> Active VIP Elite Member
                       </span>
                     </div>
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -227,11 +227,6 @@ export default function VipClubPage() {
                                 {deal.title}
                               </h4>
                             </div>
-                            {deal.discount && (
-                              <span className="bg-amber-100 dark:bg-amber-950/60 border border-amber-300 text-amber-800 dark:text-amber-300 text-xs font-bold px-2 py-0.5 rounded shadow-xs whitespace-nowrap">
-                                {deal.discount}
-                              </span>
-                            )}
                           </div>
 
                           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{deal.message}</p>
