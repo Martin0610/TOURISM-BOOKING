@@ -397,7 +397,7 @@ export default function Home() {
       <Navbar />
       <WhatsAppButton />
 
-      <section className={`relative min-h-[94vh] flex items-center justify-center pt-28 pb-16 px-4 overflow-hidden bg-gradient-to-b ${currentTheme.bgGrad} transition-colors duration-1000`}>
+      <section className={`relative min-h-screen flex items-center justify-center pt-32 pb-20 px-4 overflow-hidden bg-gradient-to-b ${currentTheme.bgGrad} transition-colors duration-1000`}>
         <div className="absolute inset-0 z-0 overflow-hidden">
           {HERO_THEMES.map((theme, idx) => (
             <div

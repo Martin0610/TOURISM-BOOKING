@@ -286,7 +286,7 @@ function PackagesContent() {
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
         {/* Header Banner */}
-        <section className="relative bg-slate-900 text-white py-12 px-4 border-b border-slate-800 shadow-sm">
+        <section className="relative bg-slate-900 text-white pt-28 pb-12 px-4 border-b border-slate-800 shadow-sm">
           <div className="relative z-10 max-w-7xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-3.5 py-1 rounded-full text-xs font-medium text-slate-300 mb-3">
               <Compass className="w-3.5 h-3.5 text-blue-400" />
