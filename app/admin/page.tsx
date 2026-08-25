@@ -139,9 +139,9 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Revenue Bar Chart */}
           <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-4">Monthly Revenue</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-3 text-base">Monthly Revenue</h3>
             {stats.monthlyRevenue.length > 0 ? (
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={stats.monthlyRevenue}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} />
@@ -159,9 +159,9 @@ export default function AdminDashboard() {
 
           {/* Booking Status Pie */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-4">Booking Status</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-3 text-base">Booking Status</h3>
             {bookingStatusData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
                   <Pie data={bookingStatusData} cx="50%" cy="50%" innerRadius={55} outerRadius={80}
                     paddingAngle={4} dataKey="value">
@@ -176,68 +176,6 @@ export default function AdminDashboard() {
             ) : (
               <div className="h-48 flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm">No bookings yet.</div>
             )}
-          </div>
-        </div>
-
-        {/* Bottom Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {/* Recent Bookings */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
-              <h3 className="font-bold text-gray-800 dark:text-white">Recent Bookings</h3>
-              <a href="/admin/bookings" className="text-purple-600 dark:text-purple-400 text-sm font-semibold hover:underline">View all →</a>
-            </div>
-            <div className="divide-y divide-gray-50 dark:divide-gray-700">
-              {stats.recentBookings.length === 0 ? (
-                <p className="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">No bookings yet.</p>
-              ) : (
-                stats.recentBookings.map((booking) => (
-                  <div key={booking.id} className="px-5 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 dark:text-white truncate">{booking.package?.name}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">{booking.user?.name} · {booking.numberOfPeople} people</p>
-                    </div>
-                    <div className="text-right ml-3">
-                      <p className="text-sm font-semibold text-gray-800 dark:text-white">₹{booking.totalAmount.toLocaleString('en-IN')}</p>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColor[booking.status]}`}>
-                        {booking.status}
-                      </span>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          {/* Top Packages */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
-              <h3 className="font-bold text-gray-800 dark:text-white">Top Packages</h3>
-              <a href="/admin/packages" className="text-purple-600 dark:text-purple-400 text-sm font-semibold hover:underline">View all →</a>
-            </div>
-            <div className="divide-y divide-gray-50 dark:divide-gray-700">
-              {stats.topPackages.length === 0 ? (
-                <p className="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">No bookings yet.</p>
-              ) : (
-                stats.topPackages.map((tp, i) => (
-                  <div key={tp.packageId} className="px-5 py-3 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <span className="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-xs font-bold flex items-center justify-center flex-shrink-0">
-                      {i + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 dark:text-white truncate">{tp.package?.name}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />{tp.package?.destination}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-800 dark:text-white">{tp._count.packageId} bookings</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">₹{(tp._sum.totalAmount ?? 0).toLocaleString('en-IN')}</p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
           </div>
         </div>
       </div>
