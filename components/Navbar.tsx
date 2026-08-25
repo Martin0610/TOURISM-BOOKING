@@ -556,11 +556,13 @@ export default function Navbar() {
       </div>
 
       {/* In-Place Floating Auth Modal */}
-      <AuthModal
-        isOpen={authModalOpen}
-        initialMode={authModalMode}
-        onClose={() => setAuthModalOpen(false)}
-      />
+      <div className="pointer-events-auto">
+        <AuthModal
+          isOpen={authModalOpen}
+          initialMode={authModalMode}
+          onClose={() => setAuthModalOpen(false)}
+        />
+      </div>
     </header>
   );
 }

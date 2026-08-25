@@ -78,16 +78,22 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
   }, []);
 
   const strength = getPasswordStrength(regForm.password);
-  const canSubmitRegister = regForm.name && regForm.email && regForm.password && regPhone.replace(/\D/g, '').length === 10 && strength.score >= 3 && agreeTerms;
-  const canSubmitLogin = loginEmail.trim().length > 0 && loginPassword.length >= 6;
 
   if (!isOpen) return null;
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!loginEmail.trim()) {
+      setLoginError('Please enter your email address.');
+      return;
+    }
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginEmail.trim());
     if (!isValidEmail) {
       setLoginError('Please enter a valid email address (e.g. name@example.com)');
+      return;
+    }
+    if (!loginPassword) {
+      setLoginError('Please enter your password.');
       return;
     }
     if (loginPassword.length < 6) {
@@ -163,13 +169,38 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (regForm.password.length < 6) { setRegError('Password must be at least 6 characters long.'); return; }
-    if (strength.score < 3) { setRegError('Please choose a stronger password before signing up.'); return; }
-    if (!agreeTerms) { setRegError('Please read and tick the box to agree to the Terms of Service & Privacy Policy.'); return; }
-    
+    if (!regForm.name.trim()) {
+      setRegError('Please enter your full name.');
+      return;
+    }
+    if (!regForm.email.trim()) {
+      setRegError('Please enter your email address.');
+      return;
+    }
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regForm.email.trim());
+    if (!isValidEmail) {
+      setRegError('Please enter a valid email address.');
+      return;
+    }
     const digits = regPhone.replace(/\D/g, '');
     if (!digits || digits.length !== 10) {
       setRegError(`Please enter a valid 10-digit mobile number (${digits ? digits.length : 0}/10 digits entered).`);
+      return;
+    }
+    if (!regForm.password) {
+      setRegError('Please enter a password.');
+      return;
+    }
+    if (regForm.password.length < 6) {
+      setRegError('Password must be at least 6 characters long.');
+      return;
+    }
+    if (strength.score < 3) {
+      setRegError('Please choose a stronger password before signing up.');
+      return;
+    }
+    if (!agreeTerms) {
+      setRegError('Please read and tick the box to agree to the Terms of Service & Privacy Policy.');
       return;
     }
 
@@ -185,7 +216,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: regForm.name,
+          name: regForm.name.trim(),
           email: regForm.email.toLowerCase().trim(),
           password: regForm.password,
           phone: formattedPhone,
@@ -227,7 +258,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto pointer-events-auto">
       {/* Crisp Background Dimmer */}
       <div 
         className="fixed inset-0 bg-black/40 transition-opacity duration-200"
@@ -383,8 +414,8 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
 
               <button 
                 type="submit" 
-                disabled={loginLoading || !canSubmitLogin}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
+                disabled={loginLoading}
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
               >
                 {loginLoading ? 'Signing in...' : (<>Sign In <ArrowRight className="w-4 h-4" /></>)}
               </button>
@@ -640,7 +671,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
 
               <button 
                 type="submit" 
-                disabled={regLoading || !canSubmitRegister}
+                disabled={regLoading}
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer text-sm"
               >
                 {regLoading ? 'Creating account...' : (<>Create Account <ArrowRight className="w-4 h-4" /></>)}
