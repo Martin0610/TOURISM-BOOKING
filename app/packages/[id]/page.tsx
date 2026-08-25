@@ -41,13 +41,32 @@ export default function PackageDetailPage() {
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [isUserVip, setIsUserVip] = useState(false);
 
-  // Redirect unsigned users to login with redirect back to this package
+  // Restore pending booking details if returning from login
   useEffect(() => {
-    if (!authLoading && !user && typeof window !== 'undefined' && !localStorage.getItem('token')) {
-      router.push(`/login?redirect=/packages/${id}`);
-      return;
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem(`pending_booking_${id}`);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed) {
+            setForm((prev) => ({
+              ...prev,
+              travelDate: parsed.travelDate || prev.travelDate,
+              numberOfPeople: parsed.numberOfPeople || prev.numberOfPeople,
+              departureLocationId: parsed.departureLocationId || prev.departureLocationId,
+              countryCode: parsed.countryCode || prev.countryCode,
+              phone: parsed.phone || prev.phone,
+            }));
+            if (parsed.couponCode) {
+              setCouponCode(parsed.couponCode);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error reading pending booking:', err);
+      }
     }
-  }, [user, authLoading, id, router]);
+  }, [id]);
   
   // Booking Form State with Country Code
   const [form, setForm] = useState<{
@@ -257,11 +276,6 @@ export default function PackageDetailPage() {
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      toast.error('Please login to proceed with booking');
-      router.push('/login');
-      return;
-    }
     if (!form.travelDate) {
       setFormError('Please select a travel date.');
       return;
@@ -279,6 +293,25 @@ export default function PackageDetailPage() {
       setFormError(`Please enter a valid 10-digit mobile number (${digits.length}/10 digits entered).`);
       return;
     }
+
+    if (!user) {
+      // Save all entered details so they stay intact after login
+      if (typeof window !== 'undefined') {
+        const pendingData = {
+          travelDate: form.travelDate,
+          numberOfPeople: form.numberOfPeople,
+          departureLocationId: form.departureLocationId,
+          countryCode: form.countryCode,
+          phone: form.phone,
+          couponCode: couponResult?.code || couponCode,
+        };
+        sessionStorage.setItem(`pending_booking_${id}`, JSON.stringify(pendingData));
+      }
+      toast('Please sign in to confirm and proceed to pay.', { icon: '🔐' });
+      router.push(`/login?redirect=/packages/${id}`);
+      return;
+    }
+
     const formattedPhone = formatPhoneNumber(form.countryCode, digits);
     setFormError('');
     setBookingLoading(true);
@@ -292,7 +325,10 @@ export default function PackageDetailPage() {
         couponCode: couponResult?.code || undefined,
         phone: formattedPhone,
       });
-      toast.success('Booking initialized!');
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem(`pending_booking_${id}`);
+      }
+      toast.success('Booking initialized! Proceeding to payment...');
       router.push(`/booking/${res.data.data.id}`);
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };
