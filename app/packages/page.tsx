@@ -60,7 +60,7 @@ function PackagesContent() {
   const couponParam = searchParams.get('coupon');
   const getPkgUrl = (pkgId: string) => {
     const q = couponParam ? `?coupon=${encodeURIComponent(couponParam)}` : '';
-    return user ? `/packages/${pkgId}${q}` : `/login?redirect=/packages/${pkgId}${q ? encodeURIComponent(q) : ''}`;
+    return `/packages/${pkgId}${q}`;
   };
 
   const getVipDealForPkg = (pkgId: string) => {

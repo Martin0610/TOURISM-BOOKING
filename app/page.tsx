@@ -367,7 +367,7 @@ export default function Home({ defaultAuth, redirectUrl }: { defaultAuth?: 'logi
         p.destination.toLowerCase().includes(pkgNameOrId.toLowerCase())
     );
     const targetId = found ? found.id : pkgNameOrId;
-    return user ? `/packages/${targetId}` : `/login?redirect=/packages/${targetId}`;
+    return `/packages/${targetId}`;
   };
 
   useEffect(() => {

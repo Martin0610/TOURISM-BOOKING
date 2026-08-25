@@ -16,6 +16,7 @@ import {
 import Link from 'next/link';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
+import AuthModal from '@/components/AuthModal';
 import { COUNTRY_CODES, parsePhoneNumber, formatPhoneNumber } from '@/lib/countryCodes';
 import { getAuthToken } from '@/lib/authStorage';
 
@@ -84,6 +85,7 @@ export default function PackageDetailPage() {
   });
   const [bookingLoading, setBookingLoading] = useState(false);
   const [formError, setFormError] = useState('');
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // Custom Dropdowns State & Refs (Project-handled custom select)
   const [departureDropdownOpen, setDepartureDropdownOpen] = useState(false);
@@ -295,7 +297,7 @@ export default function PackageDetailPage() {
     }
 
     if (!user) {
-      // Save all entered details so they stay intact after login
+      // Save all entered details so they stay intact
       if (typeof window !== 'undefined') {
         const pendingData = {
           travelDate: form.travelDate,
@@ -307,8 +309,8 @@ export default function PackageDetailPage() {
         };
         sessionStorage.setItem(`pending_booking_${id}`, JSON.stringify(pendingData));
       }
-      toast('Please sign in to confirm and proceed to pay.', { icon: '🔐' });
-      router.push(`/login?redirect=/packages/${id}`);
+      toast('Please sign in to proceed with your booking.', { icon: '🔐' });
+      setAuthModalOpen(true);
       return;
     }
 
@@ -1353,7 +1355,7 @@ export default function PackageDetailPage() {
 
                     {!user && (
                       <p className="text-[11px] text-center text-slate-400">
-                        You will be redirected to sign in before finalizing.
+                        Sign in to finalize your booking with group savings & voucher.
                       </p>
                     )}
                   </form>
@@ -1364,6 +1366,13 @@ export default function PackageDetailPage() {
         </div>
       </div>
       <Footer />
+
+      {/* Floating Auth Modal in-place over package details */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        redirectUrl={`/packages/${id}`}
+      />
     </>
   );
 }
