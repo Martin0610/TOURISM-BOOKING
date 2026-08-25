@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
 import PolicyModal, { PolicyType } from './PolicyModal';
+import { getAuthToken } from '@/lib/authStorage';
 
 export default function Footer() {
   const { user } = useAuth();
@@ -29,7 +30,7 @@ export default function Footer() {
 
   // Fetch VIP status for logged-in user
   useEffect(() => {
-    if (user && localStorage.getItem('token')) {
+    if (user && getAuthToken()) {
       api.get('/api/vip/status')
         .then((res) => {
           if (res.data?.data) {

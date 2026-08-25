@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Compass, Mail, Lock, ArrowRight, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { getAuthUser } from '@/lib/authStorage';
 
 function LoginContent() {
   const { login } = useAuth();
@@ -42,10 +43,9 @@ function LoginContent() {
     try {
       await login(form.email.trim().toLowerCase(), form.password);
       
-      // Get user from localStorage to check role
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        const user = JSON.parse(userStr);
+      // Get user from isolated session to check role
+      const user = getAuthUser();
+      if (user) {
         // Redirect based on role and redirect query param
         if (user.role === 'ADMIN') {
           router.push('/admin');

@@ -1,14 +1,15 @@
 import axios from 'axios';
+import { getAuthToken, clearAuthSession } from './authStorage';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || '',
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Attach JWT token to every request
+// Attach JWT token to every request (isolated per tab)
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
+    const token = getAuthToken();
     if (token) config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -25,8 +26,7 @@ api.interceptors.response.use(
 
       // Only purge and redirect if not already on an authentication page/endpoint
       if (!isAuthPage && !isAuthEndpoint) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        clearAuthSession();
         window.location.href = '/login';
       }
     }

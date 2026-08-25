@@ -17,6 +17,7 @@ import Link from 'next/link';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
 import { COUNTRY_CODES, parsePhoneNumber, formatPhoneNumber } from '@/lib/countryCodes';
+import { getAuthToken } from '@/lib/authStorage';
 
 interface Review {
   id: string;
@@ -139,7 +140,7 @@ export default function PackageDetailPage() {
         setAvailableCoupons(couponRes.data.data || []);
 
         // Check wishlist & VIP status if logged in
-        if (localStorage.getItem('token')) {
+        if (getAuthToken()) {
           try {
             const [wRes, vipRes] = await Promise.all([
               api.get('/api/wishlist').catch(() => ({ data: { data: [] } })),

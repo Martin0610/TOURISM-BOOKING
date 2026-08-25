@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import api from '@/lib/api';
+import { getAuthToken } from '@/lib/authStorage';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -40,7 +41,7 @@ export default function Navbar() {
   }, []);
 
   const fetchWishlistCount = () => {
-    if (user && user.role !== 'ADMIN' && localStorage.getItem('token')) {
+    if (user && user.role !== 'ADMIN' && getAuthToken()) {
       api.get('/api/wishlist')
         .then((res) => {
           if (res.data?.data) {

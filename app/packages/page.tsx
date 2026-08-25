@@ -16,6 +16,7 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import Footer from '@/components/Footer';
+import { getAuthToken } from '@/lib/authStorage';
 
 interface AvailableCoupon {
   id: string;
@@ -120,7 +121,7 @@ function PackagesContent() {
       .finally(() => setLoading(false));
 
     // Load wishlist
-    if (localStorage.getItem('token')) {
+    if (getAuthToken()) {
       api.get('/api/wishlist')
         .then((res) => {
           const ids = new Set<string>(res.data.data.map((w: { packageId: string }) => w.packageId));
