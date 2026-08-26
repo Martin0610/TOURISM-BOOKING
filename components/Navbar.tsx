@@ -99,15 +99,17 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none ${
-      scrolled ? 'pt-2.5 px-3 sm:px-6 transition-[padding] duration-300 ease-out' : 'pt-0 px-2 sm:px-4 transition-[padding] duration-300 ease-out'
+    <header className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-[padding] duration-300 ease-out ${
+      scrolled ? 'pt-2 px-3 sm:px-6' : 'pt-3 sm:pt-4 px-3 sm:px-6'
     }`}>
       <div className={`pointer-events-auto transition-all duration-300 ease-out ${
         scrolled 
           ? (menuOpen 
               ? 'max-w-5xl mx-auto px-4 sm:px-6 rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md' 
               : 'max-w-5xl mx-auto px-4 sm:px-6 rounded-full bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md')
-          : 'max-w-6xl mx-auto px-4 sm:px-8 rounded-b-2xl sm:rounded-b-3xl bg-white/95 dark:bg-slate-900/95 border-x border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md shadow-slate-900/5 dark:shadow-black/30'
+          : (menuOpen
+              ? 'max-w-6xl mx-auto px-4 sm:px-8 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md shadow-lg shadow-slate-900/5 dark:shadow-black/30'
+              : 'max-w-6xl mx-auto px-4 sm:px-8 rounded-full bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md shadow-lg shadow-slate-900/5 dark:shadow-black/30')
       }`}>
         <div className={`flex justify-between items-center transition-all duration-300 ease-out ${scrolled ? 'h-13 sm:h-14' : 'h-15 sm:h-16'}`}>
           {/* Brand Logo */}

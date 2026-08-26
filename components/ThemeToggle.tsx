@@ -51,7 +51,9 @@ export default function ThemeToggle() {
         title="Switch theme"
         aria-label="Switch theme"
       >
-        {resolvedTheme === 'dark' ? (
+        {theme === 'system' ? (
+          <Monitor className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+        ) : theme === 'dark' ? (
           <Moon className="w-4 h-4 text-slate-200" />
         ) : (
           <Sun className="w-4 h-4 text-amber-500" />
