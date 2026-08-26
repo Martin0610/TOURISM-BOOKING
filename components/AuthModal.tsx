@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -67,6 +68,9 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
   const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
   const [policyModal, setPolicyModal] = useState<PolicyType>(null);
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (countryRef.current && !countryRef.current.contains(event.target as Node)) {
@@ -77,27 +81,46 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
-  // Block background scrolling when AuthModal is open
+  // Block background scrolling on both html and body + passive touch/wheel prevention
   useEffect(() => {
     if (!isOpen) return;
-    const originalOverflow = document.body.style.overflow;
+
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
     const originalPaddingRight = document.body.style.paddingRight;
     const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 
+    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     if (scrollBarWidth > 0) {
       document.body.style.paddingRight = `${scrollBarWidth}px`;
     }
 
+    const preventScroll = (e: TouchEvent | WheelEvent) => {
+      const card = document.getElementById('auth-modal-card');
+      if (card && card.contains(e.target as Node)) {
+        return; // allow smooth scrolling inside the card
+      }
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      document.body.style.overflow = originalBodyOverflow;
       document.body.style.paddingRight = originalPaddingRight;
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
     };
   }, [isOpen]);
 
   const strength = getPasswordStrength(regForm.password);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -275,16 +298,19 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto pointer-events-auto overscroll-contain">
-      {/* Dark Overlay to Block Background Scrolling & Dim Screen */}
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 overflow-y-auto pointer-events-auto overscroll-contain">
+      {/* Deep Dark Overlay to Block Background Scrolling & Dim Screen */}
       <div 
-        className="fixed inset-0 bg-black/75 backdrop-blur-[2px] transition-opacity duration-200"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 touch-none"
         onClick={onClose}
       />
 
       {/* Floating Minimalist Auth Card */}
-      <div className="relative z-10 w-full max-w-md max-h-[92vh] overflow-y-auto no-scrollbar bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-7 animate-in fade-in zoom-in-95 duration-200 my-auto">
+      <div 
+        id="auth-modal-card"
+        className="relative z-10 w-full max-w-md max-h-[92vh] overflow-y-auto no-scrollbar bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-7 animate-in fade-in zoom-in-95 duration-200 my-auto"
+      >
         
         {/* Top Header Row */}
         <div className="flex items-center justify-between mb-5">
@@ -732,6 +758,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
         onClose={() => setPolicyModal(null)} 
         onAccept={handlePolicyAccept}
       />
-    </div>
+    </div>,
+    document.body
   );
 }
