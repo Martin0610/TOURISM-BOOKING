@@ -10,7 +10,15 @@ export default function ThemeToggle() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      const userCustomTheme = sessionStorage.getItem('user_custom_theme');
+      if (!userCustomTheme) {
+        setTheme('system');
+      }
+    }
+  }, [setTheme]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -29,9 +37,9 @@ export default function ThemeToggle() {
   }
 
   const options = [
+    { value: 'system', label: 'System', icon: Monitor },
     { value: 'light', label: 'Light', icon: Sun },
     { value: 'dark', label: 'Dark', icon: Moon },
-    { value: 'system', label: 'System', icon: Monitor },
   ];
 
   return (
@@ -60,6 +68,9 @@ export default function ThemeToggle() {
                 key={opt.value}
                 type="button"
                 onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('user_custom_theme', opt.value);
+                  }
                   setTheme(opt.value);
                   setOpen(false);
                 }}
