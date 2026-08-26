@@ -40,9 +40,32 @@ export default function PackageDetailPage() {
   const urlCoupon = searchParams.get('coupon');
   const { user, loading: authLoading } = useAuth();
   
-  const [pkg, setPkg] = useState<Package | null>(null);
+  const [pkg, setPkg] = useState<Package | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = sessionStorage.getItem('cached_packages') || localStorage.getItem('cached_packages');
+        if (cached) {
+          const list: Package[] = JSON.parse(cached);
+          const found = list.find((p) => p.id === id);
+          if (found) return found;
+        }
+      } catch {}
+    }
+    return null;
+  });
   const [departures, setDepartures] = useState<DepartureLocation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = sessionStorage.getItem('cached_packages') || localStorage.getItem('cached_packages');
+        if (cached) {
+          const list: Package[] = JSON.parse(cached);
+          if (list.some((p) => p.id === id)) return false;
+        }
+      } catch {}
+    }
+    return true;
+  });
   const [copied, setCopied] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [isUserVip, setIsUserVip] = useState(false);
@@ -159,20 +182,22 @@ export default function PackageDetailPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const pkgRes = await api.get(`/api/packages/${id}`);
+        const [pkgRes, reviewRes, couponRes] = await Promise.all([
+          api.get(`/api/packages/${id}`),
+          api.get(`/api/reviews/package/${id}`).catch(() => ({ data: { data: { reviews: [], avgRating: 0 } } })),
+          api.get('/api/coupons/available').catch(() => ({ data: { data: [] } })),
+        ]);
         const p: Package = pkgRes.data.data;
         setPkg(p);
-        
-        const [depRes, reviewRes, couponRes] = await Promise.all([
-          api.get(`/api/departures?destination=${encodeURIComponent(p.destination)}`),
-          api.get(`/api/reviews/package/${id}`),
-          api.get('/api/coupons/available'),
-        ]);
-        
-        setDepartures(depRes.data.data || []);
-        setReviews(reviewRes.data.data?.reviews || []);
-        setAvgRating(reviewRes.data.data?.avgRating || 0);
-        setAvailableCoupons(couponRes.data.data || []);
+        setReviews(reviewRes.data?.data?.reviews || []);
+        setAvgRating(reviewRes.data?.data?.avgRating || 0);
+        setAvailableCoupons(couponRes.data?.data || []);
+
+        if (p?.destination) {
+          api.get(`/api/departures?destination=${encodeURIComponent(p.destination)}`)
+            .then((depRes) => setDepartures(depRes.data.data || []))
+            .catch(() => {});
+        }
 
         // Check wishlist & VIP status if logged in
         if (getAuthToken()) {

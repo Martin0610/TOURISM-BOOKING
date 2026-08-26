@@ -40,9 +40,46 @@ function PackagesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [allPackages, setAllPackages] = useState<Package[]>([]);
-  const [categories, setCategories] = useState<string[]>(['All']);
-  const [loading, setLoading] = useState(true);
+  const [allPackages, setAllPackages] = useState<Package[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = sessionStorage.getItem('cached_packages') || localStorage.getItem('cached_packages');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
+    }
+    return [];
+  });
+  const [categories, setCategories] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = sessionStorage.getItem('cached_packages') || localStorage.getItem('cached_packages');
+        if (cached) {
+          const parsed: Package[] = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const catSet = new Set<string>();
+            catSet.add('All');
+            parsed.forEach((p) => {
+              if (p.category) catSet.add(p.category);
+            });
+            return Array.from(catSet);
+          }
+        }
+      } catch {}
+    }
+    return ['All'];
+  });
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = sessionStorage.getItem('cached_packages') || localStorage.getItem('cached_packages');
+        if (cached && JSON.parse(cached).length > 0) return false;
+      } catch {}
+    }
+    return true;
+  });
   const [vipCoupons, setVipCoupons] = useState<AvailableCoupon[]>([]);
   
   // Filter states
@@ -101,11 +138,17 @@ function PackagesContent() {
 
   // Fetch initial packages
   useEffect(() => {
-    setLoading(true);
+    if (allPackages.length === 0) {
+      setLoading(true);
+    }
     api.get('/api/packages')
       .then((res) => {
         const pkgs: Package[] = res.data.data;
         setAllPackages(pkgs);
+        try {
+          sessionStorage.setItem('cached_packages', JSON.stringify(pkgs));
+          localStorage.setItem('cached_packages', JSON.stringify(pkgs));
+        } catch {}
 
         // Extract unique categories
         const catSet = new Set<string>();
@@ -116,7 +159,7 @@ function PackagesContent() {
         setCategories(Array.from(catSet));
       })
       .catch(() => {
-        setAllPackages([]);
+        if (allPackages.length === 0) setAllPackages([]);
       })
       .finally(() => setLoading(false));
 

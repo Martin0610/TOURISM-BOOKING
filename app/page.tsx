@@ -203,7 +203,18 @@ export default function Home() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const [dbPackages, setDbPackages] = useState<Package[]>([]);
+  const [dbPackages, setDbPackages] = useState<Package[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = sessionStorage.getItem('cached_packages') || localStorage.getItem('cached_packages');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
+    }
+    return [];
+  });
   const [favoriteCategory, setFavoriteCategory] = useState<string | null>(null);
 
   useEffect(() => {
@@ -211,6 +222,10 @@ export default function Home() {
       .then((res) => {
         if (res.data?.data && Array.isArray(res.data.data)) {
           setDbPackages(res.data.data);
+          try {
+            sessionStorage.setItem('cached_packages', JSON.stringify(res.data.data));
+            localStorage.setItem('cached_packages', JSON.stringify(res.data.data));
+          } catch {}
         }
       })
       .catch(() => {});
