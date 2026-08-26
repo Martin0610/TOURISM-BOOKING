@@ -77,6 +77,24 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
+  // Block background scrolling when AuthModal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = 'hidden';
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    }
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, [isOpen]);
+
   const strength = getPasswordStrength(regForm.password);
 
   if (!isOpen) return null;
@@ -258,10 +276,10 @@ export default function AuthModal({ isOpen, initialMode = 'login', onClose, redi
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto pointer-events-auto">
-      {/* Crisp Background Dimmer */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto pointer-events-auto overscroll-contain">
+      {/* Dark Overlay to Block Background Scrolling & Dim Screen */}
       <div 
-        className="fixed inset-0 bg-black/40 transition-opacity duration-200"
+        className="fixed inset-0 bg-black/75 backdrop-blur-[2px] transition-opacity duration-200"
         onClick={onClose}
       />
 
