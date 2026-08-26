@@ -100,16 +100,16 @@ export default function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none ${
-      scrolled ? 'pt-3 px-3 sm:px-6 transition-[padding] duration-200 ease-out' : 'pt-0 px-0'
+      scrolled ? 'pt-2.5 px-3 sm:px-6 transition-[padding] duration-300 ease-out' : 'pt-0 px-2 sm:px-4 transition-[padding] duration-300 ease-out'
     }`}>
-      <div className={`pointer-events-auto ${
+      <div className={`pointer-events-auto transition-all duration-300 ease-out ${
         scrolled 
           ? (menuOpen 
-              ? 'max-w-6xl mx-auto px-4 sm:px-7 rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md transition-all duration-200 ease-out' 
-              : 'max-w-6xl mx-auto px-4 sm:px-7 rounded-full bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md transition-all duration-200 ease-out')
-          : 'w-full max-w-full px-4 sm:px-8 lg:px-12 rounded-none bg-white/95 dark:bg-slate-900/95 border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-xs'
+              ? 'max-w-5xl mx-auto px-4 sm:px-6 rounded-2xl bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md' 
+              : 'max-w-5xl mx-auto px-4 sm:px-6 rounded-full bg-white/95 dark:bg-slate-900/95 shadow-xl shadow-slate-900/10 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800 backdrop-blur-md')
+          : 'max-w-6xl mx-auto px-4 sm:px-8 rounded-b-2xl sm:rounded-b-3xl bg-white/95 dark:bg-slate-900/95 border-x border-b border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md shadow-md shadow-slate-900/5 dark:shadow-black/30'
       }`}>
-        <div className={`flex justify-between items-center ${scrolled ? 'h-14 sm:h-16 transition-all duration-200' : 'h-16 sm:h-20'}`}>
+        <div className={`flex justify-between items-center transition-all duration-300 ease-out ${scrolled ? 'h-13 sm:h-14' : 'h-15 sm:h-16'}`}>
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors">
